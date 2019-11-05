@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/ridley",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "WTFPL",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
   "author": "darkobits",
