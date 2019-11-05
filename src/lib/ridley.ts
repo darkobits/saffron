@@ -4,7 +4,7 @@ import camelcaseKeys from 'camelcase-keys';
 import {cosmiconfig, Options as _CosmiconfigOptions} from 'cosmiconfig';
 import readPkgUp, {NormalizedReadResult} from 'read-pkg-up';
 import R from 'ramda';
-import yargs, {Arguments} from 'yargs';
+import yargs, {Arguments, CommandModule} from 'yargs';
 
 import {RidleyOptions} from 'etc/types';
 
@@ -114,7 +114,7 @@ export default async function Ridley<C = any>(options: RidleyOptions<C>) {
 
 
   // Build command, using our wrapper as the handler.
-  yargs.command({...yargsOptions, handler});
+  yargs.command({...yargsOptions, handler} as CommandModule<C, C>);
 
   // Apply various other config for Yargs.
   yargs.showHelpOnFail(true, 'See --help for usage instructions.');
