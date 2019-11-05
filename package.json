@@ -1,12 +1,12 @@
 {
-  "name": "__PROJECT-NAME-HERE__",
+  "name": "@darkobits/ridley",
   "version": "0.1.0",
   "license": "WTFPL",
-  "description": "__PROJECT-DESCRIPTION-HERE__",
-  "author": "__AUTHOR-NAME-HERE__",
+  "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
+  "author": "darkobits",
   "repository": {
     "type": "git",
-    "url": "__PROJECT-REPOSITORY-URL-HERE__"
+    "url": "git+https://github.com/darkobits/ridley.git"
   },
   "files": [
     "dist"
@@ -18,9 +18,17 @@
     "bump": "nps bump",
     "prepare": "nps prepare"
   },
+  "dependencies": {
+    "camelcase-keys": "^6.1.0",
+    "cosmiconfig": "^6.0.0",
+    "ramda": "^0.26.1",
+    "read-pkg-up": "^7.0.0",
+    "yargs": "^14.2.0"
+  },
   "devDependencies": {
     "@darkobits/ts-unified": "^3.2.3",
     "@types/jest": "^24.0.21",
-    "@types/node": "^12.12.5"
+    "@types/node": "^12.12.5",
+    "@types/ramda": "^0.26.33"
   }
 }
