@@ -1,1 +1,1 @@
-export {default as default} from 'lib/add';
+export {default as default} from 'lib/ridley';
