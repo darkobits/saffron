@@ -311,6 +311,16 @@ For comparison, the default Cosmiconfig search places can be found [here](https:
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
+##### `config.searchFrom`
+
+**Type:** `string`<br>
+**Required:** No<br>
+**Default:** `process.cwd()`
+
+Directory to begin searching for a configuration file. Cosmiconfig will then walk up the directory tree from this location until a configuration file is found or the root is reached.
+
+<a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
+
 #### `strict`
 
 **Type:** `boolean`<br>

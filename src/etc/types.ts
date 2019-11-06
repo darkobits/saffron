@@ -10,7 +10,7 @@ import {Arguments, BuilderCallback, CommandModule} from 'yargs';
 export interface ExtendedCosmiconfigOptions extends CosmiconfigOptions {
   /**
    * (Optional) Name to use as a base when searching for configuration files. If
-   * omitted, the unscoped portion of the project's package name will be used.
+   * omitted, the un-scoped portion of the project's package name will be used.
    */
   fileName?: string;
 
@@ -20,6 +20,13 @@ export interface ExtendedCosmiconfigOptions extends CosmiconfigOptions {
    * applications with several sub-commands.
    */
   key?: string;
+
+  /**
+   * (Optional) Path to begin searching for a configuration file.
+   *
+   * Default: process.cwd()
+   */
+  searchFrom?: string;
 }
 
 
@@ -116,11 +123,12 @@ export interface SaffronOptions<C = any> {
   builder: BuilderCallback<C, C>;
 
   /**
-   * Configuration for Cosmiconfig. Will be merged with Saffron's defaults.
+   * Configuration for Cosmiconfig. Will be merged with Saffron's defaults. This
+   * can be set to `false` to disable configuration file support entirely.
    *
    * See: https://github.com/davidtheclark/cosmiconfig#cosmiconfigoptions
    */
-  config?: Partial<ExtendedCosmiconfigOptions>;
+  config?: Partial<ExtendedCosmiconfigOptions> | false;
 
   /**
    * If `false`, Yargs strict mode will not be used. Disabling strict mode will

@@ -14,7 +14,7 @@ export {CosmiconfigResult};
  * registered that use the same file, we don't have to worry about multiple
  * filesystem calls here.
  */
-export default function loadConfiguration({fileName, key, ...cosmicOptions}: ExtendedCosmiconfigOptions): CosmiconfigResult {
+export default function loadConfiguration({fileName, key, searchFrom, ...cosmicOptions}: ExtendedCosmiconfigOptions): CosmiconfigResult {
   // Validate options.
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
@@ -32,7 +32,7 @@ export default function loadConfiguration({fileName, key, ...cosmicOptions}: Ext
     // N.B. If the user provided a custom searchPlaces array, it will overwrite
     // the one above.
     ...cosmicOptions
-  }).search();
+  }).search(searchFrom);
 
   // If we loaded a non-empty file and the user specified a sub-key that they
   // want to drill-down into, ensure that the root configuration object has that
