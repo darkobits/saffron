@@ -20,12 +20,15 @@ import {RidleyOptions} from 'etc/types';
 export default async function Ridley<C = any>(options: RidleyOptions<C>) {
   // ----- Read Package Info ---------------------------------------------------
 
-  const packageResult = await readPkgUp();
-
+  let packageResult: readPkgUp.NormalizedReadResult | undefined;
   let packageJson: NormalizedReadResult['packageJson'] | false = false;
 
-  if (packageResult && packageResult.packageJson) {
-    packageJson = packageResult.packageJson;
+  if (process.mainModule) {
+    packageResult = await readPkgUp({cwd: path.resolve(process.mainModule.filename)});
+
+    if (packageResult && packageResult.packageJson) {
+      packageJson = packageResult.packageJson;
+    }
   }
 
 
