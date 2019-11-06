@@ -2,7 +2,7 @@ import camelcaseKeys from 'camelcase-keys';
 import ow from 'ow';
 import yargs, {Arguments, Argv} from 'yargs';
 
-import {RidleyOptions} from 'etc/types';
+import {SaffronOptions} from 'etc/types';
 import loadConfiguration, {CosmiconfigResult} from 'lib/configuration';
 import getPackageInfo from 'lib/package';
 
@@ -15,7 +15,7 @@ import getPackageInfo from 'lib/package';
  * C = Shape of the command's configuration and arguments, or a union of the two
  *     if they are divergent.
  */
-export default function buildCommand<C = any>(options: RidleyOptions<C>) {
+export default function buildCommand<C = any>(options: SaffronOptions<C>) {
   // ----- Validate Options ----------------------------------------------------
 
   ow(options.command, 'command', ow.optional.string);

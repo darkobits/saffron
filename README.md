@@ -1,18 +1,18 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/68170118-62522680-ff23-11e9-9600-1f0af2854c96.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/68292684-3d53d580-0041-11ea-90c5-a76899bbd6df.png" style="max-width: 100%;">
 </a>
 <p align="center">
-  <a href="https://www.npmjs.com/package/@darkobits/ridley"><img src="https://img.shields.io/npm/v/@darkobits/ridley.svg?style=flat-square"></a>
-  <a href="https://github.com/darkobits/ridley/actions"><img src="https://img.shields.io/endpoint?url=https://aws.frontlawn.net/ga-shields/darkobits/log&style=flat-square"></a>
-  <a href="https://david-dm.org/darkobits/ridley"><img src="https://img.shields.io/david/darkobits/ridley.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
+  <a href="https://github.com/darkobits/saffron/actions"><img src="https://img.shields.io/endpoint?url=https://aws.frontlawn.net/ga-shields/darkobits/log&style=flat-square"></a>
+  <a href="https://david-dm.org/darkobits/saffron"><img src="https://img.shields.io/david/darkobits/saffron.svg?style=flat-square"></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-FB5E85.svg?style=flat-square"></a>
 </p>
 
-Ridley is an opinionated integration between [Yargs](https://github.com/yargs/yargs) and [Cosmiconfig](https://github.com/davidtheclark/cosmiconfig), two best-in-class tools for building robust command-line applications in Node. General familiarity with these tools is recommended before using Ridley.
+Saffron is an opinionated integration between [Yargs](https://github.com/yargs/yargs) and [Cosmiconfig](https://github.com/davidtheclark/cosmiconfig), two best-in-class tools for building robust command-line applications in Node. General familiarity with these tools is recommended before using Saffron.
 
-The core feature of Ridley is the utilization of [`yargs.config()`](https://github.com/yargs/yargs/blob/master/docs/api.md#configobject) to pass data loaded by Cosmiconfig into Yargs, where we can then perform normalization, validation, set defaults (and more) all in one place.
+The core feature of Saffron is the utilization of [`yargs.config()`](https://github.com/yargs/yargs/blob/master/docs/api.md#configobject) to pass data loaded by Cosmiconfig into Yargs, where we can then perform normalization, validation, set defaults (and more) all in one place.
 
-In addition to this, Ridley applies some opinionated settings to both Yargs and Cosmiconfig to encourage consistency and best practices.
+In addition to this, Saffron applies some opinionated settings to both Yargs and Cosmiconfig to encourage consistency and best practices.
 
 * [Install](#install)
 * [Getting Started](#getting-started)
@@ -23,7 +23,7 @@ In addition to this, Ridley applies some opinionated settings to both Yargs and 
 ## Install
 
 ```
-npm i @darkobits/ridley
+npm i @darkobits/saffron
 ```
 
 ## Getting Started
@@ -39,9 +39,9 @@ Let's build-out a quick CLI for this application to make sure options/arguments 
 > `cli.ts`
 
 ```ts
-import cli from '@darkobits/ridley';
+import cli from '@darkobits/saffron';
 // Or, if you prefer:
-import {command, init} from '@darkobits/ridley';
+import {command, init} from '@darkobits/saffron';
 
 cli.command({
   command: '* <spline>',
@@ -164,7 +164,7 @@ spline-reticulator 402B
 
 ### `command`
 
-Ridley's `command` function accepts a single options object, the API for which is very similar to that of Yargs' [command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule), which configures each command using a single options object rather than by chaining several method calls.
+Saffron's `command` function accepts a single options object, the API for which is very similar to that of Yargs' [command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule), which configures each command using a single options object rather than by chaining several method calls.
 
 The interface for this object is defined below.
 
@@ -198,7 +198,7 @@ See: [Command Aliases](https://github.com/yargs/yargs/blob/master/docs/advanced.
 **Required:** No<br>
 **Default:** See below.
 
-Top-level description for the command itself. If left blank, Ridley will use the `description` field from your project's `package.json`.
+Top-level description for the command itself. If left blank, Saffron will use the `description` field from your project's `package.json`.
 
 Note that if you use [`.usage()`](https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler) in your builder function, it will override this description.
 
@@ -220,9 +220,9 @@ This function will be passed an object that will allow you to further configure 
 **Required:** No<br>
 **Default:** See below.
 
-Allows for configuration of Cosmiconfig. This object also supports the `moduleName` option, which is typically provided as a separate parameter to Cosmiconfig. By default, Ridley will use the unscoped part of the `name` field from your project's `package.json` (re: the portion after the `/`, if it has one, or the entire name otherwise).
+Allows for configuration of Cosmiconfig. This object also supports the `moduleName` option, which is typically provided as a separate parameter to Cosmiconfig. By default, Saffron will use the unscoped part of the `name` field from your project's `package.json` (re: the portion after the `/`, if it has one, or the entire name otherwise).
 
-Therefore, if our package's name was `spline-reticulator`, and no `config.moduleName` option was provided, Ridley will use `spline-reticulator` as the module name. This will be provided to the call to Cosmiconfig to initialize it. It will also be used to set a custom set of search paths for configuration file names shown below:
+Therefore, if our package's name was `spline-reticulator`, and no `config.moduleName` option was provided, Saffron will use `spline-reticulator` as the module name. This will be provided to the call to Cosmiconfig to initialize it. It will also be used to set a custom set of search paths for configuration file names shown below:
 
 ```js
 [
@@ -253,11 +253,11 @@ Whether to configure Yargs to use strict mode. In strict mode, any additional op
 
 #### `handler`
 
-**Type:** `(result: RidleyResult): void`<br>
+**Type:** `(result: SaffronResult): void`<br>
 **Required:** Yes<br>
 **Default:** N/A
 
-Identical to the `handler` option used when defining a Yargs command module. This function will be provided parsed/validated arguments/options. The signature of this function in Ridley differs slightly from the Yargs version; it is passed a single object with the following keys:
+Identical to the `handler` option used when defining a Yargs command module. This function will be provided parsed/validated arguments/options. The signature of this function in Saffron differs slightly from the Yargs version; it is passed a single object with the following keys:
 
 |Key|Description|
 |:--|:--|
@@ -277,12 +277,12 @@ This function should be called once all commands have been configured to initial
 
 ## TypeScript Integration
 
-Ridley is written in TypeScript and leverages Yargs' excellent TypeScript support. If you have created a type definition for your application's configuration/command-line arguments, it may be passed to Ridley as a type argument and Ridley will ensure the object passed to your handler is appropriately typed.
+Saffron is written in TypeScript and leverages Yargs' excellent TypeScript support. If you have created a type definition for your application's configuration/command-line arguments, it may be passed to Saffron as a type argument and Saffron will ensure the object passed to your handler is appropriately typed.
 
 **Example**
 
 ```ts
-import cli from '@darkobits/ridley';
+import cli from '@darkobits/saffron';
 
 interface SplineReticulatorOptions {
   spline: string;

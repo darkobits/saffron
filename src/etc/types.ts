@@ -24,9 +24,9 @@ export interface ExtendedCosmiconfigOptions extends CosmiconfigOptions {
 
 
 /**
- * Object passed to a Ridley 'handler' function.
+ * Object passed to a Saffron 'handler' function.
  */
-export interface RidleyResults<C> {
+export interface SaffronResults<C> {
   /**
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
@@ -65,19 +65,19 @@ export interface RidleyResults<C> {
 
 
 /**
- * Signature of a Ridley 'handler' function, which differs from a Yargs handler
- * insofar as it accepts a RidleyResults object instead of just argv.
+ * Signature of a Saffron 'handler' function, which differs from a Yargs handler
+ * insofar as it accepts a SaffronResults object instead of just argv.
  */
-export type RidleyHandler<C> = (results: RidleyResults<C>) => Promise<void> | void;
+export type SaffronHandler<C> = (results: SaffronResults<C>) => Promise<void> | void;
 
 
 /**
- * Options object accepted by Ridley.
+ * Options object accepted by Saffron.
  *
  * C = Shape of the application's parsed configuration file/arguments, which
  *     should in most cases have the same shape.
  */
-export interface RidleyOptions<C = any> {
+export interface SaffronOptions<C = any> {
   /**
    * If developing an application with multiple sub-commands, this should be
    * the name of the sub-command. Otherwise, this option can be omitted and
@@ -116,7 +116,7 @@ export interface RidleyOptions<C = any> {
   builder: BuilderCallback<C, C>;
 
   /**
-   * Configuration for Cosmiconfig. Will be merged with Ridley's defaults.
+   * Configuration for Cosmiconfig. Will be merged with Saffron's defaults.
    *
    * See: https://github.com/davidtheclark/cosmiconfig#cosmiconfigoptions
    */
@@ -132,5 +132,5 @@ export interface RidleyOptions<C = any> {
   /**
    * Handler for the command.
    */
-  handler: RidleyHandler<C>;
+  handler: SaffronHandler<C>;
 }
