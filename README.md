@@ -14,6 +14,12 @@ The core feature of Ridley is the utilization of [`yargs.config()`](https://gith
 
 In addition to this, Ridley applies some opinionated settings to both Yargs and Cosmiconfig to encourage consistency and best practices.
 
+* [Install](#install)
+* [Getting Started](#getting-started)
+* [API](#api)
+* [TypeScript Integration](#typescript-integration)
+* [Caveats](#caveats)
+
 ## Install
 
 ```
@@ -33,9 +39,11 @@ Let's build-out a quick CLI for this application to make sure options/arguments 
 > `cli.ts`
 
 ```ts
-import Ridley from '@darkobits/ridley';
+import cli from '@darkobits/ridley';
+// Or, if you prefer:
+import {command, init} from '@darkobits/ridley';
 
-export default Ridley({
+cli.command({
   command: '* <spline>',
   description: 'Reticulates splines using various algorithms.'
   builder: command => {
@@ -60,6 +68,9 @@ export default Ridley({
     console.log(config);
   }
 })
+
+// Once you have registered all commands for your application, be sure to call init.
+cli.init();
 ```
 
 First, lets try invoking `spline-reticulator --help` to make sure everything looks okay:
@@ -101,7 +112,7 @@ $ spline-reticulator 402B
 {
   '$0': 'spline-reticulator',
   _: [],
-  spline: '403b'
+  spline: '402B'
   algorithm: 'RTA-21',
 }
 ```
@@ -128,8 +139,6 @@ Invalid values:
   Argument: algorithm, Given: "foo", Choices: "RTA-20", "RTA-21", "RTA-22"
 ```
 
-#### Configuration File
-
 If we are working in a project that contains splines that should always be reticulated using a specific algorithm, and we wanted to track that requirement in source control, we can leverage a configuration file to indicate the algorithm to use:
 
 > `.spline-reticulator.yml`
@@ -151,28 +160,11 @@ spline-reticulator 402B
 }
 ```
 
-## TypeScript Integration
-
-Ridley is written in TypeScript and leverages Yargs' excellent TypeScript support. If you have created a type definition for your application's configuration/command-line arguments, it may be passed to Ridley as a type argument and Ridley will ensure the object passed to your handler is appropriately typed.
-
-**Example**
-
-```ts
-interface SplineReticulatorOptions {
-  spline: string;
-  algorithm: 'RTA-20' | 'RTA-21' | 'RTA-22';
-}
-
-Ridley<SplineReticulatorOptions>({
-  handler: ({argv}) => {
-    // TypeScript will know that argv.spline is of type 'string' here.
-  }
-})
-```
-
 ## API
 
-Ridley accepts a single options object, the API for which is very similar to that of Yargs' [command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule), which configures each command using a single options object rather than by chaining several method calls.
+### `command`
+
+Ridley's `command` function accepts a single options object, the API for which is very similar to that of Yargs' [command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule), which configures each command using a single options object rather than by chaining several method calls.
 
 The interface for this object is defined below.
 
@@ -186,6 +178,8 @@ Name of the command being implemented, or `*` to handle the root command. This i
 
 See: [Positional Arguments](https://github.com/yargs/yargs/blob/master/docs/advanced.md#positional-arguments)
 
+**Note:** This option is a pass-through to Yargs' `command` option.
+
 #### `aliases`
 
 **Type:** `Array<string>`<br>
@@ -195,6 +189,8 @@ See: [Positional Arguments](https://github.com/yargs/yargs/blob/master/docs/adva
 Only practical when implementing sub-commands, this option allows you to specify a list of aliases for the command.
 
 See: [Command Aliases](https://github.com/yargs/yargs/blob/master/docs/advanced.md#command-aliases)
+
+**Note:** This option is a pass-through to Yargs' `aliases` option.
 
 #### `description`
 
@@ -206,6 +202,8 @@ Top-level description for the command itself. If left blank, Ridley will use the
 
 Note that if you use [`.usage()`](https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler) in your builder function, it will override this description.
 
+**Note:** This option is a pass-through to Yargs' `describe` option.
+
 #### `builder`
 
 **Type:** `(command: Argv): void`<br>
@@ -213,6 +211,8 @@ Note that if you use [`.usage()`](https://github.com/yargs/yargs/blob/master/doc
 **Default:** N/A
 
 This function will be passed an object that will allow you to further configure the command. The API exposed by this object is almost identical to that of Yargs itself, but the context you are configuring is scoped to the command defined by `command`, making this API preferable to using the global Yargs object. The [.positional()](https://github.com/yargs/yargs/blob/master/docs/api.md#positionalkey-opt) and [.option()](https://github.com/yargs/yargs/blob/master/docs/api.md#optionkey-opt) methods will be the most-used in your builder to define the options for the command.
+
+**Note:** This option is a pass-through to Yargs' `builder` option.
 
 #### `config`
 
@@ -241,6 +241,8 @@ Therefore, if our package's name was `spline-reticulator`, and no `config.module
 ];
 ```
 
+**Note:** This object is a pass-through to Cosmiconfig.
+
 #### `strict`
 
 **Type:** `boolean`<br>
@@ -267,9 +269,38 @@ Identical to the `handler` option used when defining a Yargs command module. Thi
 |`packageJsonPath`|Absolute path to the application's `package.json`.|
 |`packageRoot`|Absolute path to the application's root (the directory containing `package.json`)|
 
+### `init`
+
+This function should be called once all commands have been configured to initialize the Yargs parser, equivalent to accessing `yargs.argv`.
+
+**Note:** The order in which you register your commands matters, and will affect the appearance of help output.
+
+## TypeScript Integration
+
+Ridley is written in TypeScript and leverages Yargs' excellent TypeScript support. If you have created a type definition for your application's configuration/command-line arguments, it may be passed to Ridley as a type argument and Ridley will ensure the object passed to your handler is appropriately typed.
+
+**Example**
+
+```ts
+import cli from '@darkobits/ridley';
+
+interface SplineReticulatorOptions {
+  spline: string;
+  algorithm: 'RTA-20' | 'RTA-21' | 'RTA-22';
+}
+
+cli.command<SplineReticulatorOptions>({
+  handler: ({argv}) => {
+    // TypeScript will know that argv.spline is of type 'string' here.
+  }
+});
+
+cli.init();
+```
+
 ## Caveats
 
-* If your application has required positional arguments, these must always be provided via the command-line. This is a Yargs limitation.
+* If your application has required positional arguments, these **must** be provided via the command-line. This is a Yargs limitation.
 
 ## &nbsp;
 <p align="center">
