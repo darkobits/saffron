@@ -44,7 +44,7 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
   // option. Otherwise, we can skip looking for a configuration file.
   if (options.config !== false && (pkgJson?.name || (options.config && options.config.fileName))) {
     configForCommand = loadConfiguration({
-      fileName: pkgJson?.name,
+      fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
       // N.B. If the user provided a custom fileName, it will overwrite the one
       // from package.json above.
       ...options.config
