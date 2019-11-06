@@ -14,6 +14,7 @@ The core feature of Saffron is the utilization of [`yargs.config()`](https://git
 
 In addition to this, Saffron applies some opinionated settings to both Yargs and Cosmiconfig to encourage consistency and best practices.
 
+* [Rationale](#rationale)
 * [Install](#install)
 * [Getting Started](#getting-started)
 * [API](#api)
@@ -21,10 +22,22 @@ In addition to this, Saffron applies some opinionated settings to both Yargs and
 * [Caveats](#caveats)
 * [Addenda](#addenda)
 
+## Rationale
+
+Yargs is arguably the best command-line argument parser in the Node ecosystem. However, it has grown tremendously over the years to support the myriad idiosyncratic use-cases of its users, leading to bloat. On the other hand, it does have limited support for loading configuration files, but the names/formats supported are lacking.
+
+Saffron focuses on what it thinks is the most flexible, robust Yargs API, the [Command Module API]([command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule)), which supports almost every Yargs use case any only involves a single Yargs function (`.command()`) that accepts a single configuration object.
+
+Cosmiconfig is an extremely powerful and configurable utility for adding support for configuration files to an application in several different formats, giving your users choices between JSON, YAML, and JavaScript-based configuration with a single tool.
+
+Saffron aims to integrate these two tools, solving for many common cases, applying sensible defaults where it can, and generally making it as easy as possible to write robust CLIs in as few lines as possible while allowing code to remain clear and readable.
+
 ## Install
 
+To install Saffron, ideally in an existing Node project, run:
+
 ```
-npm i @darkobits/saffron
+npm install @darkobits/saffron
 ```
 
 ## Getting Started
@@ -50,7 +63,7 @@ Let's build-out a quick CLI for this application to make sure options/arguments 
 }
 ```
 
-> `cli.ts`
+> `cli.js`
 
 ```ts
 import cli from '@darkobits/saffron';
@@ -274,7 +287,7 @@ Alternatively, this option may be set to `false` to disable configuration file s
 **Required:** No<br>
 **Default:** See below.
 
-By default, Saffron will use the un-scoped portion of your application's name from its `package.json`. If you would prefer to use a different base name for configuration files, you may provide your own `fileName` option.
+By default, Saffron will use the un-scoped portion of your application's name from its `package.json`. If you would prefer to use a different base name for configuration files, you may provide your own `fileName` option. This is equivalent to the `moduleName` value used [throughout the Cosmiconfig documentation](https://github.com/davidtheclark/cosmiconfig#usage).
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
@@ -294,7 +307,7 @@ For complex applications with many sub-commands, it may be desirable to scope co
 **Required:** No<br>
 **Default:** See below.
 
-Saffron overrides the default `searchPlaces` option in Cosmiconfig with the below defaults, where `fileName` is the base file name for your program as derived from `package.json` or as indicated at `config.fileName` (see above). Using our example package name of `@fluffykins/spline-reticulator`, the below snippet has been annotated with examples of the exact file names Saffron would search for.
+Saffron overrides the default [`searchPlaces` option in Cosmiconfig](https://github.com/davidtheclark/cosmiconfig#searchplaces) with the below defaults, where `fileName` is the base file name for your program as derived from `package.json` or as indicated at `config.fileName` (see above). Using our example package name of `@fluffykins/spline-reticulator`, the below snippet has been annotated with examples of the exact file names Saffron would search for.
 
 ```js
 [
@@ -306,14 +319,12 @@ Saffron overrides the default `searchPlaces` option in Cosmiconfig with the belo
   `.${fileName}.yaml`,
   // Look for .spline-reticulator.yml in YAML format.
   `.${fileName}.yml`,
-  // Look spline-reticulator.config.js that exports a configuration object.
-  `${fileName}.config.js`,
-  // Look for .spline-reticulatorrc in JSON or YAML format.
-  `.${fileName}rc`
+  // Look for spline-reticulator.config.js that exports a configuration object.
+  `${fileName}.config.js`
 ];
 ```
 
-For comparison, the default Cosmiconfig search places can be found [here](https://github.com/davidtheclark/cosmiconfig#searchplaces).
+For comparison, the default Cosmiconfig `searchPlaces` can be found [here](https://github.com/davidtheclark/cosmiconfig#searchplaces).
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
@@ -333,7 +344,9 @@ Directory to begin searching for a configuration file. Cosmiconfig will then wal
 **Required:** No<br>
 **Default:** `true`
 
-Whether to configure Yargs to use strict mode. In strict mode, any additional options passed via the CLI or found in a configuration file will cause Yargs to exit the program. This is generally a good idea because it helps catch typos. However, if your application's configuration file supports more options than you would like to consume via the CLI, then you will need to disable strict mode. Also be aware that because these additional options will not be defined in your builder, Yargs will not perform any validation on them.
+Whether to configure Yargs to use strict mode. In strict mode, any additional options passed via the CLI or found in a configuration file will cause Yargs to exit the program and report an error. This is generally a good idea because it helps catch typos from user input.
+
+However, if your application's configuration file supports more options than you would like to consume via the CLI, then you will need to disable strict mode. Also be aware that because these additional options will not be defined in your builder, Yargs will not perform any validation on them.
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
@@ -378,8 +391,8 @@ interface SplineReticulatorOptions {
 
 cli.command<SplineReticulatorOptions>({
   handler: ({argv}) => {
-    // TypeScript will know that argv.spline is of type 'string' and that
-    // argv.algorithm is an eum here.
+    // Here, TypeScript will know that argv.spline is of type 'string' and that
+    // argv.algorithm is an enum.
   }
 });
 
