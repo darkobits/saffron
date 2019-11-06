@@ -23,11 +23,11 @@ export default function loadConfiguration({fileName, key, ...cosmicOptions}: Ext
   const configResult = cosmiconfigSync(fileName, {
     searchPlaces: [
       'package.json',
-      `.${fileName}rc`,
       `.${fileName}.json`,
       `.${fileName}.yaml`,
       `.${fileName}.yml`,
       `${fileName}.config.js`,
+      `.${fileName}rc`
     ],
     // N.B. If the user provided a custom searchPlaces array, it will overwrite
     // the one above.
