@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/darkobits/saffron/compare/v0.1.3...v0.1.4) (2019-11-06)
+
+
+### Features
+
+* Add config.searchFrom option. ([dd577b8](https://github.com/darkobits/saffron/commit/dd577b8dbe01eec6f0c92c284a0d986b197062d9))
+
+
+### Bug Fixes
+
+* Properly de-scope package names. ([c9ac5c4](https://github.com/darkobits/saffron/commit/c9ac5c454bf7c8bd8b98e3ef4bdadefdc218c3be))
+
 ### [0.1.3](https://github.com/darkobits/saffron/compare/v0.1.2...v0.1.3) (2019-11-06)
 
 
