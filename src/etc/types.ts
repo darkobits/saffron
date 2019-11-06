@@ -1,14 +1,66 @@
-import {Options as OriginalCosmiconfigOptions} from 'cosmiconfig';
+import {Options as CosmiconfigOptions} from 'cosmiconfig';
 import {NormalizedReadResult} from 'read-pkg-up';
 import {Arguments, BuilderCallback, CommandModule} from 'yargs';
 
 
 /**
- * Cosmiconfig configuration options with the addition of 'moduleName', which is
+ * Cosmiconfig configuration options with the addition of 'fileName', which is
  * typically provided as a separate parameter.
  */
-export interface CosmiconfigOptions extends OriginalCosmiconfigOptions {
-  moduleName?: string;
+export interface ExtendedCosmiconfigOptions extends CosmiconfigOptions {
+  /**
+   * (Optional) Name to use as a base when searching for configuration files. If
+   * omitted, the unscoped portion of the project's package name will be used.
+   */
+  fileName?: string;
+
+  /**
+   * (Optional) Specifies a key in loaded configuration files that should be
+   * used as a scope for configuring this command. Useful when building
+   * applications with several sub-commands.
+   */
+  key?: string;
+}
+
+
+/**
+ * Object passed to a Ridley 'handler' function.
+ */
+export interface RidleyResults<C> {
+  /**
+   * Parsed command line arguments merged with any file-based configuration and
+   * validated by Yargs.
+   */
+  argv: Arguments<C>;
+
+  /**
+   * Entire config file as read by Cosmiconfig. Useful if your application
+   * supports options that should only be configurable via file and not
+   * command-line arguments.
+   */
+  rawConfig?: C;
+
+  /**
+   * Path where Cosmiconfig found a configuration file.
+   */
+  configPath?: string;
+
+  /**
+   * True if Cosmiconfig found a configuration file, but the file was empty.
+   */
+  configIsEmpty?: boolean;
+
+  /**
+   * Normalized package.json.
+   *
+   * See: https://github.com/npm/normalize-package-data
+   */
+  packageJson?: NormalizedReadResult['packageJson'];
+
+  /**
+   * Path to the package root.
+   */
+  packageRoot?: string;
 }
 
 
@@ -22,7 +74,7 @@ export type RidleyHandler<C> = (results: RidleyResults<C>) => Promise<void> | vo
 /**
  * Options object accepted by Ridley.
  *
- * U = Shape of the application's parsed configuration file/arguments, which
+ * C = Shape of the application's parsed configuration file/arguments, which
  *     should in most cases have the same shape.
  */
 export interface RidleyOptions<C = any> {
@@ -68,7 +120,7 @@ export interface RidleyOptions<C = any> {
    *
    * See: https://github.com/davidtheclark/cosmiconfig#cosmiconfigoptions
    */
-  config?: CosmiconfigOptions;
+  config?: Partial<ExtendedCosmiconfigOptions>;
 
   /**
    * If `false`, Yargs strict mode will not be used. Disabling strict mode will
@@ -81,50 +133,4 @@ export interface RidleyOptions<C = any> {
    * Handler for the command.
    */
   handler: RidleyHandler<C>;
-}
-
-
-/**
- * Object passed to a Ridley 'handler' function.
- */
-export interface RidleyResults<C> {
-  /**
-   * Parsed command line arguments merged with any file-based configuration and
-   * validated by Yargs.
-   */
-  argv: Arguments<C>;
-
-  /**
-   * Entire config file as read by Cosmiconfig. Useful if your application
-   * supports options that should only be configurable via file and not
-   * command-line arguments.
-   */
-  rawConfig?: C;
-
-  /**
-   * Path where Cosmiconfig found a configuration file.
-   */
-  configPath?: string;
-
-  /**
-   * True if Cosmiconfig found a configuration file, but the file was empty.
-   */
-  configIsEmpty?: boolean;
-
-  /**
-   * Normalized package.json.
-   *
-   * See: https://github.com/npm/normalize-package-data
-   */
-  packageJson?: NormalizedReadResult['packageJson'];
-
-  /**
-   * Path to package.json.
-   */
-  packageJsonPath?: string;
-
-  /**
-   * Path to the package root.
-   */
-  packageRoot?: string;
 }
