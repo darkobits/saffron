@@ -258,11 +258,13 @@ This function will be passed an object that will allow you to further configure 
 
 #### `config`
 
-**Type:** `object`<br>
+**Type:** `object | false`<br>
 **Required:** No<br>
 **Default:** See below.
 
 Configuration for Cosmiconfig, which is responsible for locating and parsing your program's configuration file. In addition to the below options, this object accepts any [Cosmiconfig option](https://github.com/davidtheclark/cosmiconfig/blob/master/src/index.ts#L36).
+
+Alternatively, this option may be set to `false` to disable configuration file support entirely.
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
@@ -277,6 +279,10 @@ By default, Saffron will use the un-scoped portion of your application's name fr
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
 ##### `config.key`
+
+**Type:** `string`<br>
+**Required:** No<br>
+**Default:** N/A
 
 For complex applications with many sub-commands, it may be desirable to scope configuration for a particular sub-command to a particular key in the application's configuration file. If this option is set, Saffron will only use data under this key (rather than the entire file) for the command being configured.
 
