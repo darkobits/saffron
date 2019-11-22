@@ -113,8 +113,8 @@ cli.command({
     });
   },
   handler: ({argv}) => {
-    // This is where we would normally call our application, but let's
-    // just log the configuration we got from Saffron.
+    // This is where we would normally call our application's main function, but
+    // let's just log the configuration we got from Saffron.
     console.log(argv);
   }
 })
@@ -342,6 +342,26 @@ may carry any valid [Cosmiconfig option](https://github.com/davidtheclark/cosmic
 
 Alternatively, this option may be set to `false` to disable configuration file
 support entirely.
+
+<a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
+
+##### `config.auto`
+
+**Type:** `boolean`<br>
+**Required:** No<br>
+**Default:** `true`
+
+By default, after loading an application's configuration file, Saffron will call
+Yargs' `.config()` method, passing it the data from the configuration file. This
+will have the effect of allowing configuration data to serve as default values
+for any arguments the application accepts. This is referred to as
+auto-configuration.
+
+If an application's command-line argument schema and configuration schema
+differ, auto-configuration would not be desirable. In such cases, `auto` may be
+set to `false`, and Saffron will only load an application's configuration file
+and pass its contents to `builder` and `handler` functions without calling
+`.config()`.
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
