@@ -1,9 +1,6 @@
 import {cosmiconfigSync} from 'cosmiconfig';
-import {CosmiconfigResult} from 'cosmiconfig/dist/types';
 import ow from 'ow';
-import {ExtendedCosmiconfigOptions} from 'etc/types';
-
-export {CosmiconfigResult};
+import {SaffronCosmiconfigOptions, SaffronCosmiconfigResult} from 'etc/types';
 
 
 /**
@@ -14,7 +11,7 @@ export {CosmiconfigResult};
  * registered that use the same file, we don't have to worry about multiple
  * filesystem calls here.
  */
-export default function loadConfiguration({fileName, key, searchFrom, ...cosmicOptions}: ExtendedCosmiconfigOptions): CosmiconfigResult {
+export default function loadConfiguration<C>({fileName, key, searchFrom, ...cosmicOptions}: SaffronCosmiconfigOptions): SaffronCosmiconfigResult<C> {
   // Validate options.
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);

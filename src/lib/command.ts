@@ -2,20 +2,22 @@ import camelcaseKeys from 'camelcase-keys';
 import ow from 'ow';
 import yargs, {Arguments, Argv} from 'yargs';
 
-import {SaffronOptions} from 'etc/types';
-import loadConfiguration, {CosmiconfigResult} from 'lib/configuration';
+import {SaffronOptions, SaffronCosmiconfigResult} from 'etc/types';
+import loadConfiguration from 'lib/configuration';
 import getPackageInfo from 'lib/package';
 
 
 /**
- * Integration between Yargs and Cosmiconfig.
+ * Saffron command builder.
  *
  * Type Parameters:
  *
- * C = Shape of the command's configuration and arguments, or a union of the two
- *     if they are divergent.
+ * A = Shape of the application's parsed arguments.
+ *
+ * C = Shape of the application's parsed configuration file, which by default
+ *     has the same shape as A.
  */
-export default function buildCommand<C = any>(options: SaffronOptions<C>) {
+export default function buildCommand<A extends object = any, C extends object = A>(options: SaffronOptions<A, C>) {
   // ----- Validate Options ----------------------------------------------------
 
   ow(options.command, 'command', ow.optional.string);
@@ -25,10 +27,7 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
   ow(options.builder, 'builder', ow.function);
   ow(options.handler, 'handler', ow.function);
   ow(options.strict, 'strict', ow.optional.boolean);
-  ow(options.config, 'config', ow.optional.object.exactShape({
-    fileName: ow.optional.string.nonEmpty,
-    key: ow.optional.string.nonEmpty
-  }));
+  ow(options.config, 'config', ow.any(ow.boolean.false, ow.object, ow.undefined));
 
 
   // ----- Get Package Info ----------------------------------------------------
@@ -38,12 +37,21 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
 
   // ----- (Optional) Load Configuration File ----------------------------------
 
-  let configForCommand: CosmiconfigResult;
+  // Whether we should automatically call command.config() with the data from
+  // the configuration file.
+  let autoConfig: boolean | undefined = false;
 
-  // Ensure we have either (a) a name from package.json or (b) a config.fileName
-  // option. Otherwise, we can skip looking for a configuration file.
-  if (options.config !== false && (pkgJson?.name || (options.config && options.config.fileName))) {
-    configForCommand = loadConfiguration({
+  let configResult: SaffronCosmiconfigResult<C> | undefined;
+
+  if (options.config !== false) {
+    // If the user did not disable configuration file loading entirely, switch
+    // autoConfig to `true` unless they explicitly set the `auto` option to
+    // `false`.
+    autoConfig = options.config?.auto !== false;
+
+    configResult = loadConfiguration<C>({
+      // By default, use the un-scoped portion of the package's name as the
+      // configuration file name.
       fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
       // N.B. If the user provided a custom fileName, it will overwrite the one
       // from package.json above.
@@ -58,16 +66,10 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
    * This function wraps the "builder" function provided to Yargs, setting
    * default behaviors and passing any configuration loaded from cosmiconfig.
    */
-  function builder(command: Argv<C>) {
+  function builder(command: Argv<A>) {
     // Set strict mode unless otherwise indicated.
     if (options.strict !== false) {
       command.strict();
-    }
-
-    // Use the data from the configuration file to populate Yargs. This lets us
-    // have a single path for validation/parsing.
-    if (configForCommand && !configForCommand.isEmpty) {
-      command.config(configForCommand.config);
     }
 
     // Apply defaults for the command.
@@ -78,29 +80,45 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
     command.version();
     command.help();
 
-    // Call user-provided builder.
-    options.builder(command);
+    // Call user-provided builder, additionally passing the (possible)
+    // configuration file data we loaded.
+    options.builder({
+      command,
+      config: configResult?.config,
+      configPath: configResult?.filepath ?? undefined,
+      configIsEmpty: configResult?.isEmpty ?? undefined,
+      packageJson: pkgJson?.packageJson ?? undefined,
+      packageRoot: pkgRoot
+    });
+
+    // If autoConfig is still true and we successfully loaded data from a
+    // configuration file, automatically configure the command using said data.
+    // This lets us leverage Yargs to validate both CLI arguments and the
+    // configuration data in a single code path.
+    if (autoConfig && configResult && !configResult.isEmpty) {
+      command.config(configResult.config);
+    }
 
     return command;
   }
 
 
-  // ----- Handler Proxy -------------------------------------------------------
+  // ----- Handler Decorator ---------------------------------------------------
 
   /**
    * This function wraps the "handler" function provided to Yargs, allowing us
    * to provide several additional data to command handlers. We also ensure
    * that process.exit() is called when an (otherwise uncaught) error is thrown,
-   * avoiding UncaughtPromiseException errors.
+   * avoiding UncaughtPromiseRejection errors.
    */
-  async function handler(argv: Arguments<C>) {
+  async function handler(argv: Arguments<A>) {
     try {
       await options.handler({
         // Strip "kebab-case" duplicate keys from argv.
-        argv: camelcaseKeys(argv) as Arguments<C>,
-        rawConfig: configForCommand?.config,
-        configPath: configForCommand?.filepath ?? undefined,
-        configIsEmpty: configForCommand?.isEmpty ?? undefined,
+        argv: camelcaseKeys(argv) as Arguments<A>,
+        config: configResult?.config,
+        configPath: configResult?.filepath ?? undefined,
+        configIsEmpty: configResult?.isEmpty ?? undefined,
         packageJson: pkgJson?.packageJson ?? undefined,
         packageRoot: pkgRoot
       });
@@ -116,7 +134,7 @@ export default function buildCommand<C = any>(options: SaffronOptions<C>) {
 
   // ----- Register Command ----------------------------------------------------
 
-  yargs.command<C>({
+  yargs.command<A>({
     command: options.command || '*',
     describe: options?.description ?? pkgJson?.description ?? undefined,
     aliases: options.aliases,
