@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/darkobits/saffron/compare/v0.1.4...v0.1.5) (2019-11-22)
+
+
+### Features
+
+* Pass configuration to builder functions. ([9cd640c](https://github.com/darkobits/saffron/commit/9cd640c9b7e98107e5c1df8951de1ea79f562d3e))
+
 ### [0.1.4](https://github.com/darkobits/saffron/compare/v0.1.3...v0.1.4) (2019-11-06)
 
 
