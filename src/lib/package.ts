@@ -18,10 +18,12 @@ const cachedPackageResult: PackageData = {};
 
 
 /**
- * Loads the package.json of the host package, if one exists, and caches the
+ * Loads the package.json of the host application, if one exists, and caches the
  * result.
  */
 export default function getPackageInfo(): PackageData {
+  // N.B. There may be ways we can recover from this, but until we have an
+  // example where this value is not set, throw.
   if (!process.mainModule) {
     throw new Error('Unable to load package.json; process.mainModule is not set.');
   }
