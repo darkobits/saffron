@@ -84,7 +84,7 @@ export default function buildCommand<A extends object = any, C extends object = 
     // configuration file data we loaded.
     options.builder({
       command,
-      config: configResult?.config,
+      config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true}) as C : undefined,
       configPath: configResult?.filepath ?? undefined,
       configIsEmpty: configResult?.isEmpty ?? undefined,
       packageJson: pkgJson,
@@ -115,8 +115,8 @@ export default function buildCommand<A extends object = any, C extends object = 
     try {
       await options.handler({
         // Strip "kebab-case" duplicate keys from argv.
-        argv: camelcaseKeys(argv) as Arguments<A>,
-        config: configResult?.config,
+        argv: camelcaseKeys(argv, {deep: true}) as Arguments<A>,
+        config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true}) as C : undefined,
         configPath: configResult?.filepath ?? undefined,
         configIsEmpty: configResult?.isEmpty ?? undefined,
         packageJson: pkgJson,
