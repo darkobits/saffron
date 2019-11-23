@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/darkobits/saffron/compare/v0.1.6...v0.1.7) (2019-11-23)
+
+
+### Bug Fixes
+
+* Apply camelcaseKeys recursively to configuration objects. ([4b4a80b](https://github.com/darkobits/saffron/commit/4b4a80b7e51262c5027de2f65957c70a04368f83))
+* Pass package.json to builder/handler properly. ([727c781](https://github.com/darkobits/saffron/commit/727c781a706d45e2db244613b7d0512f13b51967))
+
 ### [0.1.6](https://github.com/darkobits/saffron/compare/v0.1.5...v0.1.6) (2019-11-22)
 
 ### [0.1.5](https://github.com/darkobits/saffron/compare/v0.1.4...v0.1.5) (2019-11-22)
