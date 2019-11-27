@@ -88,7 +88,7 @@ export default function buildCommand<A extends object = any, C extends object = 
         config: configResult?.config,
         configPath: configResult?.filepath ?? undefined,
         configIsEmpty: configResult?.isEmpty ?? undefined,
-        packageJson: pkgJson?.packageJson ?? undefined,
+        packageJson: pkgJson,
         packageRoot: pkgRoot
       });
     }
