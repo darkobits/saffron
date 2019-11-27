@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/darkobits/saffron/compare/v0.1.7...v0.1.8) (2019-11-27)
+
+
+### Features
+
+* Builder function is optional. ([1e6a00c](https://github.com/darkobits/saffron/commit/1e6a00c927ca73877a2fb2d004c031b8a8437a8d))
+* Init takes an optional callback. ([3abc3a1](https://github.com/darkobits/saffron/commit/3abc3a11c5c1825d2f0d5323d720bcf2257ccd52))
+
 ### [0.1.7](https://github.com/darkobits/saffron/compare/v0.1.6...v0.1.7) (2019-11-23)
 
 
