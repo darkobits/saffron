@@ -474,13 +474,30 @@ it is passed a single object with the following keys:
 
 <a href="#top" title="Back to top"><img src="https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png"></a>
 
-### `init(): void`
+### `init(cb?: (yargs) => void): void`
 
 This function should be called once all commands have been configured to
-initialize the Yargs parser, equivalent to accessing `yargs.argv`.
+initialize the Yargs parser, equivalent to accessing `yargs.argv`. It accepts an
+optional callback that will be passed the global `yargs` object which you can
+use to perform any global operations with Yargs.
 
-**Note:** The order in which you register your commands matters, and will affect
-the appearance of help output.
+> `cli.ts`
+
+```ts
+import cli from '@darkobits/saffron';
+
+cli.command({
+  // ...
+});
+
+cli.init();
+
+// Or:
+
+cli.init(yargs => {
+  // Advanced/custom Yargs config here.
+});
+```
 
 ## TypeScript Integration
 

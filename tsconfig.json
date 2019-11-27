@@ -1,7 +1,9 @@
 {
   "extends": "./node_modules/@darkobits/ts-unified/dist/config/tsconfig.json",
+  "include": ["src"],
   "compilerOptions": {
-    "baseUrl": ".",
+    "rootDir": "src",
+    "baseUrl": "src",
     "outDir": "dist",
     "paths": {"*": ["*", "src/*"]}
   }
