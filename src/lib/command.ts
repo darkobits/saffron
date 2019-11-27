@@ -24,7 +24,7 @@ export default function buildCommand<A extends object = any, C extends object = 
   ow(options.description, 'description', ow.optional.string);
   // @ts-ignore -- Typings on this are weird.
   ow(options.aliases, ow.optional.any(ow.string, ow.array.ofType(ow.string)));
-  ow(options.builder, 'builder', ow.function);
+  ow(options.builder, 'builder', ow.any(ow.undefined, ow.function));
   ow(options.handler, 'handler', ow.function);
   ow(options.strict, 'strict', ow.optional.boolean);
   ow(options.config, 'config', ow.any(ow.boolean.false, ow.object, ow.undefined));
@@ -82,14 +82,16 @@ export default function buildCommand<A extends object = any, C extends object = 
 
     // Call user-provided builder, additionally passing the (possible)
     // configuration file data we loaded.
-    options.builder({
-      command,
-      config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true}) as C : undefined,
-      configPath: configResult?.filepath ?? undefined,
-      configIsEmpty: configResult?.isEmpty ?? undefined,
-      packageJson: pkgJson,
-      packageRoot: pkgRoot
-    });
+    if (typeof options.builder === 'function') {
+      options.builder({
+        command,
+        config: configResult?.config,
+        configPath: configResult?.filepath ?? undefined,
+        configIsEmpty: configResult?.isEmpty ?? undefined,
+        packageJson: pkgJson?.packageJson ?? undefined,
+        packageRoot: pkgRoot
+      });
+    }
 
     // If autoConfig is still true and we successfully loaded data from a
     // configuration file, automatically configure the command using said data.

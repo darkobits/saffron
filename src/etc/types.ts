@@ -158,12 +158,12 @@ export interface SaffronOptions<A extends object = any, C = A> {
   description?: CommandModule['describe'];
 
   /**
-   * Command builder function, used to configure how command-line arguments are
-   * defined, parsed, and validated.
+   * (Optional) Command builder function, used to add and configure arguments
+   * for the command.
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
    */
-  builder: SaffronBuilder<A, C>;
+  builder?: SaffronBuilder<A, C>;
 
   /**
    * Handler for the command.
