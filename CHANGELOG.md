@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/darkobits/saffron/compare/v0.1.8...v0.1.9) (2019-11-27)
+
+
+### Bug Fixes
+
+* Use correct path when providing package data to builders. ([7570d79](https://github.com/darkobits/saffron/commit/7570d7950a668ab02e7f98e5423e7928a468a6cb))
+
 ### [0.1.8](https://github.com/darkobits/saffron/compare/v0.1.7...v0.1.8) (2019-11-27)
 
 
