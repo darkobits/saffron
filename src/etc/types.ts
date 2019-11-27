@@ -1,6 +1,6 @@
 import {Options as CosmiconfigOptions} from 'cosmiconfig';
 import {NormalizedReadResult} from 'read-pkg-up';
-import {Argv, Arguments, CommandModule} from 'yargs';
+import yargs, {Argv, Arguments, CommandModule} from 'yargs';
 
 
 // ----- Miscellaneous ---------------------------------------------------------
@@ -14,6 +14,14 @@ export interface SaffronCosmiconfigResult<C> {
   filepath: string;
   isEmpty: boolean | undefined;
 }
+
+
+/**
+ * Optional function that may be passed to Saffron.init(). This function will be
+ * passed the Yargs object, and may perform any additional configuration prior
+ * to arguments being parsed.
+ */
+export type SaffronInitCallback = (y: typeof yargs) => void;
 
 
 /**
