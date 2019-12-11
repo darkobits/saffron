@@ -22,12 +22,12 @@ export default function buildCommand<A extends object = any, C extends object = 
 
   ow(options.command, 'command', ow.optional.string);
   ow(options.description, 'description', ow.optional.string);
-  // @ts-ignore -- Typings on this are weird.
-  ow(options.aliases, ow.optional.any(ow.string, ow.array.ofType(ow.string)));
   ow(options.builder, 'builder', ow.any(ow.undefined, ow.function));
   ow(options.handler, 'handler', ow.function);
   ow(options.strict, 'strict', ow.optional.boolean);
   ow(options.config, 'config', ow.any(ow.boolean.false, ow.object, ow.undefined));
+  // @ts-ignore -- Typings on this are weird.
+  ow(options.aliases, 'aliases', ow.any(ow.undefined, ow.string, ow.array.ofType(ow.string)));
 
 
   // ----- Get Package Info ----------------------------------------------------
@@ -39,7 +39,7 @@ export default function buildCommand<A extends object = any, C extends object = 
 
   // Whether we should automatically call command.config() with the data from
   // the configuration file.
-  let autoConfig: boolean | undefined = false;
+  let autoConfig = false;
 
   let configResult: SaffronCosmiconfigResult<C> | undefined;
 
@@ -82,12 +82,12 @@ export default function buildCommand<A extends object = any, C extends object = 
 
     // Call user-provided builder, additionally passing the (possible)
     // configuration file data we loaded.
-    if (typeof options.builder === 'function') {
+    if (options.builder) {
       options.builder({
         command,
         config: configResult?.config,
-        configPath: configResult?.filepath ?? undefined,
-        configIsEmpty: configResult?.isEmpty ?? undefined,
+        configPath: configResult?.filepath,
+        configIsEmpty: configResult?.isEmpty,
         packageJson: pkgJson,
         packageRoot: pkgRoot
       });
@@ -119,13 +119,15 @@ export default function buildCommand<A extends object = any, C extends object = 
         // Strip "kebab-case" duplicate keys from argv.
         argv: camelcaseKeys(argv, {deep: true}) as Arguments<A>,
         config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true}) as C : undefined,
-        configPath: configResult?.filepath ?? undefined,
-        configIsEmpty: configResult?.isEmpty ?? undefined,
+        configPath: configResult?.filepath,
+        configIsEmpty: configResult?.isEmpty,
         packageJson: pkgJson,
         packageRoot: pkgRoot
       });
     } catch (err) {
-      if (typeof err?.code === 'number') {
+      if (typeof err?.exitCode === 'number') {
+        process.exit(err.exitCode);
+      } else if (typeof err?.code === 'number') {
         process.exit(err.code);
       } else {
         process.exit(1);
@@ -138,7 +140,7 @@ export default function buildCommand<A extends object = any, C extends object = 
 
   yargs.command<A>({
     command: options.command || '*',
-    describe: options?.description ?? pkgJson?.description ?? undefined,
+    describe: options?.description || pkgJson?.description || undefined,
     aliases: options.aliases,
     builder,
     handler
