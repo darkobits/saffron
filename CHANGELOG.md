@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://github.com/darkobits/saffron/compare/v0.1.9...v0.1.10) (2019-12-11)
+
+
+### Bug Fixes
+
+* Fix nullish coalescing. ([6f519f2](https://github.com/darkobits/saffron/commit/6f519f28af4aac3a7a2d48761beaae79e35db848))
+
 ### [0.1.9](https://github.com/darkobits/saffron/compare/v0.1.8...v0.1.9) (2019-11-27)
 
 
