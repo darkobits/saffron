@@ -1,7 +1,10 @@
 import command from 'lib/command';
 import init from 'lib/init';
 
+
 /**
+ * [Types]
+ *
  * Re-export selected types from 'yargs' in the event they are needed for
  * advanced use-cases.
  */
@@ -9,6 +12,19 @@ export {
   Arguments,
   Argv
 } from 'yargs';
+
+
+/**
+ * [Types]
+ *
+ * Export selected types from 'etc/types'.
+ */
+export {
+  SaffronBuilder,
+  SaffronBuilderOptions,
+  SaffronHandler,
+  SaffronHandlerOptions
+} from 'etc/types';
 
 
 /**
