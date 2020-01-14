@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/darkobits/saffron/compare/v0.1.10...v0.1.11) (2020-01-14)
+
+
+### Features
+
+* Export selected typings from Yargs. ([b9c5033](https://github.com/darkobits/saffron/commit/b9c5033d55aa5fa4cd3f56d4a866e7032f8526d1))
+
 ### [0.1.10](https://github.com/darkobits/saffron/compare/v0.1.9...v0.1.10) (2019-12-11)
 
 
