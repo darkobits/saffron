@@ -1,11 +1,11 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/68292684-3d53d580-0041-11ea-90c5-a76899bbd6df.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/100699103-f40eac00-334e-11eb-870e-05b2334af2e9.png" style="max-width: 100%;">
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
-  <a href="https://github.com/darkobits/saffron/actions"><img src="https://img.shields.io/endpoint?url=https://aws.frontlawn.net/ga-shields/darkobits/log&style=flat-square"></a>
+  <a href="https://travis-ci.com/github/darkobits/saffron"><img src="https://img.shields.io/travis/com/darkobits/saffron.svg?style=flat-square"></a>
   <a href="https://david-dm.org/darkobits/saffron"><img src="https://img.shields.io/david/darkobits/saffron.svg?style=flat-square"></a>
-  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-FB5E85.svg?style=flat-square"></a>
+  <a href="https://www.conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
 </p>
 
 Saffron is an opinionated integration between [Yargs](https://github.com/yargs/yargs)
@@ -37,15 +37,14 @@ limited support for loading configuration files, it only supports files in the
 JSON format.
 
 Saffron focuses on what it thinks is the most flexible, robust Yargs API, the
-[Command Module API]([command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule)),
-which supports almost every Yargs use-case any only involves a single Yargs
-function (`.command()`) that accepts a single configuration object, making this
-API easy to wrap.
+[command module API](https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule),
+which supports almost every Yargs use-case while only involving a single Yargs
+method (`.command()`)
 
 Cosmiconfig is an extremely powerful and configurable utility for adding support
 for configuration files to an application in several different formats, giving
 users the ability to choose between JSON, YAML, and JavaScript-based
-configuration with a single tool.
+configuration files with a single tool.
 
 Saffron aims to integrate these two tools, solving for many common cases,
 applying sensible defaults where it can, and generally making it as easy as
