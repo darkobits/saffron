@@ -24,5 +24,5 @@ export default function init(cb?: SaffronInitCallback) {
   }
 
   // Note: This is a custom getter that acts like a function call.
-  yargs.argv; // tslint:disable-line: no-unused-expression
+  void yargs.argv;
 }

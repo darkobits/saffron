@@ -11,20 +11,23 @@ import {SaffronCosmiconfigOptions, SaffronCosmiconfigResult} from 'etc/types';
  * registered that use the same file, we don't have to worry about multiple
  * filesystem calls here.
  */
-export default function loadConfiguration<C>({fileName, key, searchFrom, ...cosmicOptions}: SaffronCosmiconfigOptions): SaffronCosmiconfigResult<C> {
+export default function loadConfiguration<C>({fileName, key, searchFrom, ...cosmicOptions}: SaffronCosmiconfigOptions) {
   // Validate options.
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
-  // @ts-ignore -- Remove this when ow adds assertion signatures.
+  // @ts-expect-error: Remove this when ow adds type assertion signatures.
   const configResult = cosmiconfigSync(fileName, {
     searchPlaces: [
       'package.json',
       `.${fileName}.json`,
       `.${fileName}.yaml`,
       `.${fileName}.yml`,
+      `.${fileName}rc`,
       `${fileName}.config.js`,
-      `.${fileName}rc`
+      // Added in cosmiconfig 7.x:
+      `${fileName}.config.cjs`,
+      `${fileName}rc.cjs`
     ],
     // N.B. If the user provided a custom searchPlaces array, it will overwrite
     // the one above.
@@ -45,5 +48,5 @@ export default function loadConfiguration<C>({fileName, key, searchFrom, ...cosm
     }
   }
 
-  return configResult;
+  return configResult as SaffronCosmiconfigResult<C>;
 }

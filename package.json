@@ -1,9 +1,9 @@
 {
   "name": "@darkobits/saffron",
   "version": "0.1.12",
+  "author": "darkobits",
   "license": "WTFPL",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
-  "author": "darkobits",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/darkobits/saffron.git"
@@ -13,23 +13,17 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "build": "nps build",
-    "test": "nps test",
-    "bump": "nps bump",
     "prepare": "nps prepare"
   },
   "dependencies": {
-    "@types/yargs": "^15.0.0",
-    "camelcase-keys": "^6.1.1",
-    "cosmiconfig": "^6.0.0",
-    "ow": "^0.15.0",
+    "@types/yargs": "^15.0.10",
+    "camelcase-keys": "^6.2.2",
+    "cosmiconfig": "^7.0.0",
+    "ow": "^0.20.0",
     "read-pkg-up": "^7.0.1",
-    "yargs": "^15.1.0"
+    "yargs": "^16.1.1"
   },
   "devDependencies": {
-    "@darkobits/ts-unified": "3.3.0",
-    "@types/jest": "^24.0.25",
-    "@types/node": "^13.1.6",
-    "@types/source-map-support": "^0.5.0"
+    "@darkobits/ts": "^0.1.1"
   }
 }

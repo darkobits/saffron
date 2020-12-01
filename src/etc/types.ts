@@ -5,6 +5,11 @@ import yargs, {Argv, Arguments, CommandModule} from 'yargs';
 
 // ----- Miscellaneous ---------------------------------------------------------
 
+export interface GenericObject {
+  [key: string]: any;
+}
+
+
 /**
  * Object with the same shape as CosmiconfigResult, but with support for a typed
  * `config` key.
@@ -135,7 +140,7 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
  * C = Shape of the application's parsed configuration file, which by default
  *     has the same shape as A.
  */
-export interface SaffronOptions<A extends object = any, C = A> {
+export interface SaffronOptions<A extends GenericObject = any, C = A> {
   /**
    * If developing an application with multiple sub-commands, this should be
    * the name of the sub-command. Otherwise, this option can be omitted and

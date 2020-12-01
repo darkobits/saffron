@@ -1,1 +1,1 @@
-module.exports = require('@darkobits/ts-unified/dist/config/jest')();
+module.exports = require('@darkobits/ts').jest();

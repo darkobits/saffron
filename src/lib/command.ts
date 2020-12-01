@@ -2,7 +2,11 @@ import camelcaseKeys from 'camelcase-keys';
 import ow from 'ow';
 import yargs, {Arguments, Argv} from 'yargs';
 
-import {SaffronOptions, SaffronCosmiconfigResult} from 'etc/types';
+import {
+  GenericObject,
+  SaffronOptions,
+  SaffronCosmiconfigResult
+} from 'etc/types';
 import loadConfiguration from 'lib/configuration';
 import getPackageInfo from 'lib/package';
 
@@ -17,7 +21,7 @@ import getPackageInfo from 'lib/package';
  * C = Shape of the application's parsed configuration file, which by default
  *     has the same shape as A.
  */
-export default function buildCommand<A extends object = any, C extends object = A>(options: SaffronOptions<A, C>) {
+export default function buildCommand<A extends GenericObject = any, C extends GenericObject = A>(options: SaffronOptions<A, C>) {
   // ----- Validate Options ----------------------------------------------------
 
   ow(options.command, 'command', ow.optional.string);
@@ -66,7 +70,7 @@ export default function buildCommand<A extends object = any, C extends object = 
    * This function wraps the "builder" function provided to Yargs, setting
    * default behaviors and passing any configuration loaded from cosmiconfig.
    */
-  function builder(command: Argv<A>) {
+  const builder = (command: Argv<A>): Argv<A> => {
     // Set strict mode unless otherwise indicated.
     if (options.strict !== false) {
       command.strict();
@@ -74,7 +78,7 @@ export default function buildCommand<A extends object = any, C extends object = 
 
     // Apply defaults for the command.
     command.showHelpOnFail(true, 'See --help for usage instructions.');
-    command.wrap(yargs.terminalWidth());
+    // command.wrap(yargs.terminalWidth());
     command.alias('v', 'version');
     command.alias('h', 'help');
     command.version();
@@ -102,7 +106,7 @@ export default function buildCommand<A extends object = any, C extends object = 
     }
 
     return command;
-  }
+  };
 
 
   // ----- Handler Decorator ---------------------------------------------------
@@ -113,12 +117,12 @@ export default function buildCommand<A extends object = any, C extends object = 
    * that process.exit() is called when an (otherwise uncaught) error is thrown,
    * avoiding UncaughtPromiseRejection errors.
    */
-  async function handler(argv: Arguments<A>) {
+  const handler = async (argv: Arguments<A>) => {
     try {
       await options.handler({
         // Strip "kebab-case" duplicate keys from argv.
-        argv: camelcaseKeys(argv, {deep: true}) as Arguments<A>,
-        config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true}) as C : undefined,
+        argv: camelcaseKeys(argv, {deep: true}),
+        config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true})  : undefined,
         configPath: configResult?.filepath,
         configIsEmpty: configResult?.isEmpty,
         packageJson: pkgJson,
@@ -133,15 +137,16 @@ export default function buildCommand<A extends object = any, C extends object = 
         process.exit(1);
       }
     }
-  }
+  };
 
 
   // ----- Register Command ----------------------------------------------------
 
   yargs.command<A>({
-    command: options.command || '*',
-    describe: options?.description || pkgJson?.description || undefined,
+    command: options.command ?? '*',
+    describe: options?.description ?? pkgJson?.description ?? undefined,
     aliases: options.aliases,
+    // @ts-expect-error: Typings are wonky here as of Yargs 16.x.
     builder,
     handler
   });
