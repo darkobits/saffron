@@ -24,6 +24,6 @@
     "yargs": "^16.1.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.1.1"
+    "@darkobits/ts": "^0.1.3"
   }
 }
