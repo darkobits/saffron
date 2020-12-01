@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.13](https://github.com/darkobits/saffron/compare/v0.1.12...v0.1.13) (2020-12-01)
+
+
+### 🏗 Chores
+
+* Update dependencies. ([1c6d144](https://github.com/darkobits/saffron/commit/1c6d14428ff24957b1413ccf6bbe6951c9abc932))
+
+
+### 📖 Documentation
+
+* Update README. ([883bd2d](https://github.com/darkobits/saffron/commit/883bd2d467e3158c554e379aaecdf4c657f45400))
+
 ### [0.1.12](https://github.com/darkobits/saffron/compare/v0.1.11...v0.1.12) (2020-01-14)
 
 ### [0.1.11](https://github.com/darkobits/saffron/compare/v0.1.10...v0.1.11) (2020-01-14)
