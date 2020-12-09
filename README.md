@@ -1,5 +1,5 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/100699103-f40eac00-334e-11eb-870e-05b2334af2e9.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/101694946-bda8ef00-3a28-11eb-8d4f-e3629fd94d4c.png" style="max-width: 100%;">
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
@@ -568,6 +568,12 @@ is a [space pirate](https://en.wikipedia.org/wiki/List_of_space_pirates) from
 the excellent [Firefly](https://en.wikipedia.org/wiki/Firefly_(TV_series))
 series.
 
+## See Also
+
+* [Command-Line Interface Guidelines](https://clig.dev) – An open-source guide
+  to help you write better command-line programs.
+
+<br />
 <a href="#top">
-  <img src="https://user-images.githubusercontent.com/441546/69777002-41ac7380-1153-11ea-85a4-88184f8c9975.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/101694731-67d44700-3a28-11eb-92af-82f9a41fe88e.png" style="max-width: 100%;">
 </a>
