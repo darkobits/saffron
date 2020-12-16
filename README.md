@@ -575,5 +575,5 @@ series.
 
 <br />
 <a href="#top">
-  <img src="https://user-images.githubusercontent.com/441546/101694731-67d44700-3a28-11eb-92af-82f9a41fe88e.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/102322726-5e6d4200-3f34-11eb-89f2-c31624ab7488.png" style="max-width: 100%;">
 </a>
