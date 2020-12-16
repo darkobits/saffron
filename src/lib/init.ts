@@ -1,5 +1,5 @@
 import yargs from 'yargs';
-import {SaffronInitCallback} from 'etc/types';
+import { SaffronInitCallback } from 'etc/types';
 
 
 /**

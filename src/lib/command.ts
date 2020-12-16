@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import ow from 'ow';
-import yargs, {Arguments, Argv} from 'yargs';
+import yargs, { Arguments, Argv } from 'yargs';
 
 import {
   GenericObject,
@@ -78,7 +78,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
 
     // Apply defaults for the command.
     command.showHelpOnFail(true, 'See --help for usage instructions.');
-    // command.wrap(yargs.terminalWidth());
+    command.wrap(yargs.terminalWidth());
     command.alias('v', 'version');
     command.alias('h', 'help');
     command.version();
