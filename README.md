@@ -3,7 +3,7 @@
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
-  <a href="https://travis-ci.com/github/darkobits/saffron"><img src="https://img.shields.io/travis/com/darkobits/saffron.svg?style=flat-square"></a>
+  <a href="https://github.com/darkobits/saffron/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/darkobits/saffron/CI/master?style=flat-square"></a>
   <a href="https://david-dm.org/darkobits/saffron"><img src="https://img.shields.io/david/darkobits/saffron.svg?style=flat-square"></a>
   <a href="https://www.conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
 </p>
