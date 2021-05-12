@@ -4,8 +4,8 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
   <a href="https://github.com/darkobits/saffron/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/darkobits/saffron/CI/master?style=flat-square"></a>
-  <a href="https://david-dm.org/darkobits/saffron"><img src="https://img.shields.io/david/darkobits/saffron.svg?style=flat-square"></a>
-  <a href="https://www.conventionalcommits.org"><img src="https://img.shields.io/badge/conventional%20commits-1.0.0-027dc6.svg?style=flat-square"></a>
+  <a href="https://depfu.com/github/darkobits/saffron"><img src="https://img.shields.io/depfu/darkobits/saffron?style=flat-square"></a>
+  <a href="https://conventionalcommits.org"><img src="https://img.shields.io/static/v1?label=commits&message=conventional&style=flat-square&color=398AFB"></a>
 </p>
 
 Saffron is an opinionated integration between [Yargs](https://github.com/yargs/yargs)
@@ -188,7 +188,7 @@ Options:
   -h, --help     Show help                                                                     [boolean]
 
 Invalid values:
-  Argument: algorithm, Given: "foo", Choices: "RTA-20", "RTA-21", "RTA-22"
+  Argument: algorithm, Given: "RTA-16", Choices: "RTA-20", "RTA-21", "RTA-22"
 ```
 
 Notice the `Invalid values:` section at the end, indicating the erroneous
