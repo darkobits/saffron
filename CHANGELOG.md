@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.17](https://github.com/darkobits/saffron/compare/v0.1.16...v0.1.17) (2021-05-12)
+
+
+### 🏗 Chores
+
+* **deps:** bump handlebars from 4.7.6 to 4.7.7 ([#3](https://github.com/darkobits/saffron/issues/3)) ([19ae4cf](https://github.com/darkobits/saffron/commit/19ae4cf3b7d7780c7084d68b2b4468097d1ed70c))
+* **deps:** bump hosted-git-info from 2.8.8 to 2.8.9 ([#5](https://github.com/darkobits/saffron/issues/5)) ([938779b](https://github.com/darkobits/saffron/commit/938779bbc0179200d155fde1045f21a854edce2b))
+* **deps:** bump lodash from 4.17.20 to 4.17.21 ([#4](https://github.com/darkobits/saffron/issues/4)) ([8787543](https://github.com/darkobits/saffron/commit/8787543e246d4c59ed7e5f82729b95fa701862ff))
+* **deps:** Update dependencies ([97e7c86](https://github.com/darkobits/saffron/commit/97e7c86dff3ac43f95e91d6bc9347181d224dabb))
+* Update dependencies. ([57cf1e2](https://github.com/darkobits/saffron/commit/57cf1e24f27a24742a3c777fd72e13a95fbb0c18))
+
 ### [0.1.16](https://github.com/darkobits/saffron/compare/v0.1.15...v0.1.16) (2020-12-21)
 
 
