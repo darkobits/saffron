@@ -16,7 +16,7 @@
     "prepare": "nps prepare"
   },
   "dependencies": {
-    "@types/yargs": "^16.0.1",
+    "@types/yargs": "^16.0.3",
     "camelcase-keys": "^6.2.2",
     "cosmiconfig": "^7.0.0",
     "ow": "^0.21.0",
