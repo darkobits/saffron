@@ -36,7 +36,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
 
   // ----- Get Package Info ----------------------------------------------------
 
-  const {pkgJson, pkgRoot} = getPackageInfo();
+  const { pkgJson, pkgRoot } = getPackageInfo();
 
 
   // ----- (Optional) Load Configuration File ----------------------------------
@@ -89,9 +89,6 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     if (options.builder) {
       options.builder({
         command,
-        config: configResult?.config,
-        configPath: configResult?.filepath,
-        configIsEmpty: configResult?.isEmpty,
         packageJson: pkgJson,
         packageRoot: pkgRoot
       });

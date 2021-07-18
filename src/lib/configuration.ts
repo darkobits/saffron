@@ -1,6 +1,18 @@
 import { cosmiconfigSync } from 'cosmiconfig';
+import merge, { } from 'deepmerge';
+import esm from 'esm';
 import ow from 'ow';
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
+
+
+/**
+ * Cosmiconfig custom loader that supports ESM syntax.
+ */
+function loadEsm(filepath: string) {
+  const requireEsm = esm(module);
+  const config = requireEsm(filepath);
+  return config?.default ? config.default : config;
+}
 
 
 /**
@@ -16,8 +28,12 @@ export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cos
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
-  // @ts-expect-error: Remove this when ow adds type assertion signatures.
-  const configResult = cosmiconfigSync(fileName, {
+  const configResult = cosmiconfigSync(fileName, merge({
+    loaders: {
+      '.js': loadEsm,
+      '.mjs': loadEsm,
+      '.cjs': loadEsm
+    },
     searchPlaces: [
       'package.json',
       `.${fileName}.json`,
@@ -28,11 +44,14 @@ export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cos
       // Added in cosmiconfig 7.x:
       `${fileName}.config.cjs`,
       `${fileName}rc.cjs`
-    ],
-    // N.B. If the user provided a custom searchPlaces array, it will overwrite
-    // the one above.
-    ...cosmicOptions
-  }).search(searchFrom);
+    ]
+  }, cosmicOptions, {
+    arrayMerge: (target, source) => {
+      // When merging arrays (like searchPlaces) prepend the user's value to
+      // our value.
+      return [...source, ...target];
+    }
+  })).search(searchFrom);
 
   // If we loaded a non-empty file and the user specified a sub-key that they
   // want to drill-down into, ensure that the root configuration object has that

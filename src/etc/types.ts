@@ -1,6 +1,6 @@
-import {Options as CosmiconfigOptions} from 'cosmiconfig';
-import {NormalizedReadResult} from 'read-pkg-up';
-import yargs, {Argv, Arguments, CommandModule} from 'yargs';
+import { OptionsSync as CosmiconfigSyncOptions } from 'cosmiconfig';
+import { NormalizedReadResult } from 'read-pkg-up';
+import yargs, { Argv, Arguments, CommandModule } from 'yargs';
 
 
 // ----- Miscellaneous ---------------------------------------------------------
@@ -32,22 +32,7 @@ export type SaffronInitCallback = (y: typeof yargs) => void;
 /**
  * Common options provided to builder and handler functions.
  */
-export interface SaffronBuilderHandlerCommonOptions<C> {
-  /**
-   * Parsed configuration file, if found.
-   */
-  config?: C;
-
-  /**
-   * Path where Cosmiconfig found a configuration file.
-   */
-  configPath?: string;
-
-  /**
-   * True if Cosmiconfig found a configuration file, but the file was empty.
-   */
-  configIsEmpty?: boolean;
-
+export interface SaffronBuilderHandlerCommonOptions {
   /**
    * Normalized package.json.
    *
@@ -67,14 +52,14 @@ export interface SaffronBuilderHandlerCommonOptions<C> {
 /**
  * Object passed to a Saffron 'builder' function.
  */
-export interface SaffronBuilderOptions<A, C> extends SaffronBuilderHandlerCommonOptions<C> {
+export interface SaffronBuilderOptions<A> extends SaffronBuilderHandlerCommonOptions {
   command: Argv<A>;
 }
 
 /**
  * Signature of a Saffron 'builder' function.
  */
-export type SaffronBuilder<A, C> = (options: SaffronBuilderOptions<A, C>) => void;
+export type SaffronBuilder<A> = (options: SaffronBuilderOptions<A>) => void;
 
 
 // ----- Handler Functions -----------------------------------------------------
@@ -82,13 +67,29 @@ export type SaffronBuilder<A, C> = (options: SaffronBuilderOptions<A, C>) => voi
 /**
  * Object passed to a Saffron 'handler' function.
  */
-export interface SaffronHandlerOptions<A, C> extends SaffronBuilderHandlerCommonOptions<C> {
+export interface SaffronHandlerOptions<A, C> extends SaffronBuilderHandlerCommonOptions {
   /**
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
    */
   argv: Arguments<A>;
+
+  /**
+   * Parsed configuration file, if found.
+   */
+  config?: C;
+
+  /**
+    * Path where Cosmiconfig found a configuration file.
+  */
+  configPath?: string;
+
+  /**
+    * True if Cosmiconfig found a configuration file, but the file was empty.
+    */
+  configIsEmpty?: boolean;
 }
+
 
 /**
  * Signature of a Saffron 'handler' function.
@@ -101,7 +102,7 @@ export type SaffronHandler<A, C> = (options: SaffronHandlerOptions<A, C>) => Pro
 /**
  * Options for configuring Cosmiconfig.
  */
-export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
+export interface SaffronCosmiconfigOptions extends CosmiconfigSyncOptions {
   /**
    * (Optional) If false, Saffron will not automatically configure the command
    * using data loaded from a configuration file.
@@ -176,7 +177,7 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
    */
-  builder?: SaffronBuilder<A, C>;
+  builder?: SaffronBuilder<A>;
 
   /**
    * Handler for the command.
