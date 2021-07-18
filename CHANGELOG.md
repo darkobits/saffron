@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/darkobits/saffron/compare/v0.1.17...v0.2.0) (2021-07-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* As part of this update, builders are no longer passed information about configuration files.
+
+### 📖 Documentation
+
+* Update README. ([fcf0d25](https://github.com/darkobits/saffron/commit/fcf0d25e455e622a2e7e337176b37a4563a19de9))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([5c584e5](https://github.com/darkobits/saffron/commit/5c584e5998d96ff2ae78aabe37c51ecedae43d3b))
+
+
+### ✨ Features
+
+* Support ESM syntax in configuration files. ([3bb3666](https://github.com/darkobits/saffron/commit/3bb3666ba9fb395282020508607b8b9d76cb067e))
+
 ### [0.1.17](https://github.com/darkobits/saffron/compare/v0.1.16...v0.1.17) (2021-05-12)
 
 
