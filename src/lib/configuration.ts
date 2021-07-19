@@ -2,9 +2,10 @@
 import babelRegister from '@babel/register';
 import { cosmiconfigSync } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
-import esm from 'esm';
 import ow from 'ow';
+
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
+import log from 'lib/log';
 
 
 /**
@@ -12,12 +13,39 @@ import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
  * may be installed in the local project.
  */
 function loadEsm(filepath: string) {
-  const require = esm(module);
-  babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+  let config;
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const config = require(filepath);
-  return config?.default ? config.default : config;
+  // Load bare configuration. This will be used as a backup if the below methods
+  // fail.
+  try {
+    config = require(filepath);
+  } catch (err) {
+    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
+  }
+
+  // Try to load configuration using 'esm'.
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const requireEsm = require('esm')(module, { cjs: true });
+    config = requireEsm(filepath);
+  } catch (err) {
+    log.verbose(log.prefix('loadEsm'), `Failed to load configuration with ESM: ${err.message}`);
+  }
+
+  // Try to load configuration using @babel/register and the host project's
+  // Babel configuration. This will be necessary if the configuration file or
+  // anything it imports uses Babel features.
+  try {
+    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+    config = require(filepath);
+    babelRegister.revert();
+  } catch (err) {
+    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
+  }
+
+  if (config) {
+    return config?.default ? config.default : config;
+  }
 }
 
 
