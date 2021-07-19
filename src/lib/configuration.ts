@@ -1,5 +1,5 @@
 // @ts-expect-error - No type declarations for this package.
-import babelRegister from '@babel/register';
+import babelRegister, { revert } from '@babel/register';
 import { cosmiconfigSync } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import ow from 'ow';
@@ -38,7 +38,7 @@ function loadEsm(filepath: string) {
   try {
     babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
     config = require(filepath);
-    babelRegister.revert();
+    revert();
   } catch (err) {
     log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
   }
