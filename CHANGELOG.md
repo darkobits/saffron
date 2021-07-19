@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/darkobits/saffron/compare/v0.2.1...v0.2.2) (2021-07-19)
+
+
+### 🐞 Bug Fixes
+
+* **config:** Improve configuration loading logic. ([d22c02a](https://github.com/darkobits/saffron/commit/d22c02ac031bab9f4bc51b89eb76076e6dfa2266))
+
 ### [0.2.1](https://github.com/darkobits/saffron/compare/v0.2.0...v0.2.1) (2021-07-19)
 
 
