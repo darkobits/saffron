@@ -16,6 +16,7 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
+    "@babel/register": "^7.14.5",
     "@types/yargs": "^16.0.1",
     "camelcase-keys": "^6.2.2",
     "cosmiconfig": "^7.0.0",

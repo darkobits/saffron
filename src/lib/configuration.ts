@@ -1,3 +1,5 @@
+// @ts-expect-error - No type declarations for this package.
+import babelRegister from '@babel/register';
 import { cosmiconfigSync } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import esm from 'esm';
@@ -6,11 +8,15 @@ import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 
 
 /**
- * Cosmiconfig custom loader that supports ESM syntax.
+ * Cosmiconfig custom loader that supports ESM syntax and any Babel plugins that
+ * may be installed in the local project.
  */
 function loadEsm(filepath: string) {
-  const requireEsm = esm(module);
-  const config = requireEsm(filepath);
+  const require = esm(module);
+  babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const config = require(filepath);
   return config?.default ? config.default : config;
 }
 
@@ -30,6 +36,7 @@ export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cos
 
   const configResult = cosmiconfigSync(fileName, merge({
     loaders: {
+      '.ts': loadEsm,
       '.js': loadEsm,
       '.mjs': loadEsm,
       '.cjs': loadEsm
@@ -40,9 +47,10 @@ export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cos
       `.${fileName}.yaml`,
       `.${fileName}.yml`,
       `.${fileName}rc`,
+      `${fileName}.config.ts`,
       `${fileName}.config.js`,
-      // Added in cosmiconfig 7.x:
       `${fileName}.config.cjs`,
+      `${fileName}.config.mjs`,
       `${fileName}rc.cjs`
     ]
   }, cosmicOptions, {
