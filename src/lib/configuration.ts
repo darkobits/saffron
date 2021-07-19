@@ -13,12 +13,12 @@ import log from 'lib/log';
  * may be installed in the local project.
  */
 function loadEsm(filepath: string) {
-  let config;
-
   // Load bare configuration. This will be used as a backup if the below methods
   // fail.
   try {
-    config = require(filepath);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const config = require(filepath);
+    return config?.default ? config.default : config;
   } catch (err) {
     log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
   }
@@ -27,7 +27,8 @@ function loadEsm(filepath: string) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const requireEsm = require('esm')(module, { cjs: true });
-    config = requireEsm(filepath);
+    const config = requireEsm(filepath);
+    return config?.default ? config.default : config;
   } catch (err) {
     log.verbose(log.prefix('loadEsm'), `Failed to load configuration with ESM: ${err.message}`);
   }
@@ -37,14 +38,12 @@ function loadEsm(filepath: string) {
   // anything it imports uses Babel features.
   try {
     babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
-    config = require(filepath);
-    revert();
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const config = require(filepath);
+    return config?.default ? config.default : config;
   } catch (err) {
     log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
-  }
-
-  if (config) {
-    return config?.default ? config.default : config;
+    revert();
   }
 }
 
@@ -79,7 +78,10 @@ export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cos
       `${fileName}.config.js`,
       `${fileName}.config.cjs`,
       `${fileName}.config.mjs`,
-      `${fileName}rc.cjs`
+      `${fileName}rc.ts`,
+      `${fileName}rc.js`,
+      `${fileName}rc.cjs`,
+      `${fileName}rc.mjs`
     ]
   }, cosmicOptions, {
     arrayMerge: (target, source) => {
