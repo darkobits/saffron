@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/darkobits/saffron/compare/v0.2.2...v0.2.3) (2021-07-19)
+
+
+### 🐞 Bug Fixes
+
+* Import @babel/register `revert` correctly. ([77fa194](https://github.com/darkobits/saffron/commit/77fa194a882444d472294833a6624c9a2b1edfb5))
+
 ### [0.2.2](https://github.com/darkobits/saffron/compare/v0.2.1...v0.2.2) (2021-07-19)
 
 
