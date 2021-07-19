@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/darkobits/saffron/compare/v0.2.0...v0.2.1) (2021-07-19)
+
+
+### ✨ Features
+
+* Use @babel/register when loading configuration files. ([8f7e5ce](https://github.com/darkobits/saffron/commit/8f7e5cecb90e12b4dbdb0a549adcb048487c54f3))
+
 ## [0.2.0](https://github.com/darkobits/saffron/compare/v0.1.17...v0.2.0) (2021-07-18)
 
 
