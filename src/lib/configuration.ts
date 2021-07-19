@@ -20,7 +20,7 @@ function loadEsm(filepath: string) {
     const config = require(filepath);
     return config?.default ? config.default : config;
   } catch (err) {
-    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
+    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file without shims: ${err.message}`);
   }
 
   // Try to load configuration using 'esm'.
