@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/darkobits/saffron/compare/v0.2.5...v0.3.0) (2021-07-21)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([c2b4cf7](https://github.com/darkobits/saffron/commit/c2b4cf717d7b9aa3f1eab4fd978250c4717383fb))
+
+
+### ✨ Features
+
+* Add dynamic import() configuration loading strategy. ([140999d](https://github.com/darkobits/saffron/commit/140999d27a5c4585cb095e31c1fe07b40e5c2152))
+
 ### [0.2.5](https://github.com/darkobits/saffron/compare/v0.2.4...v0.2.5) (2021-07-19)
 
 
