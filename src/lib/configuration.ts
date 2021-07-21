@@ -11,64 +11,148 @@ import log from 'lib/log';
 
 /**
  * Cosmiconfig custom loader that supports ESM syntax and any Babel plugins that
- * may be installed in the local project.
+ * may be installed in the local project. This function attempts 6 different
+ * parsing strategies in sequence that should cover cases where we are in a CJS
+ * context trying to load an ESM configuration file and vice versa, as well as
+ *
  */
 async function parseConfiguration(filepath: string) {
-  // Load bare configuration. This will be used as a backup if the below methods
-  // fail.
+  const errors: Array<() => void> = [];
+
+  // ----- 1: CommonJs Require -------------------------------------------------
+
+  // This strategy will work if we are in a CJS context trying to load a CJS
+  // configuration file.
   if (typeof require === 'function') {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const config = require(filepath);
-      log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using require().');
+      log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using require().'));
       return config?.default ? config.default : config;
     } catch (err) {
-      log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file using require():'), err.message);
+      errors.push(
+        () => log.silly(
+          log.prefix('parseConfiguration'),
+          log.chalk.red.bold('Failed to load configuration file using require():'),
+          err.message
+        )
+      );
     }
   }
 
+
+  // ----- 2: Dynamic Import ---------------------------------------------------
+
+  // This strategy will work if we are in a CJS or ESM context trying to load an
+  // ESM configuration file.
   try {
     const config = await import(filepath);
-    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using import().');
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
     return config?.default ? config.default : config;
   } catch (err) {
-    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file using import():'), err.message);
+    errors.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration file using import():'),
+        err.message
+      )
+    );
   }
 
 
-  // Try to load configuration using 'esm'.
+  // ----- 3: ESM --------------------------------------------------------------
+
+  // This strategy is a fallback to strategy 2 that may work in some cases where
+  // dynamic import does not.
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const requireEsm = esm(module, { cjs: true });
     const config = requireEsm(filepath);
-    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using `esm`.');
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using `esm`.'));
     return config?.default ? config.default : config;
   } catch (err) {
-    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration with `esm`:'), err.message);
+    errors.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration with `esm`:'),
+        err.message
+      )
+    );
   }
 
-  // Try to load configuration using @babel/register and the host project's
-  // Babel configuration. This will be necessary if the configuration file or
-  // anything it imports uses Babel features.
+  // Load @babel/register, which will use the host project's Babel
+  // configuration. This will be necessary if the configuration file or anything
+  // it imports uses Babel features.
   babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
 
+
+  // ----- 4: Babel Register + CommonJS Require --------------------------------
+
+  // This strategy will work when we are in a CJS context trying to load a CJS
+  // configuration file that uses (or requires files that use) certain Babel
+  // features or path mappings that are configured by the local project's Babel
+  // configuration file.
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config = require(filepath);
-    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using @babel/register + require().');
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + require().'));
     return config?.default ? config.default : config;
   } catch (err) {
-    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file with @babel/register + require():'), err.message);
+    errors.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration file with @babel/register + require():'),
+        err.message
+      )
+    );
     revert();
   }
 
+
+  // ----- 5: Babel Register + Dynamic Import ----------------------------------
+
+  // This strategy will work when we are in a CJS or ESM context trying to load
+  // an ESM configuration file that uses (or requires files that use) certain
+  // Babel features or path mappings that are configured by the local project's
+  // Babel configuration file.
   try {
     const config = await import(filepath);
-    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using @babel/register + import().');
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
     return config?.default ? config.default : config;
   } catch (err) {
-    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file with @babel/register + import():'), err.message);
+    errors.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration file with @babel/register + import():'),
+        err.message
+      )
+    );
     revert();
+  }
+
+
+  // ----- 6: Babel Register + ESM ---------------------------------------------
+
+  // This strategy is a fallback to strategy 5 that may work in cases where
+  // dynamic import does not.
+  try {
+    const requireEsm = esm(module, { cjs: true });
+    const config = requireEsm(filepath);
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + `esm`.'));
+    return config?.default ? config.default : config;
+  } catch (err) {
+    errors.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration with @babel/register + `esm`:'),
+        err.message
+      )
+    );
+    revert();
+  }
+
+  if (errors.length > 0) {
+    errors.forEach(errorFn => errorFn());
+    throw new Error('All configuration parsing strategies failed.');
   }
 }
 
