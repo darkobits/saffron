@@ -1,4 +1,6 @@
+import fs from 'fs';
 import path from 'path';
+
 import readPkgUp from 'read-pkg-up';
 
 
@@ -23,9 +25,9 @@ const cachedPackageResult: PackageData = {};
  */
 export default function getPackageInfo(): PackageData {
   if (Object.keys(cachedPackageResult).length === 0) {
-    const packageResult = readPkgUp.sync({
-      cwd: path.dirname(process.argv[1])
-    });
+    const execPath = path.dirname(fs.realpathSync(process.argv[1]));
+
+    const packageResult = readPkgUp.sync({ cwd: execPath });
 
     if (packageResult) {
       cachedPackageResult.pkgJson = packageResult.packageJson;
