@@ -1,6 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
 import ow from 'ow';
-import yargs, { Arguments, Argv } from 'yargs';
+import yargs from 'yargs';
 
 import {
   GenericObject,
@@ -45,7 +45,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    * This function wraps the "builder" function provided to Yargs, setting
    * default behaviors and passing any configuration loaded from cosmiconfig.
    */
-  const builder = (command: Argv<A>): Argv<A> => {
+  const builder = (command: yargs.Argv<A>): yargs.Argv<A> => {
     // Set strict mode unless otherwise indicated.
     if (options.strict !== false) {
       command.strict();
@@ -81,7 +81,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    * that process.exit() is called when an (otherwise uncaught) error is thrown,
    * avoiding UncaughtPromiseRejection errors.
    */
-  const handler = async (argv: Arguments<A>) => {
+  const handler = async (argv: yargs.Arguments<A>) => {
     try {
       const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
 

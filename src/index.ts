@@ -8,7 +8,7 @@ import init from 'lib/init';
  * Re-export selected types from 'yargs' in the event they are needed for
  * advanced use-cases.
  */
-export {
+export type {
   Arguments,
   Argv
 } from 'yargs';
@@ -19,7 +19,7 @@ export {
  *
  * Export selected types from 'etc/types'.
  */
-export {
+export type {
   SaffronBuilder,
   SaffronBuilderOptions,
   SaffronHandler,

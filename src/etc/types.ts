@@ -1,6 +1,6 @@
-import { OptionsSync as CosmiconfigSyncOptions } from 'cosmiconfig';
-import { NormalizedReadResult } from 'read-pkg-up';
-import yargs, { Argv, Arguments, CommandModule } from 'yargs';
+import type { OptionsSync as CosmiconfigSyncOptions } from 'cosmiconfig';
+import type { NormalizedReadResult } from 'read-pkg-up';
+import type yargs from 'yargs';
 
 
 // ----- Miscellaneous ---------------------------------------------------------
@@ -53,7 +53,7 @@ export interface SaffronBuilderHandlerCommonOptions {
  * Object passed to a Saffron 'builder' function.
  */
 export interface SaffronBuilderOptions<A> extends SaffronBuilderHandlerCommonOptions {
-  command: Argv<A>;
+  command: yargs.Argv<A>;
 }
 
 /**
@@ -72,7 +72,7 @@ export interface SaffronHandlerOptions<A, C> extends SaffronBuilderHandlerCommon
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
    */
-  argv: Arguments<A>;
+  argv: yargs.Arguments<A>;
 
   /**
    * Parsed configuration file, if found.
@@ -151,7 +151,7 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    *
    * Default: '*'
    */
-  command?: CommandModule['command'];
+  command?: yargs.CommandModule['command'];
 
   /**
    * List of aliases for the command being defined. This should only be used
@@ -159,7 +159,7 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#aliaskey-alias
    */
-  aliases?: CommandModule['aliases'];
+  aliases?: yargs.CommandModule['aliases'];
 
   /**
    * Description that will appear at the top of help content.
@@ -169,7 +169,7 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    *
    * Default: "description" field from package.json.
    */
-  description?: CommandModule['describe'];
+  description?: yargs.CommandModule['describe'];
 
   /**
    * (Optional) Command builder function, used to add and configure arguments
