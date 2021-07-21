@@ -1,7 +1,8 @@
 // @ts-expect-error - No type declarations for this package.
 import babelRegister, { revert } from '@babel/register';
-import { cosmiconfigSync } from 'cosmiconfig';
+import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
+import esm from 'esm';
 import ow from 'ow';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
@@ -12,37 +13,61 @@ import log from 'lib/log';
  * Cosmiconfig custom loader that supports ESM syntax and any Babel plugins that
  * may be installed in the local project.
  */
-function loadEsm(filepath: string) {
+async function parseConfiguration(filepath: string) {
   // Load bare configuration. This will be used as a backup if the below methods
   // fail.
+  if (typeof require === 'function') {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const config = require(filepath);
+      log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using require().');
+      return config?.default ? config.default : config;
+    } catch (err) {
+      log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file using require():'), err.message);
+    }
+  }
+
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const config = require(filepath);
+    const config = await import(filepath);
+    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using import().');
     return config?.default ? config.default : config;
   } catch (err) {
-    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file without shims: ${err.message}`);
+    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file using import():'), err.message);
   }
+
 
   // Try to load configuration using 'esm'.
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const requireEsm = require('esm')(module, { cjs: true });
+    const requireEsm = esm(module, { cjs: true });
     const config = requireEsm(filepath);
+    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using `esm`.');
     return config?.default ? config.default : config;
   } catch (err) {
-    log.verbose(log.prefix('loadEsm'), `Failed to load configuration with ESM: ${err.message}`);
+    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration with `esm`:'), err.message);
   }
 
   // Try to load configuration using @babel/register and the host project's
   // Babel configuration. This will be necessary if the configuration file or
   // anything it imports uses Babel features.
+  babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+
   try {
-    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config = require(filepath);
+    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using @babel/register + require().');
     return config?.default ? config.default : config;
   } catch (err) {
-    log.verbose(log.prefix('loadEsm'), `Failed to load configuration file with @babel/register: ${err.message}`);
+    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file with @babel/register + require():'), err.message);
+    revert();
+  }
+
+  try {
+    const config = await import(filepath);
+    log.verbose(log.prefix('parseConfiguration'), 'Loaded configuration using @babel/register + import().');
+    return config?.default ? config.default : config;
+  } catch (err) {
+    log.silly(log.prefix('parseConfiguration'), log.chalk.red.bold('Failed to load configuration file with @babel/register + import():'), err.message);
     revert();
   }
 }
@@ -56,17 +81,17 @@ function loadEsm(filepath: string) {
  * registered that use the same file, we don't have to worry about multiple
  * filesystem calls here.
  */
-export default function loadConfiguration<C>({ fileName, key, searchFrom, ...cosmicOptions }: SaffronCosmiconfigOptions) {
+export default async function loadConfiguration<C>({ fileName, key, searchFrom, ...cosmicOptions }: SaffronCosmiconfigOptions) {
   // Validate options.
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
-  const configResult = cosmiconfigSync(fileName, merge({
+  const configResult = await cosmiconfig(fileName, merge({
     loaders: {
-      '.ts': loadEsm,
-      '.js': loadEsm,
-      '.mjs': loadEsm,
-      '.cjs': loadEsm
+      '.ts': parseConfiguration,
+      '.js': parseConfiguration,
+      '.mjs': parseConfiguration,
+      '.cjs': parseConfiguration
     },
     searchPlaces: [
       'package.json',

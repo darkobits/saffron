@@ -4,8 +4,8 @@ import yargs, { Arguments, Argv } from 'yargs';
 
 import {
   GenericObject,
-  SaffronOptions,
-  SaffronCosmiconfigResult
+  SaffronHandlerOptions,
+  SaffronOptions
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
 import getPackageInfo from 'lib/package';
@@ -39,31 +39,6 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
   const { pkgJson, pkgRoot } = getPackageInfo();
 
 
-  // ----- (Optional) Load Configuration File ----------------------------------
-
-  // Whether we should automatically call command.config() with the data from
-  // the configuration file.
-  let autoConfig = false;
-
-  let configResult: SaffronCosmiconfigResult<C> | undefined;
-
-  if (options.config !== false) {
-    // If the user did not disable configuration file loading entirely, switch
-    // autoConfig to `true` unless they explicitly set the `auto` option to
-    // `false`.
-    autoConfig = options.config?.auto !== false;
-
-    configResult = loadConfiguration<C>({
-      // By default, use the un-scoped portion of the package's name as the
-      // configuration file name.
-      fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
-      // N.B. If the user provided a custom fileName, it will overwrite the one
-      // from package.json above.
-      ...options.config
-    });
-  }
-
-
   // ----- Builder Proxy -------------------------------------------------------
 
   /**
@@ -94,19 +69,11 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
       });
     }
 
-    // If autoConfig is still true and we successfully loaded data from a
-    // configuration file, automatically configure the command using said data.
-    // This lets us leverage Yargs to validate both CLI arguments and the
-    // configuration data in a single code path.
-    if (autoConfig && configResult && !configResult.isEmpty) {
-      command.config(configResult.config);
-    }
-
     return command;
   };
 
 
-  // ----- Handler Decorator ---------------------------------------------------
+  // ----- Handler Proxy -------------------------------------------------------
 
   /**
    * This function wraps the "handler" function provided to Yargs, allowing us
@@ -116,15 +83,53 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    */
   const handler = async (argv: Arguments<A>) => {
     try {
-      await options.handler({
-        // Strip "kebab-case" duplicate keys from argv.
-        argv: camelcaseKeys(argv, {deep: true}),
-        config: configResult?.config ? camelcaseKeys(configResult.config, {deep: true})  : undefined,
-        configPath: configResult?.filepath,
-        configIsEmpty: configResult?.isEmpty,
-        packageJson: pkgJson,
-        packageRoot: pkgRoot
-      });
+      const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
+
+      // Convert raw `argv` to camelCase.
+      handlerOpts.argv = camelcaseKeys(argv, {deep: true});
+
+      handlerOpts.packageJson = pkgJson;
+      handlerOpts.packageRoot = pkgRoot;
+
+      // Whether we should automatically call command.config() with the data
+      // from the configuration file.
+      let autoConfig = false;
+
+      if (options.config !== false) {
+        // If the user did not disable configuration file loading entirely,
+        // switch autoConfig to `true` unless they explicitly set the `auto`
+        // option to `false`.
+        autoConfig = options.config?.auto !== false;
+
+        const configResult = await loadConfiguration<C>({
+          // By default, use the un-scoped portion of the package's name as the
+          // configuration file name.
+          fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
+          // N.B. If the user provided a custom fileName, it will overwrite the
+          // one from package.json above.
+          ...options.config
+        });
+
+        if (configResult.config) {
+          handlerOpts.config = camelcaseKeys(configResult.config, {deep: true});
+        }
+
+        handlerOpts.configPath = configResult.filepath;
+        handlerOpts.configIsEmpty = configResult.isEmpty;
+
+        // If `autoConfig` is enabled, for each key in `argv`, set its value to
+        // the corresponding value from `config`, if it exists.
+        if (autoConfig && !handlerOpts.configIsEmpty) {
+          Object.entries(configResult.config).forEach(([key, value]) => {
+            if (handlerOpts.argv && handlerOpts.config && Reflect.has(handlerOpts.argv, key)) {
+              Reflect.set(handlerOpts.argv, key, value);
+            }
+          });
+        }
+      }
+
+      // Finally, invoke the user's handler.
+      await options.handler(handlerOpts as Required<SaffronHandlerOptions<A, C>>);
     } catch (err) {
       if (typeof err?.exitCode === 'number') {
         process.exit(err.exitCode);
@@ -143,7 +148,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     command: options.command ?? '*',
     describe: options?.description ?? pkgJson?.description ?? undefined,
     aliases: options.aliases,
-    // @ts-expect-error: Typings are wonky here as of Yargs 16.x.
+    // @ts-expect-error
     builder,
     handler
   });
