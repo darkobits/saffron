@@ -56,7 +56,11 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     command.wrap(yargs.terminalWidth());
     command.alias('v', 'version');
     command.alias('h', 'help');
-    command.version();
+
+    if (pkgJson?.version) {
+      command.version(pkgJson.version);
+    }
+
     command.help();
 
     // Call user-provided builder, additionally passing the (possible)

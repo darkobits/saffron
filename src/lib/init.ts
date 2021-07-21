@@ -1,12 +1,15 @@
 import yargs from 'yargs';
-import { SaffronInitCallback } from 'etc/types';
 
+import type { SaffronInitCallback } from 'etc/types';
+import getPackageInfo from 'lib/package';
 
 /**
  * Sets global defaults for Yargs, then calls `yargs.argv`, which initiates the
  * Yargs parser.
  */
 export default function init(cb?: SaffronInitCallback) {
+  const { pkgJson } = getPackageInfo();
+
   // For applications with no sub-commands, this ensures we show help properly
   // when the user calls --help from the root command. This is necessary even
   // when a default command with these same options has been configured.
@@ -14,7 +17,11 @@ export default function init(cb?: SaffronInitCallback) {
   yargs.wrap(yargs.terminalWidth());
   yargs.alias('v', 'version');
   yargs.alias('h', 'help');
-  yargs.version();
+
+  if (pkgJson?.version) {
+    yargs.version(pkgJson.version);
+  }
+
   yargs.help();
 
   // Finally, call the provided callback, passing it the Yargs object, in the
