@@ -22,14 +22,10 @@ const cachedPackageResult: PackageData = {};
  * result.
  */
 export default function getPackageInfo(): PackageData {
-  // N.B. There may be ways we can recover from this, but until we have an
-  // example where this value is not set, throw.
-  if (!require.main) {
-    throw new Error('Unable to load package.json; require.main is not set.');
-  }
-
   if (Object.keys(cachedPackageResult).length === 0) {
-    const packageResult = readPkgUp.sync({cwd: path.resolve(require.main.filename)});
+    const packageResult = readPkgUp.sync({
+      cwd: path.dirname(process.argv[1])
+    });
 
     if (packageResult) {
       cachedPackageResult.pkgJson = packageResult.packageJson;
