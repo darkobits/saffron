@@ -214,5 +214,7 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
     }
   }
 
-  return configResult as SaffronCosmiconfigResult<C>;
+  if (configResult) {
+    return configResult as SaffronCosmiconfigResult<C>;
+  }
 }

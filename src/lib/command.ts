@@ -8,6 +8,7 @@ import {
   SaffronOptions
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
+import log from 'lib/log';
 import getPackageInfo from 'lib/package';
 
 
@@ -86,34 +87,34 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    * avoiding UncaughtPromiseRejection errors.
    */
   const handler = async (argv: yargs.Arguments<A>) => {
-    try {
-      const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
+    const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
 
-      // Convert raw `argv` to camelCase.
-      handlerOpts.argv = camelcaseKeys(argv, {deep: true});
+    // Convert raw `argv` to camelCase.
+    handlerOpts.argv = camelcaseKeys(argv, {deep: true});
 
-      handlerOpts.packageJson = pkgJson;
-      handlerOpts.packageRoot = pkgRoot;
+    handlerOpts.packageJson = pkgJson;
+    handlerOpts.packageRoot = pkgRoot;
 
-      // Whether we should automatically call command.config() with the data
-      // from the configuration file.
-      let autoConfig = false;
+    // Whether we should automatically call command.config() with the data
+    // from the configuration file.
+    let autoConfig = false;
 
-      if (options.config !== false) {
-        // If the user did not disable configuration file loading entirely,
-        // switch autoConfig to `true` unless they explicitly set the `auto`
-        // option to `false`.
-        autoConfig = options.config?.auto !== false;
+    if (options.config !== false) {
+      // If the user did not disable configuration file loading entirely,
+      // switch autoConfig to `true` unless they explicitly set the `auto`
+      // option to `false`.
+      autoConfig = options.config?.auto !== false;
 
-        const configResult = await loadConfiguration<C>({
-          // By default, use the un-scoped portion of the package's name as the
-          // configuration file name.
-          fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
-          // N.B. If the user provided a custom fileName, it will overwrite the
-          // one from package.json above.
-          ...options.config
-        });
+      const configResult = await loadConfiguration<C>({
+        // By default, use the un-scoped portion of the package's name as the
+        // configuration file name.
+        fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
+        // N.B. If the user provided a custom fileName, it will overwrite the
+        // one from package.json above.
+        ...options.config
+      });
 
+      if (configResult) {
         if (configResult.config) {
           handlerOpts.config = camelcaseKeys(configResult.config, {deep: true});
         }
@@ -131,7 +132,9 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
           });
         }
       }
+    }
 
+    try {
       // Finally, invoke the user's handler.
       await options.handler(handlerOpts as Required<SaffronHandlerOptions<A, C>>);
     } catch (err) {
