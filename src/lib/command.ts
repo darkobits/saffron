@@ -8,7 +8,6 @@ import {
   SaffronOptions
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
-import log from 'lib/log';
 import getPackageInfo from 'lib/package';
 
 
