@@ -1,9 +1,13 @@
 {
   "name": "@darkobits/saffron",
   "version": "0.3.2",
-  "author": "darkobits",
-  "license": "WTFPL",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
+  "author": "darkobits",
+  "type": "module",
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "WTFPL",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/darkobits/saffron.git"
