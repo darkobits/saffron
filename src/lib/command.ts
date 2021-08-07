@@ -137,6 +137,8 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
       // Finally, invoke the user's handler.
       await options.handler(handlerOpts as Required<SaffronHandlerOptions<A, C>>);
     } catch (err) {
+      console.error(err);
+
       if (typeof err?.exitCode === 'number') {
         process.exit(err.exitCode);
       } else if (typeof err?.code === 'number') {
