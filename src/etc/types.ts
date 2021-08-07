@@ -25,7 +25,7 @@ export interface SaffronCosmiconfigResult<C> {
  * Signature of an optional custom parser that may be returned from
  * Saffron.init() callbacks.
  */
-type SaffronCustomParser = (err: Error | null, argv: yargs.Arguments, output: string | undefined) => void;
+type SaffronCustomParser = <A extends yargs.Arguments>(err: Error | null, argv: A, output: string | undefined) => void;
 
 
 /**
