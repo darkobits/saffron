@@ -33,5 +33,8 @@ export default function init(cb?: SaffronInitCallback) {
       ? yargs.parseAsync(process.argv.slice(2), customParser)
       // Note: This is a custom getter that acts like a function call.
       : yargs.argv;
+  }).catch(err => {
+    console.error(err);
+    process.exit(1);
   });
 }
