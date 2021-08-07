@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/darkobits/saffron/compare/v0.3.5...v0.4.0) (2021-08-07)
+
+
+### 🏗 Chores
+
+* Update dependencies. ([e2d0639](https://github.com/darkobits/saffron/commit/e2d0639f7c21c5ebc677cd0a56d602b1c9d84980))
+
+
+### ✨ Features
+
+* Support custom parser callbacks. ([a08bd97](https://github.com/darkobits/saffron/commit/a08bd979347b59184c08b8ba99713e3fae002394))
+
 ### [0.3.5](https://github.com/darkobits/saffron/compare/v0.3.4...v0.3.5) (2021-07-21)
 
 ### [0.3.4](https://github.com/darkobits/saffron/compare/v0.3.3...v0.3.4) (2021-07-21)
