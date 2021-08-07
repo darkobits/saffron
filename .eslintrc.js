@@ -1,8 +1,6 @@
-import { eslint } from '@darkobits/ts';
-
-export default {
-  extends: eslint,
+module.exports = {
+  extends: require('@darkobits/ts').eslint,
   rules: {
     'unicorn/no-process-exit': 'off'
   }
-};
+}

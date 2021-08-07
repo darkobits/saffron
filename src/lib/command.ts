@@ -89,7 +89,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
 
     // Convert raw `argv` to camelCase.
-    handlerOpts.argv = camelcaseKeys(argv, {deep: true});
+    handlerOpts.argv = camelcaseKeys<any, any>(argv, {deep: true});
 
     handlerOpts.packageJson = pkgJson;
     handlerOpts.packageRoot = pkgRoot;
@@ -115,7 +115,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
 
       if (configResult) {
         if (configResult.config) {
-          handlerOpts.config = camelcaseKeys(configResult.config, {deep: true});
+          handlerOpts.config = camelcaseKeys<any, any>(configResult.config, {deep: true});
         }
 
         handlerOpts.configPath = configResult.filepath;
