@@ -26,10 +26,12 @@ export default function init(cb?: SaffronInitCallback) {
 
   // Finally, call the provided callback, passing it the Yargs object, in the
   // event the user needs to perform any additional actions prior to parsing.
-  if (typeof cb === 'function') {
-    cb(yargs);
-  }
-
-  // Note: This is a custom getter that acts like a function call.
-  void yargs.argv;
+  void Promise.resolve(typeof cb === 'function' ? cb(yargs) : undefined).then(customParser => {
+    // If the user returned a custom parsing callback, parse arguments
+    // manually and pass the callback to `parseAsync`.
+    return typeof customParser === 'function'
+      ? yargs.parseAsync(process.argv.slice(2), customParser)
+      // Note: This is a custom getter that acts like a function call.
+      : yargs.argv;
+  });
 }
