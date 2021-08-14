@@ -15,8 +15,6 @@ export default function init(cb?: SaffronInitCallback) {
   // when a default command with these same options has been configured.
   yargs.showHelpOnFail(true, 'See --help for usage instructions.');
   yargs.wrap(yargs.terminalWidth());
-  yargs.alias('v', 'version');
-  yargs.alias('h', 'help');
 
   if (pkgJson?.version) {
     yargs.version(pkgJson.version);
