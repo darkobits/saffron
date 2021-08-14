@@ -1,7 +1,8 @@
 import yargs from 'yargs';
 
-import type { SaffronInitCallback } from 'etc/types';
 import getPackageInfo from 'lib/package';
+
+import type { SaffronInitCallback } from 'etc/types';
 
 /**
  * Sets global defaults for Yargs, then calls `yargs.argv`, which initiates the

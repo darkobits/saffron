@@ -17,7 +17,7 @@
     "prepublishOnly": "nr prepare"
   },
   "dependencies": {
-    "@babel/register": "^7.14.5",
+    "@babel/register": "^7.15.3",
     "@darkobits/log": "^2.0.0-beta.15",
     "@types/yargs": "^17.0.2",
     "camelcase-keys": "^7.0.0",
@@ -25,11 +25,11 @@
     "deepmerge": "^4.2.2",
     "esm": "^3.2.25",
     "ow": "^0.27.0",
-    "read-pkg-up": "^7.0.1",
-    "yargs": "^17.1.0"
+    "read-pkg-up": "7.0.1",
+    "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.7.11",
+    "@darkobits/ts": "^0.8.0",
     "@types/esm": "^3.2.0"
   }
 }
