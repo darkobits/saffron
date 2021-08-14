@@ -1,5 +1,5 @@
 module.exports = {
-  extends: require('@darkobits/ts').eslint,
+  extends: 'plugin:@darkobits/ts',
   rules: {
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',
