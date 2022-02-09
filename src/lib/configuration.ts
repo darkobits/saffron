@@ -1,5 +1,5 @@
 // @ts-expect-error - No type declarations for this package.
-import babelRegister, { revert } from '@babel/register';
+import babelRegister from '@babel/register';
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import esm from 'esm';
@@ -7,6 +7,9 @@ import ow from 'ow';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
+
+
+const { revert } = babelRegister;
 
 
 /**
