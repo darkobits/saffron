@@ -43,27 +43,7 @@ async function parseConfiguration(filepath: string) {
   }
 
 
-  // ----- 2: Dynamic Import ---------------------------------------------------
-
-  // This strategy will work if we are in a CJS or ESM context trying to load an
-  // ESM configuration file.
-  try {
-    const config = await import(filepath);
-    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
-    return config?.default ? config.default : config;
-  } catch (err: any) {
-    errorThunks.push(
-      () => log.silly(
-        log.prefix('parseConfiguration'),
-        log.chalk.red.bold('Failed to load configuration file using import():'),
-        err.message
-      )
-    );
-    lastErrorMessage = err.message;
-  }
-
-
-  // ----- 3: ESM --------------------------------------------------------------
+  // ----- 2: ESM --------------------------------------------------------------
 
   // This strategy is a fallback to strategy 2 that may work in some cases where
   // dynamic import does not.
@@ -87,6 +67,26 @@ async function parseConfiguration(filepath: string) {
   // configuration. This will be necessary if the configuration file or anything
   // it imports uses Babel features.
   babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+
+
+  // ----- 3: Dynamic Import ---------------------------------------------------
+
+  // This strategy will work if we are in a CJS or ESM context trying to load an
+  // ESM configuration file.
+  try {
+    const config = await import(filepath);
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
+    return config?.default ? config.default : config;
+  } catch (err: any) {
+    errorThunks.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration file using import():'),
+        err.message
+      )
+    );
+    lastErrorMessage = err.message;
+  }
 
 
   // ----- 4: Babel Register + CommonJS Require --------------------------------
@@ -113,7 +113,29 @@ async function parseConfiguration(filepath: string) {
   }
 
 
-  // ----- 5: Babel Register + Dynamic Import ----------------------------------
+  // ----- 5: Babel Register + ESM ---------------------------------------------
+
+  // This strategy is a fallback strategy that may work in cases where dynamic
+  // import does not.
+  try {
+    const requireEsm = esm(module, { cjs: true });
+    const config = requireEsm(filepath);
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + `esm`.'));
+    return config?.default ? config.default : config;
+  } catch (err: any) {
+    errorThunks.push(
+      () => log.silly(
+        log.prefix('parseConfiguration'),
+        log.chalk.red.bold('Failed to load configuration with @babel/register + `esm`:'),
+        err.message
+      )
+    );
+    lastErrorMessage = err.message;
+    revert();
+  }
+
+
+  // ----- 6: Babel Register + Dynamic Import ----------------------------------
 
   // This strategy will work when we are in a CJS or ESM context trying to load
   // an ESM configuration file that uses (or requires files that use) certain
@@ -136,26 +158,7 @@ async function parseConfiguration(filepath: string) {
   }
 
 
-  // ----- 6: Babel Register + ESM ---------------------------------------------
-
-  // This strategy is a fallback to strategy 5 that may work in cases where
-  // dynamic import does not.
-  try {
-    const requireEsm = esm(module, { cjs: true });
-    const config = requireEsm(filepath);
-    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + `esm`.'));
-    return config?.default ? config.default : config;
-  } catch (err: any) {
-    errorThunks.push(
-      () => log.silly(
-        log.prefix('parseConfiguration'),
-        log.chalk.red.bold('Failed to load configuration with @babel/register + `esm`:'),
-        err.message
-      )
-    );
-    lastErrorMessage = err.message;
-    revert();
-  }
+  // ----- Error Reporting -----------------------------------------------------
 
   if (errorThunks.length > 0) {
     errorThunks.forEach(errorThunk => errorThunk());
