@@ -1,5 +1,4 @@
 import camelcaseKeys from 'camelcase-keys';
-import ow from 'ow';
 import yargs from 'yargs';
 
 import {
@@ -8,6 +7,7 @@ import {
   SaffronOptions
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
+import ow from 'lib/ow';
 import getPackageInfo from 'lib/package';
 
 

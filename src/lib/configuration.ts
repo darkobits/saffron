@@ -3,10 +3,11 @@ import babelRegister from '@babel/register';
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import esm from 'esm';
-import ow from 'ow';
+
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
+import ow from 'lib/ow';
 
 
 const { revert } = babelRegister;
