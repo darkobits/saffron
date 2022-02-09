@@ -17,7 +17,7 @@ import log from 'lib/log';
  *
  */
 async function parseConfiguration(filepath: string) {
-  const errors: Array<() => void> = [];
+  const errorThunks: Array<() => void> = [];
 
   // ----- 1: CommonJs Require -------------------------------------------------
 
@@ -29,8 +29,8 @@ async function parseConfiguration(filepath: string) {
       const config = require(filepath);
       log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using require().'));
       return config?.default ? config.default : config;
-    } catch (err) {
-      errors.push(
+    } catch (err: any) {
+      errorThunks.push(
         () => log.silly(
           log.prefix('parseConfiguration'),
           log.chalk.red.bold('Failed to load configuration file using require():'),
@@ -49,8 +49,8 @@ async function parseConfiguration(filepath: string) {
     const config = await import(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
     return config?.default ? config.default : config;
-  } catch (err) {
-    errors.push(
+  } catch (err: any) {
+    errorThunks.push(
       () => log.silly(
         log.prefix('parseConfiguration'),
         log.chalk.red.bold('Failed to load configuration file using import():'),
@@ -69,8 +69,8 @@ async function parseConfiguration(filepath: string) {
     const config = requireEsm(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using `esm`.'));
     return config?.default ? config.default : config;
-  } catch (err) {
-    errors.push(
+  } catch (err: any) {
+    errorThunks.push(
       () => log.silly(
         log.prefix('parseConfiguration'),
         log.chalk.red.bold('Failed to load configuration with `esm`:'),
@@ -96,8 +96,8 @@ async function parseConfiguration(filepath: string) {
     const config = require(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + require().'));
     return config?.default ? config.default : config;
-  } catch (err) {
-    errors.push(
+  } catch (err: any) {
+    errorThunks.push(
       () => log.silly(
         log.prefix('parseConfiguration'),
         log.chalk.red.bold('Failed to load configuration file with @babel/register + require():'),
@@ -118,8 +118,8 @@ async function parseConfiguration(filepath: string) {
     const config = await import(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
     return config?.default ? config.default : config;
-  } catch (err) {
-    errors.push(
+  } catch (err: any) {
+    errorThunks.push(
       () => log.silly(
         log.prefix('parseConfiguration'),
         log.chalk.red.bold('Failed to load configuration file with @babel/register + import():'),
@@ -139,8 +139,8 @@ async function parseConfiguration(filepath: string) {
     const config = requireEsm(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + `esm`.'));
     return config?.default ? config.default : config;
-  } catch (err) {
-    errors.push(
+  } catch (err: any) {
+    errorThunks.push(
       () => log.silly(
         log.prefix('parseConfiguration'),
         log.chalk.red.bold('Failed to load configuration with @babel/register + `esm`:'),
@@ -150,8 +150,8 @@ async function parseConfiguration(filepath: string) {
     revert();
   }
 
-  if (errors.length > 0) {
-    errors.forEach(errorFn => errorFn());
+  if (errorThunks.length > 0) {
+    errorThunks.forEach(errorThunk => errorThunk());
     throw new Error('All configuration parsing strategies failed.');
   }
 }

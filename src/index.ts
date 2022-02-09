@@ -8,10 +8,7 @@ import init from 'lib/init';
  * Re-export selected types from 'yargs' in the event they are needed for
  * advanced use-cases.
  */
-export type {
-  Arguments,
-  Argv
-} from 'yargs';
+export type { Arguments, Argv } from 'yargs';
 
 
 /**
@@ -32,15 +29,13 @@ export type {
  *
  * @example
  *
- * import {cli, init} from '@darkobits/saffron';
+ * import { command, init } from '@darkobits/saffron';
  *
- * cli(...);
+ * command(...);
  * init(...);
  */
-export {
-  init,
-  command
-};
+export { default as init } from 'lib/init';
+export { default as command } from 'lib/command';
 
 
 /**
@@ -48,12 +43,9 @@ export {
  *
  * @example
  *
- * import saffron from '@darkobits/saffron';
+ * import cli from '@darkobits/saffron';
  *
- * saffron.command(...);
- * saffron.init(...);
+ * cli.command(...);
+ * cli.init(...);
  */
-export default {
-  init,
-  command
-};
+export default { init, command };

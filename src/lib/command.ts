@@ -30,7 +30,6 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
   ow(options.handler, 'handler', ow.function);
   ow(options.strict, 'strict', ow.optional.boolean);
   ow(options.config, 'config', ow.any(ow.boolean.false, ow.object, ow.undefined));
-  // @ts-ignore -- Typings on this are weird.
   ow(options.aliases, 'aliases', ow.any(ow.undefined, ow.string, ow.array.ofType(ow.string)));
 
 
@@ -45,7 +44,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    * This function wraps the "builder" function provided to Yargs, setting
    * default behaviors and passing any configuration loaded from cosmiconfig.
    */
-  const builder = (command: yargs.Argv<A>): yargs.Argv<A> => {
+  const builder = (command: yargs.Argv<any>): yargs.Argv<A> => {
     // Set strict mode unless otherwise indicated.
     if (options.strict !== false) {
       command.strict();
@@ -85,7 +84,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
    * that process.exit() is called when an (otherwise uncaught) error is thrown,
    * avoiding UncaughtPromiseRejection errors.
    */
-  const handler = async (argv: yargs.Arguments<A>) => {
+  const handler = async (argv: yargs.ArgumentsCamelCase<A>) => {
     const handlerOpts: Partial<SaffronHandlerOptions<A, C>> = {};
 
     // Convert raw `argv` to camelCase.
@@ -119,7 +118,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
         }
 
         handlerOpts.configPath = configResult.filepath;
-        handlerOpts.configIsEmpty = configResult.isEmpty;
+        handlerOpts.configIsEmpty = Boolean(configResult.isEmpty);
 
         // If `autoConfig` is enabled, for each key in `argv`, set its value to
         // the corresponding value from `config`, if it exists.
@@ -136,7 +135,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     try {
       // Finally, invoke the user's handler.
       await options.handler(handlerOpts as Required<SaffronHandlerOptions<A, C>>);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
 
       if (typeof err?.exitCode === 'number') {
@@ -156,7 +155,6 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     command: options.command ?? '*',
     describe: options?.description ?? pkgJson?.description ?? undefined,
     aliases: options.aliases,
-    // @ts-expect-error
     builder,
     handler
   });

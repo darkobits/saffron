@@ -45,12 +45,12 @@ export interface SaffronBuilderHandlerCommonOptions {
    *
    * See: https://github.com/npm/normalize-package-data
    */
-  packageJson?: NormalizedReadResult['packageJson'];
+  packageJson: NormalizedReadResult['packageJson'] | undefined;
 
   /**
    * Path to the package root.
    */
-  packageRoot?: string;
+  packageRoot: string | undefined;
 }
 
 
@@ -122,7 +122,7 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigSyncOptions {
    * (Optional) Name to use as a base when searching for configuration files. If
    * omitted, the un-scoped portion of the project's package name will be used.
    */
-  fileName?: string;
+  fileName: string | undefined;
 
   /**
    * (Optional) Specifies a key in loaded configuration files that should be
