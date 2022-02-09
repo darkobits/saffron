@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.7-beta.0](https://github.com/darkobits/saffron/compare/v0.4.6...v0.4.7-beta.0) (2022-02-09)
+
+
+### 🛠 Refactoring
+
+* Publish as ESM. ([2d995b1](https://github.com/darkobits/saffron/commit/2d995b181feaa2846055ac00baf56699509dbc0f))
+
 ### [0.4.6](https://github.com/darkobits/saffron/compare/v0.4.5...v0.4.6) (2022-02-09)
 
 
