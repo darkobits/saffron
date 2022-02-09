@@ -18,7 +18,7 @@ import log from 'lib/log';
  */
 async function parseConfiguration(filepath: string) {
   const errorThunks: Array<() => void> = [];
-  const errorMessages = new Set<string>();
+  let lastErrorMessage: string;
 
   // ----- 1: CommonJs Require -------------------------------------------------
 
@@ -38,7 +38,7 @@ async function parseConfiguration(filepath: string) {
           err.message
         )
       );
-      errorMessages.add(err.message);
+      lastErrorMessage = err.message;
     }
   }
 
@@ -59,7 +59,7 @@ async function parseConfiguration(filepath: string) {
         err.message
       )
     );
-    errorMessages.add(err.message);
+    lastErrorMessage = err.message;
   }
 
 
@@ -80,7 +80,7 @@ async function parseConfiguration(filepath: string) {
         err.message
       )
     );
-    errorMessages.add(err.message);
+    lastErrorMessage = err.message;
   }
 
   // Load @babel/register, which will use the host project's Babel
@@ -108,7 +108,7 @@ async function parseConfiguration(filepath: string) {
         err.message
       )
     );
-    errorMessages.add(err.message);
+    lastErrorMessage = err.message;
     revert();
   }
 
@@ -131,7 +131,7 @@ async function parseConfiguration(filepath: string) {
         err.message
       )
     );
-    errorMessages.add(err.message);
+    lastErrorMessage = err.message;
     revert();
   }
 
@@ -153,7 +153,7 @@ async function parseConfiguration(filepath: string) {
         err.message
       )
     );
-    errorMessages.add(err.message);
+    lastErrorMessage = err.message;
     revert();
   }
 
@@ -161,11 +161,8 @@ async function parseConfiguration(filepath: string) {
     errorThunks.forEach(errorThunk => errorThunk());
   }
 
-  // If every strategy produced the same error, the issue is a likely a syntax
-  // or module resolution issue.
-  if (errorMessages.size === 1) {
-    const message = [...errorMessages.values()].pop();
-    throw new Error(`Error parsing configuration file: ${message}`);
+  if (lastErrorMessage) {
+    throw new Error(`Error parsing configuration file: ${lastErrorMessage}`);
   }
 
   throw new Error('All configuration parsing strategies failed.');
