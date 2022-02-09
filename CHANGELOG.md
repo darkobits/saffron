@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.4](https://github.com/darkobits/saffron/compare/v0.4.3...v0.4.4) (2022-02-09)
+
+
+### 🏗 Chores
+
+* Update dependencies. ([0c3185c](https://github.com/darkobits/saffron/commit/0c3185c6405b0660b6d92f69bf579c177247a5d1))
+
+
+### 🛠 Refactoring
+
+* Improve error handling. ([669ea6e](https://github.com/darkobits/saffron/commit/669ea6ee1449eadc6ebf965c3f47c8ce4d9de5a8))
+
 ### [0.4.3](https://github.com/darkobits/saffron/compare/v0.4.2...v0.4.3) (2021-08-14)
 
 
