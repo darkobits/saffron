@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.6](https://github.com/darkobits/saffron/compare/v0.4.5...v0.4.6) (2022-02-09)
+
+
+### 🛠 Refactoring
+
+* Re-order import strategies. ([b5f20c5](https://github.com/darkobits/saffron/commit/b5f20c5dab860e4cd33584bfa3f42e953985dfd0))
+
 ### [0.4.5](https://github.com/darkobits/saffron/compare/v0.4.4...v0.4.5) (2022-02-09)
 
 
