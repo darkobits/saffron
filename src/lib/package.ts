@@ -1,22 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 
-import readPkgUp from 'read-pkg-up';
+import { readPackageUpSync, NormalizedPackageJson } from 'read-pkg-up';
 
 
 /**
- * Object returned by loadPackageData.
+ * Object returned by getPackageInfo.
  */
 export interface PackageData {
-  pkgJson?: readPkgUp.NormalizedPackageJson;
-  pkgRoot?: string;
+  pkgJson: NormalizedPackageJson | undefined;
+  pkgRoot: string | undefined;
 }
 
 
 /**
  * Module-local cached result from read-pkg-up.
  */
-const cachedPackageResult: PackageData = {};
+const cachedPackageResult: PackageData = {
+  pkgJson: undefined,
+  pkgRoot: undefined
+};
 
 
 /**
@@ -27,7 +30,7 @@ export default function getPackageInfo(): PackageData {
   if (Object.keys(cachedPackageResult).length === 0) {
     const execPath = path.dirname(fs.realpathSync(process.argv[1]));
 
-    const packageResult = readPkgUp.sync({ cwd: execPath });
+    const packageResult = readPackageUpSync({ cwd: execPath });
 
     if (packageResult) {
       cachedPackageResult.pkgJson = packageResult.packageJson;

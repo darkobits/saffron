@@ -1,9 +1,13 @@
 {
   "name": "@darkobits/saffron",
   "version": "0.4.6",
-  "author": "darkobits",
-  "license": "WTFPL",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
+  "author": "darkobits",
+  "engines": {
+    "node": ">=16"
+  },
+  "type": "module",
+  "license": "WTFPL",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/darkobits/saffron.git"
@@ -25,11 +29,11 @@
     "deepmerge": "^4.2.2",
     "esm": "^3.2.25",
     "ow": "^0.28.1",
-    "read-pkg-up": "7.0.1",
+    "read-pkg-up": "^9.1.0",
     "yargs": "^17.3.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.8.15",
+    "@darkobits/ts": "^0.8.16",
     "@types/esm": "^3.2.0"
   }
 }
