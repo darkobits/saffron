@@ -1,6 +1,5 @@
-import yargs from 'yargs';
-
 import getPackageInfo from 'lib/package';
+import yargs from 'lib/yargs';
 
 import type { SaffronInitCallback } from 'etc/types';
 
