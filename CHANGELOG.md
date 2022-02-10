@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.12](https://github.com/darkobits/saffron/compare/v0.4.11...v0.4.12) (2022-02-10)
+
+
+### 🏗 Chores
+
+* Update ci.yml. ([f16e1ca](https://github.com/darkobits/saffron/commit/f16e1cac650c5847cee6cbf08d15e99b4eab301e))
+* Update dependencies. ([b479e42](https://github.com/darkobits/saffron/commit/b479e42ee47423306cfb2465d24f63c4d39b23bc))
+* Update dependencies. ([dfd0555](https://github.com/darkobits/saffron/commit/dfd05556bdbed74fcd2e7eceaf1367dbb9f01f1b))
+
+
+### 🐞 Bug Fixes
+
+* **configuration:** Load `@babel/register` properly. ([0baecfb](https://github.com/darkobits/saffron/commit/0baecfbdc1f14850831b82cfe3313a1b30082392))
+
 ### [0.4.11](https://github.com/darkobits/saffron/compare/v0.4.10...v0.4.11) (2022-02-09)
 
 
