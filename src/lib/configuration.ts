@@ -12,9 +12,16 @@ import log from 'lib/log';
 import ow from 'lib/ow';
 
 
+/**
+ * @private
+ *
+ * Creates a temporary module in the nearest node_modules folder that loads
+ * @babel/register, executes the provided contents, and returns the result. The
+ * node_modules folder is used to ensure Babel loads the nearest configuration
+ * file.
+ */
 async function withBabelRegister(configPath: string, contents: string) {
   const pkgDir = await packageDirectory({ cwd: path.dirname(configPath) });
-  // const tempPath = tempy.file({ extension: 'js' });
   const babelRegisterPath = resolvePkg('@babel/register');
   const wrapper = `
     const babelRegister = require('${babelRegisterPath}');
@@ -45,22 +52,22 @@ async function parseConfiguration(filepath: string) {
 
   // ----- Dynamic Import ------------------------------------------------------
 
-  // This strategy will work if we are in a CJS or ESM context trying to load an
-  // ESM configuration file.
-  try {
-    const config = await import(filepath);
-    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
-    return config?.default ? config.default : config;
-  } catch (err: any) {
-    errorThunks.push(
-      () => log.silly(
-        log.prefix('parseConfiguration'),
-        log.chalk.red.bold('Failed to load configuration file using import():'),
-        err.message
-      )
-    );
-    lastErrorMessage = err.message;
-  }
+  // N.B. This strategy is disabled because when it fails, Node will issue a
+  // warning that is difficult to suppress.
+  // try {
+  //   const config = await import(`${filepath}?nonce=1`);
+  //   log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
+  //   return config?.default ? config.default : config;
+  // } catch (err: any) {
+  //   errorThunks.push(
+  //     () => log.silly(
+  //       log.prefix('parseConfiguration'),
+  //       log.chalk.red.bold('Failed to load configuration file using import():'),
+  //       err.message
+  //     )
+  //   );
+  //   lastErrorMessage = err.message;
+  // }
 
 
   // ----- Babel Register + Dynamic Import -------------------------------------
@@ -71,7 +78,7 @@ async function parseConfiguration(filepath: string) {
   // Babel configuration file.
   try {
     const config = await withBabelRegister(filepath, `
-      module.exports = import("${filepath}").then(result => {
+      module.exports = import("${filepath}?nonce=2").then(result => {
         return result?.default ? result.default : result;
       });
     `);
