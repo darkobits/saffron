@@ -27,7 +27,7 @@ async function withBabelRegister(configPath: string, contents: string) {
   await fs.ensureDir(tempDir);
   await fs.writeFile(loaderPath, wrapper);
   const result = await import(loaderPath);
-  // await fs.remove(loaderPath);
+  await fs.remove(loaderPath);
   return result;
 }
 
@@ -70,7 +70,11 @@ async function parseConfiguration(filepath: string) {
   // Babel features or path mappings that are configured by the local project's
   // Babel configuration file.
   try {
-    const config = await withBabelRegister(filepath, `exports.default = import("${filepath}")`);
+    const config = await withBabelRegister(filepath, `
+      module.exports = import("${filepath}").then(result => {
+        return result?.default ? result.default : result;
+      });
+    `);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
     return config?.default ? config.default : config;
   } catch (err: any) {
