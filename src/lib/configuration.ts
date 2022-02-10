@@ -67,12 +67,6 @@ async function parseConfiguration(filepath: string) {
     lastErrorMessage = err.message;
   }
 
-  // Load @babel/register, which will use the host project's Babel
-  // configuration. This will be necessary if the configuration file or anything
-  // it imports uses Babel features.
-  babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
-
-
   // ----- 3: Dynamic Import ---------------------------------------------------
 
   // This strategy will work if we are in a CJS or ESM context trying to load an
@@ -100,6 +94,7 @@ async function parseConfiguration(filepath: string) {
   // features or path mappings that are configured by the local project's Babel
   // configuration file.
   try {
+    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const config = require(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + require().'));
@@ -122,6 +117,7 @@ async function parseConfiguration(filepath: string) {
   // This strategy is a fallback strategy that may work in cases where dynamic
   // import does not.
   try {
+    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
     const requireEsm = esm(module, { cjs: true });
     const config = requireEsm(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + `esm`.'));
@@ -146,6 +142,7 @@ async function parseConfiguration(filepath: string) {
   // Babel features or path mappings that are configured by the local project's
   // Babel configuration file.
   try {
+    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
     const config = await import(filepath);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
     return config?.default ? config.default : config;

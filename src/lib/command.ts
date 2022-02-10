@@ -1,6 +1,5 @@
 import camelcaseKeys from 'camelcase-keys';
 
-
 import {
   GenericObject,
   SaffronHandlerOptions,
