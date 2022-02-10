@@ -33,7 +33,7 @@
     "yargs": "^17.3.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.8.18",
+    "@darkobits/ts": "^0.8.19",
     "@types/esm": "^3.2.0"
   }
 }
