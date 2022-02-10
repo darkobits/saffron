@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.13](https://github.com/darkobits/saffron/compare/v0.4.12...v0.4.13) (2022-02-10)
+
+
+### 🐞 Bug Fixes
+
+* **configuration:** Load `@babel/register` properly. ([ec56906](https://github.com/darkobits/saffron/commit/ec56906d4ba9b4ddd1526acb666d04df13a6633d))
+
 ### [0.4.12](https://github.com/darkobits/saffron/compare/v0.4.11...v0.4.12) (2022-02-10)
 
 
