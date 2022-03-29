@@ -1,3 +1,10 @@
+### [0.4.18](https://github.com/darkobits/saffron/compare/v0.4.17...v0.4.18) (2022-03-29)
+
+
+### 🐞 Bug Fixes
+
+* Get default export for TypeScript loader. ([2e6cda2](https://github.com/darkobits/saffron/commit/2e6cda26c246842e71635b4f6d64f260e235b6ad))
+
 ### [0.4.17](https://github.com/darkobits/saffron/compare/v0.4.16...v0.4.17) (2022-03-29)
 
 
