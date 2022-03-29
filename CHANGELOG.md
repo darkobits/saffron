@@ -1,3 +1,10 @@
+### [0.4.20](https://github.com/darkobits/saffron/compare/v0.4.19...v0.4.20) (2022-03-29)
+
+
+### 🐞 Bug Fixes
+
+* Fix Typescript build configuration. ([3061a4b](https://github.com/darkobits/saffron/commit/3061a4bca2dd67917c3b93a9dc398f24bcc19695))
+
 ### [0.4.19](https://github.com/darkobits/saffron/compare/v0.4.18...v0.4.19) (2022-03-29)
 
 
