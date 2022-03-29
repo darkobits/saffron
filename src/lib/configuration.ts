@@ -1,6 +1,5 @@
 import path from 'path';
 
-import TypeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import fs from 'fs-extra';
@@ -11,6 +10,7 @@ import resolvePkg from 'resolve-pkg';
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
 import ow from 'lib/ow';
+import TypeScriptLoader from 'lib/typescript-loader';
 
 
 /**
