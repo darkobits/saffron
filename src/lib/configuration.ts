@@ -1,5 +1,6 @@
 import path from 'path';
 
+import TypeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import fs from 'fs-extra';
@@ -48,26 +49,6 @@ async function withBabelRegister(configPath: string, contents: string) {
 async function parseConfiguration(filepath: string) {
   const errorThunks: Array<() => void> = [];
   let lastErrorMessage: string;
-
-
-  // ----- Dynamic Import ------------------------------------------------------
-
-  // N.B. This strategy is disabled because when it fails, Node will issue a
-  // warning that is difficult to suppress.
-  // try {
-  //   const config = await import(`${filepath}?nonce=1`);
-  //   log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using import().'));
-  //   return config?.default ? config.default : config;
-  // } catch (err: any) {
-  //   errorThunks.push(
-  //     () => log.silly(
-  //       log.prefix('parseConfiguration'),
-  //       log.chalk.red.bold('Failed to load configuration file using import():'),
-  //       err.message
-  //     )
-  //   );
-  //   lastErrorMessage = err.message;
-  // }
 
 
   // ----- Babel Register + Dynamic Import -------------------------------------
@@ -125,7 +106,7 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
 
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
-      '.ts': parseConfiguration,
+      '.ts': TypeScriptLoader,
       '.js': parseConfiguration,
       '.mjs': parseConfiguration,
       '.cjs': parseConfiguration
