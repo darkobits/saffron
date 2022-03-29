@@ -1,3 +1,10 @@
+### [0.4.21](https://github.com/darkobits/saffron/compare/v0.4.20...v0.4.21) (2022-03-29)
+
+
+### 🏗 Chores
+
+* Update dependencies. ([9052352](https://github.com/darkobits/saffron/commit/90523529b775126987a93b9f6f91112bb60ab0ed))
+
 ### [0.4.20](https://github.com/darkobits/saffron/compare/v0.4.19...v0.4.20) (2022-03-29)
 
 
