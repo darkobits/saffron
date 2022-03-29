@@ -28,5 +28,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Project
+      - name: Build
         run: npx nr build
+
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx nr release
