@@ -1,3 +1,17 @@
+### [0.4.17](https://github.com/darkobits/saffron/compare/v0.4.16...v0.4.17) (2022-03-29)
+
+
+### 🛠 Refactoring
+
+* Use TypeScript loader for .ts config files. ([166acd2](https://github.com/darkobits/saffron/commit/166acd2335485817b4eafc777653412bc1e7b9f5))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([e71a143](https://github.com/darkobits/saffron/commit/e71a143238b7a17097a58dfc669fdfd38b92a603))
+* Release from CI. ([99cfa27](https://github.com/darkobits/saffron/commit/99cfa27634d15e811ab9c6c53b6d2bf7f33813ec))
+* Update dependencies. ([cac33fe](https://github.com/darkobits/saffron/commit/cac33fe33c98edbff8ceda0ae8ccec9a5f119cb1))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
