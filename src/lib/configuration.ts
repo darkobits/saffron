@@ -3,13 +3,14 @@ import path from 'path';
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 import fs from 'fs-extra';
+// @ts-expect-error
+import ow from 'ow';
 import { packageDirectory } from 'pkg-dir';
 import resolvePkg from 'resolve-pkg';
 
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
-import ow from 'lib/ow';
 import TypeScriptLoader from 'lib/typescript-loader';
 
 
@@ -104,7 +105,9 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
-  const configResult = await cosmiconfig(fileName, merge({
+  // Note: ow@1.0.0 appears to have broken types or something, so we have to
+  // cast this explicitly.
+  const configResult = await cosmiconfig(fileName as string, merge({
     loaders: {
       '.ts': TypeScriptLoader,
       '.js': parseConfiguration,

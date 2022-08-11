@@ -1,4 +1,6 @@
 import camelcaseKeys from 'camelcase-keys';
+// @ts-expect-error
+import ow from 'ow';
 
 import {
   GenericObject,
@@ -6,7 +8,6 @@ import {
   SaffronOptions
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
-import ow from 'lib/ow';
 import { getPackageInfo } from 'lib/package';
 import yargs from 'lib/yargs';
 
