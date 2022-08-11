@@ -1,3 +1,15 @@
+### [0.4.22](https://github.com/darkobits/saffron/compare/v0.4.21...v0.4.22) (2022-08-11)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([65e8ce4](https://github.com/darkobits/saffron/commit/65e8ce43659b5d996451c07c9df8019c831dd9e2))
+
+
+### 🐞 Bug Fixes
+
+* Refactor `getPackageInfo` and report saffron version correctly. ([31643f4](https://github.com/darkobits/saffron/commit/31643f46050c78f22db8abdd8608cbab3b8f6f60))
+
 ### [0.4.21](https://github.com/darkobits/saffron/compare/v0.4.20...v0.4.21) (2022-03-29)
 
 
