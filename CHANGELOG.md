@@ -1,3 +1,10 @@
+### [0.4.23-beta.1](https://github.com/darkobits/saffron/compare/v0.4.22...v0.4.23-beta.1) (2022-08-11)
+
+
+### 🏗 Chores
+
+* **deps:** Update to `ow@1.0.0`. ([bc75407](https://github.com/darkobits/saffron/commit/bc754075fc977eff5e10bfb529f4d45c38cabf69))
+
 ### [0.4.22](https://github.com/darkobits/saffron/compare/v0.4.21...v0.4.22) (2022-08-11)
 
 
