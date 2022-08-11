@@ -1,42 +1,48 @@
 import fs from 'fs';
 import path from 'path';
 
+import { dirname } from '@darkobits/fd-name';
 import { readPackageUpSync, NormalizedPackageJson } from 'read-pkg-up';
 
 
 /**
- * Object returned by getPackageInfo.
+ * Object returned by `getPackageInfo`.
  */
-export interface PackageData {
-  pkgJson: NormalizedPackageJson | undefined;
-  pkgRoot: string | undefined;
+export interface PackageInfo {
+  json: NormalizedPackageJson | undefined;
+  root: string | undefined;
 }
 
 
 /**
- * Module-local cached result from read-pkg-up.
+ * @private
+ *
+ * Module-local cache of package info lookups.
  */
-const cachedPackageResult: PackageData = {
-  pkgJson: undefined,
-  pkgRoot: undefined
-};
+const packageCache = new Map<'host' | 'local', PackageInfo>();
 
 
 /**
- * Loads the package.json of the host application, if one exists, and caches the
- * result.
+ * Loads the package.json of the host or local package and returns the
+ * normalized result and the package's root directory. Results are cached.
  */
-export default function getPackageInfo(): PackageData {
-  if (Object.keys(cachedPackageResult).length === 0) {
-    const execPath = path.dirname(fs.realpathSync(process.argv[1]));
+export function getPackageInfo(type: 'host' | 'local'): PackageInfo {
+  // Cache miss; populate cache.
+  if (!packageCache.has(type)) {
+    const cwd = type === 'host'
+      ? path.dirname(fs.realpathSync(process.argv[1]))
+      :  dirname();
+    if (!cwd) throw new Error(`[getOurPackageInfo] Unable to compute cwd for the ${type} package.`);
 
-    const packageResult = readPackageUpSync({ cwd: execPath });
+    const packageResult = readPackageUpSync({ cwd });
+    if (!packageResult) throw new Error(`[getPackageInfo] Unable to get metadata for the ${type} package.`);
 
-    if (packageResult) {
-      cachedPackageResult.pkgJson = packageResult.packageJson;
-      cachedPackageResult.pkgRoot = path.dirname(packageResult.path);
-    }
+    packageCache.set(type, {
+      json: packageResult.packageJson,
+      root: path.dirname(packageResult.path)
+    });
   }
 
-  return cachedPackageResult;
+  // Return from cache.
+  return packageCache.get(type) as PackageInfo;
 }

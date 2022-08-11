@@ -41,16 +41,21 @@ export type SaffronInitCallback = (y: typeof yargs) => void | SaffronCustomParse
  */
 export interface SaffronBuilderHandlerCommonOptions {
   /**
-   * Normalized package.json.
-   *
-   * See: https://github.com/npm/normalize-package-data
+   * Parsed metadata about Saffron's host package.
    */
-  packageJson: NormalizedReadResult['packageJson'] | undefined;
+  pkg: {
+    /**
+     * Normalized package.json.
+     *
+     * See: https://github.com/npm/normalize-package-data
+     */
+    json: NormalizedReadResult['packageJson'] | undefined;
 
-  /**
-   * Path to the package root.
-   */
-  packageRoot: string | undefined;
+    /**
+     * Path to the package root.
+     */
+    root: string | undefined;
+  };
 }
 
 

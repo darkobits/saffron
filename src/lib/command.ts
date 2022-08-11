@@ -7,7 +7,7 @@ import {
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
 import ow from 'lib/ow';
-import getPackageInfo from 'lib/package';
+import { getPackageInfo } from 'lib/package';
 import yargs from 'lib/yargs';
 
 import type { Argv, ArgumentsCamelCase } from 'yargs';
@@ -37,7 +37,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
 
   // ----- Get Package Info ----------------------------------------------------
 
-  const { pkgJson, pkgRoot } = getPackageInfo();
+  const hostPkg = getPackageInfo('host');
 
 
   // ----- Builder Proxy -------------------------------------------------------
@@ -58,8 +58,8 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     command.alias('v', 'version');
     command.alias('h', 'help');
 
-    if (pkgJson?.version) {
-      command.version(pkgJson.version);
+    if (hostPkg.json?.version) {
+      command.version(hostPkg.json.version);
     }
 
     command.help();
@@ -69,8 +69,10 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     if (options.builder) {
       options.builder({
         command,
-        packageJson: pkgJson,
-        packageRoot: pkgRoot
+        pkg: {
+          json: hostPkg.json,
+          root: hostPkg.root
+        }
       });
     }
 
@@ -92,8 +94,10 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
     // Convert raw `argv` to camelCase.
     handlerOpts.argv = camelcaseKeys<any, any>(argv, {deep: true});
 
-    handlerOpts.packageJson = pkgJson;
-    handlerOpts.packageRoot = pkgRoot;
+    handlerOpts.pkg = {
+      json: hostPkg.json,
+      root: hostPkg.root
+    };
 
     // Whether we should automatically call command.config() with the data
     // from the configuration file.
@@ -108,7 +112,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
       const configResult = await loadConfiguration<C>({
         // By default, use the un-scoped portion of the package's name as the
         // configuration file name.
-        fileName: pkgJson?.name ? pkgJson.name.split('/').slice(-1)[0] : undefined,
+        fileName: hostPkg.json?.name ? hostPkg.json.name.split('/').slice(-1)[0] : undefined,
         // N.B. If the user provided a custom fileName, it will overwrite the
         // one from package.json above.
         ...options.config
@@ -155,7 +159,7 @@ export default function buildCommand<A extends GenericObject = any, C extends Ge
 
   yargs.command<A>({
     command: options.command ?? '*',
-    describe: options?.description ?? pkgJson?.description ?? undefined,
+    describe: options?.description ?? hostPkg.json?.description ?? undefined,
     aliases: options.aliases,
     builder,
     handler
