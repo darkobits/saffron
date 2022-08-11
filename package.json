@@ -20,22 +20,23 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/register": "^7.17.7",
+    "@babel/register": "^7.18.9",
+    "@darkobits/fd-name": "^0.1.4",
     "@darkobits/log": "^2.0.0-beta.15",
     "@endemolshinegroup/cosmiconfig-typescript-loader": "^3.0.2",
-    "@types/yargs": "^17.0.10",
-    "camelcase-keys": "^7.0.2",
+    "@types/yargs": "^17.0.11",
+    "camelcase-keys": "^8.0.1",
     "cosmiconfig": "^7.0.1",
     "deepmerge": "^4.2.2",
-    "fs-extra": "^10.0.1",
+    "fs-extra": "^10.1.0",
     "ow": "^0.28.1",
     "pkg-dir": "^6.0.1",
     "read-pkg-up": "^9.1.0",
     "resolve-pkg": "^2.0.0",
-    "yargs": "^17.4.0"
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.10.1",
+    "@darkobits/ts": "^0.10.6",
     "@types/fs-extra": "^9.0.13"
   }
 }
