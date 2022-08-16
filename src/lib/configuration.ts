@@ -103,8 +103,7 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
-  // @ts-expect-error - `ow` is not correctly coercing the type of `fileName` to
-  // string here.
+  // @ts-ignore
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
       '.ts': TypeScriptLoader,
