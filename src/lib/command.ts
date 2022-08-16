@@ -12,6 +12,25 @@ import yargs from 'lib/yargs';
 import type { Argv, ArgumentsCamelCase } from 'yargs';
 
 
+type ParsedPackageName<T> = T extends string
+  ? { scope?: string; name: string }
+  : { scope: never; name: never };
+
+/**
+ * @private
+ *
+ * TODO: Move to own package.
+ */
+function parsePackageName<T = any>(packageName: T) {
+  if (typeof packageName !== 'string') {
+    return { scope: undefined, name: undefined } as ParsedPackageName<T>;
+  }
+
+  const [scope, name] = packageName.replace('@', '').split('/');
+  return { scope, name } as ParsedPackageName<T>;
+}
+
+
 /**
  * Saffron command builder.
  */
@@ -50,8 +69,12 @@ export default function buildCommand<
     yargsCommand.alias('v', 'version');
     yargsCommand.alias('h', 'help');
 
+    // Set name and version based on the host application's metadata.
+    // N.B. Description is set below.
+    if (hostPkg.json?.name) yargsCommand.scriptName(parsePackageName(hostPkg.json?.name).name);
     if (hostPkg.json?.version) yargsCommand.version(hostPkg.json.version);
 
+    // Enable --help for this command.
     yargsCommand.help();
 
     // Call user-provided builder, additionally passing the (possible)
@@ -59,7 +82,7 @@ export default function buildCommand<
     if (typeof saffronCommand.builder === 'function') {
       saffronCommand.builder({
         command: yargsCommand,
-        pkg: getPackageInfo('host')
+        pkg: hostPkg
       });
     }
 
@@ -77,12 +100,12 @@ export default function buildCommand<
    * errors.
    */
   const handler = async (argv: ArgumentsCamelCase<A>) => {
-    const handlerOpts: Partial<SaffronHandlerContext<A, C>> = {};
+    const context: Partial<SaffronHandlerContext<A, C>> = {};
 
     // Convert raw `argv` to camelCase.
-    handlerOpts.argv = camelcaseKeys<any, any>(argv, {deep: true});
+    context.argv = camelcaseKeys<any, any>(argv, { deep: true });
 
-    handlerOpts.pkg = hostPkg;
+    context.pkg = hostPkg;
 
     // Whether we should automatically call command.config() with the data
     // from the configuration file.
@@ -96,7 +119,7 @@ export default function buildCommand<
       // By default, use the un-scoped portion of the package's name as the
       // configuration file name. If for some reason the user hasn't defined one
       // in their package.json,
-      const fileName = saffronCommand.config?.fileName ?? hostPkg.json?.name?.split('/').slice(-1)[0];
+      const fileName = saffronCommand.config?.fileName ?? parsePackageName(hostPkg.json?.name).name;
 
       const configResult = await loadConfiguration<C>({
         fileName,
@@ -107,18 +130,18 @@ export default function buildCommand<
 
       if (configResult) {
         if (configResult.config) {
-          handlerOpts.config = camelcaseKeys<any, any>(configResult.config, {deep: true});
+          context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
         }
 
-        handlerOpts.configPath = configResult.filepath;
-        handlerOpts.configIsEmpty = Boolean(configResult.isEmpty);
+        context.configPath = configResult.filepath;
+        context.configIsEmpty = Boolean(configResult.isEmpty);
 
         // If `autoConfig` is enabled, for each key in `argv`, set its value to
         // the corresponding value from `config`, if it exists.
-        if (autoConfig && !handlerOpts.configIsEmpty) {
+        if (autoConfig && !context.configIsEmpty) {
           Object.entries(configResult.config).forEach(([key, value]) => {
-            if (handlerOpts.argv && handlerOpts.config && Reflect.has(handlerOpts.argv, key)) {
-              Reflect.set(handlerOpts.argv, key, value);
+            if (context.argv && context.config && Reflect.has(context.argv, key)) {
+              Reflect.set(context.argv, key, value);
             }
           });
         }
@@ -127,7 +150,7 @@ export default function buildCommand<
 
     try {
       // Finally, invoke the user's handler.
-      await saffronCommand.handler(handlerOpts as Required<SaffronHandlerContext<A, C>>);
+      await saffronCommand.handler(context as Required<SaffronHandlerContext<A, C>>);
     } catch (err: any) {
       console.error(err);
 
