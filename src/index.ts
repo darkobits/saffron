@@ -18,9 +18,9 @@ export type { Arguments, Argv } from 'yargs';
  */
 export type {
   SaffronBuilder,
-  SaffronBuilderOptions,
+  SaffronBuilderContext,
   SaffronHandler,
-  SaffronHandlerOptions
+  SaffronHandlerContext
 } from 'etc/types';
 
 

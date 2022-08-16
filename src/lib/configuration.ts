@@ -6,7 +6,6 @@ import fs from 'fs-extra';
 import { packageDirectory } from 'pkg-dir';
 import resolvePkg from 'resolve-pkg';
 
-
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
 import ow from 'lib/ow';
@@ -104,6 +103,8 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
   ow(fileName, 'fileName', ow.string.nonEmpty);
   ow(key, 'key', ow.optional.string);
 
+  // @ts-expect-error - `ow` is not correctly coercing the type of `fileName` to
+  // string here.
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
       '.ts': TypeScriptLoader,

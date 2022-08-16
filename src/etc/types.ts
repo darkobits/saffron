@@ -1,14 +1,9 @@
-import type { OptionsSync as CosmiconfigSyncOptions } from 'cosmiconfig';
+import type { Options as CosmiconfigOptions } from 'cosmiconfig';
 import type { NormalizedReadResult } from 'read-pkg-up';
 import type yargs from 'yargs';
 
 
-// ----- Miscellaneous ---------------------------------------------------------
-
-export interface GenericObject {
-  [key: string]: any;
-}
-
+// ----- General ---------------------------------------------------------------
 
 /**
  * Object with the same shape as CosmiconfigResult, but with support for a typed
@@ -22,24 +17,18 @@ export interface SaffronCosmiconfigResult<C> {
 
 
 /**
- * Signature of an optional custom parser that may be returned from
- * Saffron.init() callbacks.
+ * Optional function that may be passed to `init`. This function will be passed
+ * the global Yargs object, and may perform any additional configuration prior
+ * to arguments being parsed. It may be synchronous or asynchronous, and it may
+ * optionally return a Yargs `ParseCallback` function.
  */
-type SaffronCustomParser = <A extends yargs.Arguments>(err: Error | null, argv: A, output: string | undefined) => void;
+export type SaffronInitCallback = (y: typeof yargs) => void | yargs.ParseCallback | Promise<void | yargs.ParseCallback>;
 
 
 /**
- * Optional function that may be passed to Saffron.init(). This function will be
- * passed the Yargs object, and may perform any additional configuration prior
- * to arguments being parsed.
+ * Common properties for contexts provided to builders and handlers.
  */
-export type SaffronInitCallback = (y: typeof yargs) => void | SaffronCustomParser | Promise<void | SaffronCustomParser>;
-
-
-/**
- * Common options provided to builder and handler functions.
- */
-export interface SaffronBuilderHandlerCommonOptions {
+export interface SaffronCommonContext {
   /**
    * Parsed metadata about Saffron's host package.
    */
@@ -59,27 +48,27 @@ export interface SaffronBuilderHandlerCommonOptions {
 }
 
 
-// ----- Builder Functions -----------------------------------------------------
+// ----- Builders --------------------------------------------------------------
 
 /**
- * Object passed to a Saffron 'builder' function.
+ * Context passed to builders.
  */
-export interface SaffronBuilderOptions<A> extends SaffronBuilderHandlerCommonOptions {
+export interface SaffronBuilderContext<A> extends SaffronCommonContext {
   command: yargs.Argv<A>;
 }
 
 /**
- * Signature of a Saffron 'builder' function.
+ * Signature of a builder.
  */
-export type SaffronBuilder<A> = (options: SaffronBuilderOptions<A>) => void;
+export type SaffronBuilder<A> = (context: SaffronBuilderContext<A>) => void;
 
 
-// ----- Handler Functions -----------------------------------------------------
+// ----- Handlers --------------------------------------------------------------
 
 /**
- * Object passed to a Saffron 'handler' function.
+ * Context passed to handlers.
  */
-export interface SaffronHandlerOptions<A, C> extends SaffronBuilderHandlerCommonOptions {
+export interface SaffronHandlerContext<A, C> extends SaffronCommonContext {
   /**
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
@@ -104,22 +93,22 @@ export interface SaffronHandlerOptions<A, C> extends SaffronBuilderHandlerCommon
 
 
 /**
- * Signature of a Saffron 'handler' function.
+ * Signature of handlers.
  */
-export type SaffronHandler<A, C> = (options: SaffronHandlerOptions<A, C>) => Promise<void> | void;
+export type SaffronHandler<A, C> = (context: SaffronHandlerContext<A, C>) => Promise<void> | void;
 
 
-// ----- Saffron Options -------------------------------------------------------
+// ----- Configuration ---------------------------------------------------------
 
 /**
  * Options for configuring Cosmiconfig.
  */
-export interface SaffronCosmiconfigOptions extends CosmiconfigSyncOptions {
+export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
   /**
    * (Optional) If false, Saffron will not automatically configure the command
    * using data loaded from a configuration file.
    *
-   * Default: `true`
+   * @default true
    */
   auto?: boolean;
 
@@ -127,7 +116,7 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigSyncOptions {
    * (Optional) Name to use as a base when searching for configuration files. If
    * omitted, the un-scoped portion of the project's package name will be used.
    */
-  fileName: string | undefined;
+  fileName?: string | undefined;
 
   /**
    * (Optional) Specifies a key in loaded configuration files that should be
@@ -139,29 +128,31 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigSyncOptions {
   /**
    * (Optional) Path to begin searching for a configuration file.
    *
-   * Default: process.cwd()
+   * @default process.cwd()
    */
   searchFrom?: string;
 }
 
 
+// ----- Commands --------------------------------------------------------------
+
 /**
- * Options object accepted by Saffron.
+ * Options object accepted by Saffron's `command` function.
  *
- * A = Shape of the application's parsed arguments.
- *
+ * A = Shape of the application's parsed CLI arguments.
  * C = Shape of the application's parsed configuration file, which by default
  *     has the same shape as A.
  */
-export interface SaffronOptions<A extends GenericObject = any, C = A> {
+export interface SaffronCommand<A extends Record<string, any> = Record<string, any>, C = A> {
   /**
-   * If developing an application with multiple sub-commands, this should be
-   * the name of the sub-command. Otherwise, this option can be omitted and
-   * the root-level command will be assumed.
+   * String (or array of strings) that executes this command when given on the
+   * command line. The first string should define any positional arguments for
+   * the command. If developing an application with a single command and no
+   * positional arguments, this option may be omitted.
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/advanced.md#positional-arguments
    *
-   * Default: '*'
+   * @default '*'
    */
   command?: yargs.CommandModule['command'];
 
@@ -179,22 +170,9 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    * Note: If a usage() is set in the builder function, it will override this
    * value.
    *
-   * Default: "description" field from package.json.
+   * @default "description" field from package.json.
    */
   description?: yargs.CommandModule['describe'];
-
-  /**
-   * (Optional) Command builder function, used to add and configure arguments
-   * for the command.
-   *
-   * See: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
-   */
-  builder?: SaffronBuilder<A>;
-
-  /**
-   * Handler for the command.
-   */
-  handler: SaffronHandler<A, C>;
 
   /**
    * Configuration for Cosmiconfig. Will be merged with Saffron's defaults. This
@@ -210,4 +188,17 @@ export interface SaffronOptions<A extends GenericObject = any, C = A> {
    * configuration schema differs from its command-line argument schema.
    */
   strict?: boolean;
+
+  /**
+   * (Optional) Command builder function, used to add and configure arguments
+   * for the command.
+   *
+   * See: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
+   */
+  builder?: SaffronBuilder<A>;
+
+  /**
+    * Handler for the command.
+    */
+  handler: SaffronHandler<A, C>;
 }
