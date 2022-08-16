@@ -9,7 +9,7 @@ import resolvePkg from 'resolve-pkg';
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import log from 'lib/log';
 import ow from 'lib/ow';
-import TypeScriptLoader from 'lib/typescript-loader';
+// import TypeScriptLoader from 'lib/typescript-loader';
 
 
 /**
@@ -20,8 +20,8 @@ import TypeScriptLoader from 'lib/typescript-loader';
  * node_modules folder is used to ensure Babel loads the nearest configuration
  * file.
  */
-async function withBabelRegister(configPath: string, contents: string) {
-  const pkgDir = await packageDirectory({ cwd: path.dirname(configPath) });
+async function withBabelRegister(cwd: string, contents: string) {
+  const pkgDir = await packageDirectory({ cwd: path.dirname(cwd) });
   const babelRegisterPath = resolvePkg('@babel/register');
   const wrapper = `
     const babelRegister = require('${babelRegisterPath}');
@@ -30,63 +30,38 @@ async function withBabelRegister(configPath: string, contents: string) {
   `;
 
   const tempDir = path.resolve(pkgDir, 'node_modules');
-  const loaderPath = path.resolve(tempDir, '.loader.js');
+  const loaderPath = path.resolve(tempDir, '.saffron-loader.js');
   await fs.ensureDir(tempDir);
   await fs.writeFile(loaderPath, wrapper);
   const result = await import(loaderPath);
-  await fs.remove(loaderPath);
+  void fs.remove(loaderPath);
   return result;
 }
 
 
 /**
  * Cosmiconfig custom loader that supports ESM syntax and any Babel plugins that
- * may be installed in the local project. This function attempts 6 different
- * parsing strategies in sequence that should cover cases where we are in a CJS
- * context trying to load an ESM configuration file and vice versa.
+ * may be installed in the local project. It allows host applications to be
+ * written in ESM or CJS, and for the consumers of those applications to write
+ * configuration files as ESM or CJS. It will also automatically use Babel with
+ * the consumer's Babel configuration file, if present.
  */
-async function parseConfiguration(filepath: string) {
-  const errorThunks: Array<() => void> = [];
-  let lastErrorMessage: string;
-
-
-  // ----- Babel Register + Dynamic Import -------------------------------------
-
-  // This strategy will work when we are in a CJS or ESM context trying to load
-  // an ESM configuration file that uses (or requires files that use) certain
-  // Babel features or path mappings that are configured by the local project's
-  // Babel configuration file.
+async function configurationLoader(filePath: string) {
   try {
-    const config = await withBabelRegister(filepath, `
-      module.exports = import("${filepath}?nonce=2").then(result => {
+    const config = await withBabelRegister(filePath, `
+      module.exports = import("${filePath}?nonce=1").then(result => {
         return result?.default ? result.default : result;
       });
     `);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
     return config?.default ?? config;
   } catch (err: any) {
-    errorThunks.push(
-      () => log.silly(
-        log.prefix('parseConfiguration'),
-        log.chalk.red.bold('Failed to load configuration file with @babel/register + import():'),
-        err.message
-      )
+    log.error(
+      log.prefix('parseConfiguration'),
+      'Failed to load configuration file with @babel/register + import():',
+      err.message
     );
-    lastErrorMessage = err.message;
   }
-
-
-  // ----- Error Reporting -----------------------------------------------------
-
-  if (errorThunks.length > 0) {
-    errorThunks.forEach(errorThunk => errorThunk());
-  }
-
-  if (lastErrorMessage) {
-    throw new Error(`Error parsing configuration file: ${lastErrorMessage}`);
-  }
-
-  throw new Error('All configuration parsing strategies failed.');
 }
 
 
@@ -106,10 +81,12 @@ export default async function loadConfiguration<C>({ fileName, key, searchFrom, 
   // @ts-ignore
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
-      '.ts': TypeScriptLoader,
-      '.js': parseConfiguration,
-      '.mjs': parseConfiguration,
-      '.cjs': parseConfiguration
+      // [Aug 2022] This loader is not working at the moment.
+      // '.ts': TypeScriptLoader,
+      '.ts': configurationLoader,
+      '.js': configurationLoader,
+      '.mjs': configurationLoader,
+      '.cjs': configurationLoader
     },
     searchPlaces: [
       'package.json',
