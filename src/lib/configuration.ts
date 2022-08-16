@@ -22,6 +22,8 @@ import ow from 'lib/ow';
  */
 async function withBabelRegister(cwd: string, contents: string) {
   const pkgDir = await packageDirectory({ cwd: path.dirname(cwd) });
+  if (!pkgDir) throw new Error('[withBabelRegister] Unable to compute package directory.');
+
   const babelRegisterPath = resolvePkg('@babel/register');
   const wrapper = `
     const babelRegister = require('${babelRegisterPath}');

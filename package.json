@@ -31,13 +31,13 @@
     "deepmerge": "^4.2.2",
     "fs-extra": "^10.1.0",
     "ow": "^0.28.1",
-    "pkg-dir": "^6.0.1",
+    "pkg-dir": "^7.0.0",
     "read-pkg-up": "^9.1.0",
     "resolve-pkg": "^2.0.0",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.10.7-beta.11",
+    "@darkobits/ts": "^0.11.0-beta.0",
     "@types/fs-extra": "^9.0.13"
   }
 }
