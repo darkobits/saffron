@@ -1,5 +1,5 @@
 <a href="#top" id="top">
-  <img src="https://user-images.githubusercontent.com/441546/101694946-bda8ef00-3a28-11eb-8d4f-e3629fd94d4c.png" style="max-width: 100%;">
+  <img src="https://user-images.githubusercontent.com/441546/184806432-c3494ae8-0d1b-49cd-adb8-d29fb97d2969.png" style="max-width: 100%;">
 </a>
 <p align="center">
   <a href="https://www.npmjs.com/package/@darkobits/saffron"><img src="https://img.shields.io/npm/v/@darkobits/saffron.svg?style=flat-square"></a>
@@ -8,44 +8,48 @@
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/static/v1?label=commits&message=conventional&style=flat-square&color=398AFB"></a>
 </p>
 
-Saffron is an opinionated integration between [Yargs][github:yargs] and [Cosmiconfig][github:cosmiconfig],
-two best-in-class tools for building robust command-line applications in Node. General familiarity with
-these tools is recommended before using Saffron.
+[Yargs][github:yargs] and [Cosmiconfig][github:cosmiconfig] are two best-in-class tools for building
+robust command-line applications in Node. Saffron integrates these tools and exposes an elegant API that
+encourages consistency and best practices.
 
-The core feature of Saffron is the utilization of [`yargs.config()`][yargs.config] to pass data loaded
-by Cosmiconfig into Yargs, where Yargs can then perform normalization, validation, and set defaults...
-all in one place.
+General familiarity Yargs and Cosmiconfig is recommended before using Saffron.
 
-In addition to this, Saffron applies some opinionated settings to both Yargs and Cosmiconfig to
-encourage consistency and best practices.
+## Contents
 
-* [Rationale](#rationale)
-* [Install](#install)
-* [Getting Started](#getting-started)
-* [API](#api)
-  * [`command`](#commandconfig-saffroncommand-void)
-  * [`init`](#init)
-* [TypeScript Integration](#typescript-integration)
-* [Caveats](#caveats)
-* [Addenda](#addenda)
+- [Conventions](#conventions)
+- [Rationale](#rationale)
+- [Install](#install)
+- [Getting Started](#getting-started)
+- [API](#api)
+  - [`command`](#commandconfig-saffroncommand-void)
+  - [`init`](#init)
+- [TypeScript Integration](#typescript-integration)
+- [Caveats](#caveats)
+- [Addenda](#addenda)
+
+# Conventions
+
+- This document follows the TypeScript convention of denoting optional arguments or properties with a
+  `?`.
 
 # Rationale
 
-Yargs is arguably the best command-line argument parser in the Node ecosystem. However, its API has
-grown tremendously over the years to support the myriad idiosyncratic use-cases of its users, leading to
-bloat. And while it does have limited support for loading configuration files, it only supports files in
-the JSON format.
+[Yargs][github:yargs] is arguably the best command-line argument parser in the Node ecosystem. However,
+its API has grown tremendously over the years to support the myriad idiosyncratic use-cases of its users
+while maintaining backward compatibility, leading to bloat. And while it does have limited support for
+loading configuration files, it only supports files in the JSON format.
 
-Saffron focuses on what it thinks is the most flexible, robust Yargs API, the [command module API][github:command-module-api],
-which supports almost every Yargs use-case while only involving a single Yargs method (`.command()`).
+Saffron focuses on what the most flexible, robust Yargs API, the [command module API][github:command-module-api],
+which supports almost every Yargs use-case and current feature while only involving a single Yargs
+method, `.command()`.
 
-Cosmiconfig is an extremely powerful and configurable utility for adding support for configuration files
-to an application in several different formats, giving users the ability to choose between JSON, YAML,
-and JavaScript-based configuration files with a single tool.
+[Cosmiconfig][github:cosmiconfig] is an extremely powerful and configurable utility for adding support
+for configuration files to an application in several different formats, giving users the ability to
+choose between JSON, YAML, and JavaScript-based configuration files with a single tool.
 
 Saffron aims to integrate these two tools, solving for many common cases, applying sensible defaults
-where it can, and generally making it as easy as possible to write robust CLIs in as few lines of code
-as possible.
+where possible, making it easy to create robust, self-documenting CLIs that deliver excellent user
+experiences in as few lines of code as possible.
 
 # Install
 
@@ -91,8 +95,10 @@ the above requirements.
 import cli from '@darkobits/saffron';
 
 cli.command({
+  // <> here indicates a required positional argument, while [] indicates an
+  // optional positional argument.
   command: '* <spline>',
-  builder: ({command}) => {
+  builder: ({ command }) => {
     // Add some additional information about the "spline" positional argument.
     command.positional('spline', {
       description: 'Identifier of the spline to reticulate.',
@@ -108,9 +114,10 @@ cli.command({
       default: 'RTA-21'
     });
   },
-  handler: ({argv}) => {
-    // This is where we would normally call our application's main function, but
-    // let's just log the configuration we got from Saffron.
+  handler: ({ argv }) => {
+    // This is where we would normally call the function that implements spline
+    // reticulation, but for now let's just log the configuration we got from
+    // Saffron.
     console.log(argv);
   }
 })
@@ -120,7 +127,7 @@ cli.command({
 cli.init();
 ```
 
-First, lets try invoking `spline-reticulator --help` to make sure our usage instructions look okay:
+First, lets try invoking `spline-reticulator --help` to make sure our usage instructions look good:
 
 > `Command Line`
 
@@ -141,9 +148,10 @@ Options:
   -h, --help     Show help                                                                     [boolean]
 ```
 
-Notice that the description used above was derived from the `description` field of our `package.json`.
-This is a sensible default, but can be customized by providing a `description` option in our command
-definition.
+Notice that the name and description used above was derived from the `name` (sans scope) and
+`description` fields of our application's `package.json`. These are sensible defaults, but can be
+customized by calling `command.scriptName()` from our builder and by providing a `description` property
+in our command definition, respectively.
 
 We can verify that our CLI works as expected by calling it in various ways, and ensuring it uses a
 configuration file when present:
@@ -161,8 +169,8 @@ $ spline-reticulator 402B
 }
 ```
 
-Because this invocation was valid, Yargs invoked our handler, which logged-out the parsed arguments
-object. Let's provide an invalid algorithm and ensure that Yargs catches this mistake:
+Because this invocation was valid, Yargs invoked our handler, which logged the parsed arguments object.
+Let's provide an invalid algorithm and ensure that Yargs catches the mistake:
 
 > `Command Line`
 
@@ -218,7 +226,7 @@ $ spline-reticulator 402B
 Notice we did not provide an `--algorithm` argument, and the default algorithm `RTA-21` has been
 superseded by `RTA-22`, which was loaded from our `.spline-reticulator.yml` file. Wowza!
 
-For more information about supported configuration file formats, see the [`config.searchPlaces`](https://github.com/darkobits/saffron#configsearchplaces)
+For more information about supported configuration file formats, see the [`config.searchPlaces`](#configsearchplaces)
 option.
 
 # API
@@ -237,13 +245,13 @@ which is very similar to that of Yargs' [command module API][github:command-modu
 configures each command for an application using a single object as opposed to the more idiomatic Yargs
 approach of chaining method calls.
 
-A [`SaffronCommand`][SaffronCommand] may have the following keys:
+A [`SaffronCommand`][SaffronCommand] object may have the following properties:
 
-### `command`
+### `command?`
 
-| Type     | Required | Default |
-|----------|----------|---------|
-| `string` | No       | `'*'`    |
+| Type     | Default |
+|----------|---------|
+| `string` | `'*'`   |
 
 Name of the command being implemented. If the application only implements a "root" command and does not
 take any positional arguments, this option can be omitted. If the application takes positional
@@ -256,8 +264,8 @@ See: [Positional Arguments][github:yargs-positional-arguments]
 
 **Example:**
 
-The following example illustrates how to define required and optional positional arguments in `command`
-and how to further annotate them in `builder` (documented below):
+The following example illustrates how to define required and optional positional arguments in the
+`command` property and how to further annotate them in [`builder`](#builder):
 
 ```ts
 import cli from '@darkobits/saffron';
@@ -284,14 +292,13 @@ cli.command({
 
 [![hr][hr]](#top)
 
-### `aliases`
+### `aliases?`
 
-| Type            | Required | Default |
-|-----------------|----------|---------|
-| `Array<string>` | No       | N/A     |
+| Type            | Default |
+|-----------------|---------|
+| `Array<string>` | N/A     |
 
-Only practical when implementing sub-commands, this option allows you to specify a list of aliases for
-the command.
+This option allows you to specify a list of aliases for the command.
 
 See: [Command Aliases][github:yargs-command-aliases]
 
@@ -299,30 +306,28 @@ See: [Command Aliases][github:yargs-command-aliases]
 
 **Example:**
 
-This example will alias the "serve" command to "s":
-
 ```ts
 import cli from '@darkobits/saffron';
 
 cli.command({
-  command: 'serve',
-  aliases: ['s']
+  command: 'configure',
+  aliases: ['config']
 });
 ```
 
 [![hr][hr]](#top)
 
-### `description`
+### `description?`
 
-| Type     | Required | Default    |
-|----------|----------|------------|
-| `string` | No       | See below. |
+| Type     | Default    |
+|----------|------------|
+| `string` | See below. |
 
 Description for the command. If left blank, Saffron will use the `description` field from your project's
 `package.json`.
 
-Note that if you use [`.usage()`][github:yargs-command-description] in your builder function, it will
-override this description.
+Note that if you use [`.usage()`][yargs.usage] in your builder function, it will override this
+description.
 
 > **Note** This option is a pass-through to Yargs' `describe` option.
 
@@ -338,22 +343,22 @@ cli.command({
 
 [![hr][hr]](#top)
 
-### [`config`][SaffronCommand.config]
+### `config?`
 
-| Type                                                               | Required | Default    |
-|--------------------------------------------------------------------|----------|------------|
-| [`SaffronCosmiconfigOptions`][SaffronCosmiconfigOptions] │ `false` | No       | See below. |
+| Type                                                               | Default    |
+|--------------------------------------------------------------------|------------|
+| [`SaffronCosmiconfigOptions`][SaffronCosmiconfigOptions] │ `false` | See below. |
 
 Settings for Cosmiconfig, which is responsible for locating and parsing an application's configuration
 file. In addition to the below options, this object may contain any valid [Cosmiconfig option][cosmiconfig.Options].
 
 Alternatively, this option may be set to `false` to disable configuration file support entirely.
 
-#### [`config.auto`][SaffronCommand.config.auto]
+#### `config.auto?`
 
-| Type      | Required | Default |
-|-----------|----------|---------|
-| `boolean` | No       | `true`  |
+| Type      | Default |
+|-----------|---------|
+| `boolean` | `true`  |
 
 By default, after loading an application's configuration file, Saffron will call Yargs' `.config()`
 method, passing it the data from the configuration file. This will have the effect of allowing
@@ -362,8 +367,7 @@ referred to as auto-configuration.
 
 If an application's command-line argument schema and configuration schema differ, auto-configuration
 would not be desirable. In such cases, `auto` may be set to `false`, and Saffron will only load an
-application's configuration file and pass its contents to `builder` and `handler` functions without
-calling `.config()`.
+application's configuration file and pass the parsed result to the command's `handler`.
 
 **Example:**
 
@@ -377,11 +381,11 @@ cli.command({
 });
 ```
 
-#### [`config.fileName`][SaffronCommand.config.fileName]
+#### `config.fileName?`
 
-| Type     | Required | Default    |
-|----------|----------|------------|
-| `string` | No       | See below. |
+| Type     | Default    |
+|----------|------------|
+| `string` | See below. |
 
 By default, Saffron will use the un-scoped portion of an application's name from its `package.json`.
 If you would prefer to use a different base name for configuration files, you may provide your own
@@ -400,11 +404,11 @@ cli.command({
 })
 ```
 
-#### [`config.key`][SaffronCommand.config.key]
+#### `config.key?`
 
-| Type     | Required | Default |
-|----------|----------|---------|
-| `string` | No       | N/A     |
+| Type     | Default |
+|----------|---------|
+| `string` | N/A     |
 
 For complex applications with multiple commands, it may be desirable to scope configuration for a
 particular command to a matching key in the application's configuration file. If this option is set,
@@ -424,20 +428,20 @@ cli.command({
 })
 ```
 
-#### `config.searchFrom`
+#### `config.searchFrom?`
 
-| Type     | Required | Default         |
-|----------|----------|-----------------|
-| `string` | No       | `process.cwd()` |
+| Type     | Default         |
+|----------|-----------------|
+| `string` | `process.cwd()` |
 
 Directory to begin searching for a configuration file. Cosmiconfig will then walk up the directory tree
 from this location until a configuration file is found or the root is reached.
 
-#### `config.searchPlaces`
+#### `config.searchPlaces?`
 
-| Type            | Required | Default    |
-|-----------------|----------|------------|
-| `Array<string>` | No       | See below. |
+| Type            | Default    |
+|-----------------|------------|
+| `Array<string>` | See below. |
 
 Saffron overrides the default [`searchPlaces` option in Cosmiconfig][github:cosmiconfig-search-places]
 with the below defaults, where `fileName` is the base file name for your application as derived from
@@ -464,43 +468,52 @@ For comparison, the default Cosmiconfig `searchPlaces` can be found [here][githu
 
 [![hr][hr]](#top)
 
-### `strict`
+### `strict?`
 
-| Type      | Required | Default |
-|-----------|----------|---------|
-| `boolean` | No       | `true`  |
+| Type      | Default |
+|-----------|---------|
+| `boolean` | `true`  |
 
 Whether to configure Yargs to use strict mode. In strict mode, any additional options passed via the CLI
 or found in a configuration file will cause Yargs to exit the program and report an error. This is
 generally a good idea because it helps catch typos from user input.
 
-However, if your application's configuration file supports more options than you
-would like to consume via the CLI, then you will need to disable strict mode.
-Also be aware that because these additional options will not be defined in your
-builder, Yargs will not perform any validation on them.
+However, if your application's configuration file supports more options than you would like to consume
+via the CLI, then you will need to disable strict mode. Also be aware that because these additional
+options will not be defined in your builder, Yargs will not perform any validation on them.
+
+**Example:**
+
+```ts
+import cli from '@darkobits/saffron';
+
+cli.command({
+  strict: false
+});
+```
 
 [![hr][hr]](#top)
 
-### `builder`
+### `builder?`
 
-| Type                               | Required | Default |
-|------------------------------------|----------|---------|
-| [`SaffronBuilder`][SaffronBuilder] | No       | N/A     |
+| Type                               | Default |
+|------------------------------------|---------|
+| [`SaffronBuilder`][SaffronBuilder] | N/A     |
 
 This function allows a command to be configured and annotated. The API exposed by this object is almost
 identical to the [Yargs command module API][github:command-module-api], but the context is scoped to the
-command defined by `command`, making this API preferable to using the global Yargs object. The
-[.positional()][[github:yargs-positional-options]] and [.option()][github:yargs-option-options] methods
-will be the most-used in your builder to define the arguments for the command.
+defined by `command`, making this API preferable to using the global Yargs object. The [.positional()][github:yargs-positional-options]
+and [.option()][github:yargs-option-options] methods will be the most-used in your builder to define
+the arguments for the command.
 
 Saffron builders are passed a single object, [`SaffronBuilderContext`][SaffronBuilderContext] which
 has the following properties:
 
-| Property   | Type                                                      | Description                                                                       |
-|:-----------|:----------------------------------------------------------|:----------------------------------------------------------------------------------|
-| `command`  | [`yargs.Argv`][yargs.Argv]                                | Yargs command builder API.                                                        |
-| `pkg.json` | [`NormalizedPackageJson`][read-pkg.NormalizedPackageJson] | Normalized `package.json` for the application.                                    |
-| `pkg.root` | `string`                                                  | Absolute path to the application's root (the directory containing `package.json`) |
+| Property   | Type                                                      | Description                                        |
+|:-----------|:----------------------------------------------------------|:---------------------------------------------------|
+| `command`  | [`yargs.Argv`][yargs.Argv]                                | Yargs command builder API.                         |
+| `pkg.json` | [`NormalizedPackageJson`][read-pkg.NormalizedPackageJson] | Normalized `package.json` for the application.     |
+| `pkg.root` | `string`                                                  | Absolute path to the application's root directory. |
 
 **Example:**
 
@@ -509,7 +522,8 @@ import cli from '@darkobits/saffron';
 
 cli.command({
   builder: ({ command, pkg }) => {
-    // Configure command.
+    // Use the provided `command` API here to define arguments and configure
+    // behavior.
   }
 });
 ```
@@ -518,25 +532,24 @@ cli.command({
 
 ### `handler`
 
-| Type                               | Required | Default |
-|:-----------------------------------|:---------|:--------|
-| [`SaffronHandler`][SaffronHandler] | Yes      | N/A     |
+| Type                               | Default |
+|:-----------------------------------|:--------|
+| [`SaffronHandler`][SaffronHandler] | N/A     |
 
-This function is responsible for implementing a command. It is invoked at the end of Saffron's lifecycle
-once configuration has been loaded, validated, and merged onto CLI arguments -- if configured. It is
-similar to the `handler` option used when defining a Yargs command module.
+This function is invoked at the end of Saffron's lifecycle once arguments and configuration have been
+parsed. It is similar to the `handler` option used when defining a Yargs command module.
 
 Saffron handlers are passed a single object, [`SaffronHandlerContext`][SaffronHandlerContext], which
 has the following properties:
 
 | Property        | Type                                                      | Description                                                                                                  |
 |:----------------|:----------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------|
-| `argv`          | [`yargs.Arguments`][yargs.Arguments]                      | Parsed/merged/validated arguments/configuration from Yargs and Cosmiconfig.                                  |
+| `argv`          | [`yargs.Arguments`][yargs.Arguments]                      | Parsed arguments/configuration from Yargs and Cosmiconfig.                                                   |
 | `config`        | `any`                                                     | Parsed configuration file.                                                                                   |
 | `configPath`    | `string` | `undefined`                                    | Path where Cosmiconfig found a configuration file, if any.                                                   |
 | `configIsEmpty` | `boolean`                                                 | `true` if a configuration file was found, but was empty. It is often a good idea to warn users in this case. |
 | `pkg.json`      | [`NormalizedPackageJson`][read-pkg.NormalizedPackageJson] | Parsed and [normalized][github:package-normalization] `package.json` for the application.                    |
-| `packageRoot`   | `string`                                                  | Absolute path to the application's root directory (the directory containing `package.json`).                 |
+| `pkg.root`      | `string`                                                  | Absolute path to the application's root directory (the directory containing `package.json`).                 |
 
 [![hr][hr]](#top)
 
@@ -651,10 +664,10 @@ cli.init();
 
 ## Caveats
 
-* If your application has required positional arguments, these **must** be provided via the
-  command line and cannot be provided solely from a configuration file. This is a Yargs limitation. To
-  circumvent this, all positionals may be defined as optional and validation can be performed in the
-  command's handler.
+1. If your application has required positional arguments, these **must** be provided via the
+   command line and cannot be provided solely from a configuration file. This is a Yargs limitation. To
+   circumvent this, all positionals may be defined as optional and validation can be performed in the
+   command's handler.
 
 ## Addenda
 
@@ -669,12 +682,12 @@ excellent [Firefly][wiki:firefly] series.
 * [Command-Line Interface Guidelines](https://clig.dev) – An open-source guide encouraging best
   practices for authoring CLIs.
 
-[![footer][footer]][footer]
+[![footer][img:footer]][footer]
 
 [SaffronBuilder]: src/etc/types.ts#L60-L63
 [SaffronBuilderContext]: src/etc/types.ts#L53-L58
 [SaffronCommand]: src/etc/types.ts#L139-L204
-[SaffronCosmiconfigOptions]: src/etc/types.ts#L103-134
+[SaffronCosmiconfigOptions]: src/etc/types.ts#L103-L134
 [SaffronHandler]: src/etc/types.ts#L95-L98
 [SaffronHandlerContext]: src/etc/types.ts#L68-L92
 [SaffronInitCallback]: src/etc/types.ts#L19-L25
@@ -691,14 +704,15 @@ excellent [Firefly][wiki:firefly] series.
 [yargs.terminalWidth]: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/yargs/index.d.ts#L604-L605
 [yargs.version]: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/yargs/index.d.ts#L640-L652
 [yargs.wrap]: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/yargs/index.d.ts#L654-L660
+[yargs.usage]: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/yargs/index.d.ts#L616-L638
 
 [github:command-module-api]: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
 [github:cosmiconfig-search-places]: https://github.com/davidtheclark/cosmiconfig#searchplaces
 [github:cosmiconfig-usage]: https://github.com/davidtheclark/cosmiconfig#usage
-[github:cosmiconfig]: (https://github.com/davidtheclark/cosmiconfig
+[github:cosmiconfig]: https://github.com/davidtheclark/cosmiconfig
 [github:package-normalization]: https://github.com/npm/normalize-package-data#what-normalization-currently-entails
 [github:yargs-command-aliases]: https://github.com/yargs/yargs/blob/master/docs/advanced.md#command-aliases
-[github:yargs-command-description]: (https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler
+[github:yargs-command-description]: https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler
 [github:yargs-option-options]: https://github.com/yargs/yargs/blob/master/docs/api.md#optionkey-opt
 [github:yargs-positional-arguments]: https://github.com/yargs/yargs/blob/master/docs/advanced.md#positional-arguments
 [github:yargs-positional-options]: https://github.com/yargs/yargs/blob/master/docs/api.md#positionalkey-opt
@@ -708,5 +722,5 @@ excellent [Firefly][wiki:firefly] series.
 [wiki:saffron-character]: https://en.wikipedia.org/wiki/List_of_Firefly_(TV_series)_characters#Saffron
 [wiki:space-pirates]: https://en.wikipedia.org/wiki/List_of_space_pirates
 
-[footer]: https://user-images.githubusercontent.com/441546/102322726-5e6d4200-3f34-11eb-89f2-c31624ab7488.png
-[hr]: https://user-images.githubusercontent.com/441546/67830932-d6ab4680-fa99-11e9-9870-bc6d31db5a1b.png
+[img:footer]: https://user-images.githubusercontent.com/441546/102322726-5e6d4200-3f34-11eb-89f2-c31624ab7488.png
+[hr]: https://user-images.githubusercontent.com/441546/184806276-d9ec7f90-7dcf-428a-b448-b92da653a6a0.png

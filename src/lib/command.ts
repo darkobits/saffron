@@ -5,6 +5,7 @@ import {
   SaffronCommand
 } from 'etc/types';
 import loadConfiguration from 'lib/configuration';
+import log from 'lib/log';
 import ow from 'lib/ow';
 import { getPackageInfo } from 'lib/package';
 import yargs from 'lib/yargs';
@@ -111,14 +112,12 @@ export default function buildCommand<
     // from the configuration file.
 
     if (saffronCommand.config !== false) {
-      // If the user did not disable configuration file loading entirely, switch
-      // autoConfig to `true` unless they explicitly set the `auto` option to
-      // `false`.
+      // Enable auto-configuration unless the user explicitly set the `auto`
+      // option to `false`.
       const autoConfig = saffronCommand.config?.auto !== false;
 
-      // By default, use the un-scoped portion of the package's name as the
-      // configuration file name. If for some reason the user hasn't defined one
-      // in their package.json,
+      // If the user provided an explicit file name, use it. Otherwise, use the
+      // non-scope portion of the name from the host application's package.json.
       const fileName = saffronCommand.config?.fileName ?? parsePackageName(hostPkg.json?.name).name;
 
       const configResult = await loadConfiguration<C>({
@@ -139,11 +138,15 @@ export default function buildCommand<
         // If `autoConfig` is enabled, for each key in `argv`, set its value to
         // the corresponding value from `config`, if it exists.
         if (autoConfig && !context.configIsEmpty) {
-          Object.entries(configResult.config).forEach(([key, value]) => {
-            if (context.argv && context.config && Reflect.has(context.argv, key)) {
-              Reflect.set(context.argv, key, value);
-            }
-          });
+          if (typeof configResult.config === 'object') {
+            Object.entries(configResult.config).forEach(([key, value]) => {
+              if (context.argv && context.config && Reflect.has(context.argv, key)) {
+                Reflect.set(context.argv, key, value);
+              }
+            });
+          } else {
+            log.warn(log.prefix('loadConfiguration'), `Cannot merge configuration of type "${typeof configResult.config}" with arguments.`);
+          }
         }
       }
     }
