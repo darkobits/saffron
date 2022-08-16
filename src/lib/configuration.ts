@@ -63,7 +63,7 @@ async function parseConfiguration(filepath: string) {
       });
     `);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
-    return config?.default ? config.default : config;
+    return config?.default ?? config;
   } catch (err: any) {
     errorThunks.push(
       () => log.silly(

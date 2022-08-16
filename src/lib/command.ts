@@ -71,9 +71,10 @@ export default function buildCommand<
 
   /**
    * This function wraps the "handler" function provided to Yargs. It loads the
-   * application's configuration file and provides the result several additional data to command handlers. We also ensure
-   * that process.exit() is called when an (otherwise uncaught) error is thrown,
-   * avoiding UncaughtPromiseRejection errors.
+   * application's configuration file and provides the result several additional
+   * data to command handlers. We also ensure that process.exit() is called when
+   * an (otherwise uncaught) error is thrown, avoiding UncaughtPromiseRejection
+   * errors.
    */
   const handler = async (argv: ArgumentsCamelCase<A>) => {
     const handlerOpts: Partial<SaffronHandlerContext<A, C>> = {};
