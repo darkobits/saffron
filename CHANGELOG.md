@@ -1,3 +1,10 @@
+## [0.4.26-beta.1](https://github.com/darkobits/saffron/compare/v0.4.25...v0.4.26-beta.1) (2022-08-17)
+
+
+### 🛠 Refactoring
+
+* Migrate to `valida`. ([ac76685](https://github.com/darkobits/saffron/commit/ac76685d80f11f7d09c99306a5eb93896e84e38a))
+
 ## [0.4.25](https://github.com/darkobits/saffron/compare/v0.4.24...v0.4.25) (2022-08-17)
 
 
