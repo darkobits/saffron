@@ -1,3 +1,10 @@
+## [0.4.25](https://github.com/darkobits/saffron/compare/v0.4.24...v0.4.25) (2022-08-17)
+
+
+### 🐞 Bug Fixes
+
+* Fix type exports. ([9a4f20e](https://github.com/darkobits/saffron/commit/9a4f20e587032be0dd8b5f0fd354e6c339dd5010))
+
 ## [0.4.24](https://github.com/darkobits/saffron/compare/v0.4.23...v0.4.24) (2022-08-17)
 
 
