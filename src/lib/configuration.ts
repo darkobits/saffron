@@ -7,8 +7,8 @@ import { packageDirectory } from 'pkg-dir';
 import resolvePkg from 'resolve-pkg';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
+import validators from 'etc/validators';
 import log from 'lib/log';
-import ow from 'lib/ow';
 // import TypeScriptLoader from 'lib/typescript-loader';
 
 
@@ -75,12 +75,9 @@ async function configurationLoader(filePath: string) {
  * registered that use the same file, we don't have to worry about multiple
  * filesystem calls here.
  */
-export default async function loadConfiguration<C>({ fileName, key, searchFrom, ...cosmicOptions }: SaffronCosmiconfigOptions) {
-  // Validate options.
-  ow(fileName, 'fileName', ow.string.nonEmpty);
-  ow(key, 'key', ow.optional.string);
+export default async function loadConfiguration<C>(options: SaffronCosmiconfigOptions) {
+  const { fileName, key, searchFrom, ...cosmicOptions } = validators.cosmiconfigOptions(options);
 
-  // @ts-ignore
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
       // [Aug 2022] This loader is not working at the moment.

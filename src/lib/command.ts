@@ -4,9 +4,9 @@ import {
   SaffronHandlerContext,
   SaffronCommand
 } from 'etc/types';
+import validators from 'etc/validators';
 import loadConfiguration from 'lib/configuration';
 import log from 'lib/log';
-import ow from 'lib/ow';
 import { getPackageInfo } from 'lib/package';
 import yargs from 'lib/yargs';
 
@@ -42,13 +42,7 @@ export default function buildCommand<
   C extends Record<string, any> = A
 >(saffronCommand: SaffronCommand<A, C>) {
   // Validate options.
-  ow(saffronCommand.command, 'command', ow.optional.string);
-  ow(saffronCommand.description, 'description', ow.optional.string);
-  ow(saffronCommand.strict, 'strict', ow.optional.boolean);
-  ow(saffronCommand.config, 'config', ow.any(ow.boolean.false, ow.object, ow.undefined));
-  ow(saffronCommand.aliases, 'aliases', ow.any(ow.string, ow.array.ofType(ow.string), ow.undefined));
-  ow(saffronCommand.builder, 'builder', ow.optional.function);
-  ow(saffronCommand.handler, 'handler', ow.function);
+  validators.saffronCommand(saffronCommand);
 
   // Get the host application's package manifest.
   const hostPkg = getPackageInfo('host');
