@@ -1,3 +1,10 @@
+## [0.4.26-beta.3](https://github.com/darkobits/saffron/compare/v0.4.26-beta.2...v0.4.26-beta.3) (2022-08-17)
+
+
+### 🐞 Bug Fixes
+
+* Fix validators. ([cbb41db](https://github.com/darkobits/saffron/commit/cbb41db18134bae7852a214208c08cdd1b236413))
+
 ## [0.4.26-beta.2](https://github.com/darkobits/saffron/compare/v0.4.26-beta.1...v0.4.26-beta.2) (2022-08-17)
 
 
