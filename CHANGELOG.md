@@ -1,3 +1,24 @@
+## [0.4.23](https://github.com/darkobits/saffron/compare/v0.4.22...v0.4.23) (2022-08-17)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([059f137](https://github.com/darkobits/saffron/commit/059f13718cea9da3028468124ec361a4e58ea35f))
+* **deps:** Update dependencies. ([855647e](https://github.com/darkobits/saffron/commit/855647eb8b596cfe3f0e61790430b6ee00de8f7d))
+
+
+### 📖 Documentation
+
+* Update README. ([5fe95e5](https://github.com/darkobits/saffron/commit/5fe95e562ea88c897a28cb190a907219abc660cc))
+* Update README. ([4b9cac3](https://github.com/darkobits/saffron/commit/4b9cac3e7c1baf9c12d245e10cad89a014c7f09a))
+
+
+### 🛠 Refactoring
+
+* Add `parsePackageName` helper. ([cf6ade2](https://github.com/darkobits/saffron/commit/cf6ade279147b02fb23392b79f8290a0b1fafa88))
+* Use default loader for TypeScript configuration files. ([9c24e65](https://github.com/darkobits/saffron/commit/9c24e654a52823888b0611cd18f371accecb1d5e))
+* Use external documentation. ([d330b02](https://github.com/darkobits/saffron/commit/d330b022b543590db3156cab8cdb6f403d9fc749))
+
 ### [0.4.22](https://github.com/darkobits/saffron/compare/v0.4.21...v0.4.22) (2022-08-11)
 
 
