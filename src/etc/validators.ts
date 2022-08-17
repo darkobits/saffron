@@ -1,15 +1,14 @@
-import createValidator, { type Ow } from '@darkobits/valida';
+import createValidator from '@darkobits/valida';
 
-const cosmiconfigOptionsSpec = (ow: Ow) => ow.object.partialShape({
-  auto: ow.optional.boolean,
-  searchFrom: ow.optional.string,
-  fileName: ow.string.nonEmpty,
-  key: ow.optional.string
-});
 
 export default {
   cosmiconfigOptions: createValidator(({ ow }) => ({
-    spec: cosmiconfigOptionsSpec(ow)
+    spec: ow.object.partialShape({
+      auto: ow.optional.boolean,
+      searchFrom: ow.optional.string,
+      fileName: ow.string.nonEmpty,
+      key: ow.optional.string
+    })
   })),
   saffronCommand: createValidator(({ ow }) => ({
     spec: {
@@ -17,10 +16,7 @@ export default {
       description: ow.optional.string.nonEmpty,
       aliases: ow.any(ow.string, ow.array.ofType(ow.string), ow.undefined),
       strict: ow.optional.boolean,
-      config: ow.optional.any(
-        ow.boolean.false,
-        cosmiconfigOptionsSpec(ow)
-      ),
+      config: ow.optional.any(ow.boolean.false, ow.object),
       builder: ow.optional.function,
       handler: ow.function
     }
