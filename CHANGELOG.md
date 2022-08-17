@@ -1,3 +1,10 @@
+## [0.4.26-beta.2](https://github.com/darkobits/saffron/compare/v0.4.26-beta.1...v0.4.26-beta.2) (2022-08-17)
+
+
+### 🛠 Refactoring
+
+* Update validators. ([b486f99](https://github.com/darkobits/saffron/commit/b486f99af0eb1aba55fd629e7d0a32b98c00e37a))
+
 ## [0.4.26-beta.1](https://github.com/darkobits/saffron/compare/v0.4.25...v0.4.26-beta.1) (2022-08-17)
 
 
