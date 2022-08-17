@@ -14,14 +14,9 @@ export type { Arguments, Argv } from 'yargs';
 /**
  * [Types]
  *
- * Export selected types from 'etc/types'.
+ * Export types.
  */
-export type {
-  SaffronBuilder,
-  SaffronBuilderContext,
-  SaffronHandler,
-  SaffronHandlerContext
-} from 'etc/types';
+export * from 'etc/types';
 
 
 /**
