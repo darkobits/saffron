@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.28](https://github.com/darkobits/saffron/compare/v0.4.27...v0.4.28) (2022-08-21)
+
+
+### 🐞 Bug Fixes
+
+* Add dependency on `@babel/core`. ([b4b86b2](https://github.com/darkobits/saffron/commit/b4b86b265381fbda0c9189876a2c071c704529b7))
+
 ## [0.4.27](https://github.com/darkobits/saffron/compare/v0.4.26...v0.4.27) (2022-08-17)
 
 ## [0.4.26](https://github.com/darkobits/saffron/compare/v0.4.26-beta.2...v0.4.26) (2022-08-17)
