@@ -1,3 +1,10 @@
+## [0.4.29](https://github.com/darkobits/saffron/compare/v0.4.28...v0.4.29) (2022-09-12)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([359ebf1](https://github.com/darkobits/saffron/commit/359ebf1ad5a621e2b941329d9057b8c1bc36c281))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
