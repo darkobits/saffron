@@ -20,15 +20,15 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/core": "^7.18.10",
+    "@babel/core": "^7.19.0",
     "@babel/register": "^7.18.9",
     "@darkobits/eslint-plugin": "^0.2.9",
     "@darkobits/fd-name": "^0.1.4",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@endemolshinegroup/cosmiconfig-typescript-loader": "^3.0.2",
-    "@types/yargs": "^17.0.11",
-    "camelcase-keys": "^8.0.1",
+    "@types/yargs": "^17.0.12",
+    "camelcase-keys": "^8.0.2",
     "cosmiconfig": "^7.0.1",
     "deepmerge": "^4.2.2",
     "fs-extra": "^10.1.0",
@@ -38,7 +38,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.11.0-beta.0",
+    "@darkobits/ts": "^0.12.4",
     "@types/fs-extra": "^9.0.13"
   }
 }
