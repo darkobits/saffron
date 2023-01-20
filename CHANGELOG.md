@@ -1,3 +1,15 @@
+## [0.30.0-beta.2](https://github.com/darkobits/saffron/compare/v0.30.0-beta.1...v0.30.0-beta.2) (2023-01-20)
+
+
+### 📖 Documentation
+
+* Update README. ([33e60e6](https://github.com/darkobits/saffron/commit/33e60e645a187da8d1172c4fdb9a3d12ad486dd2))
+
+
+### 🐞 Bug Fixes
+
+* Use `ts-node` with `transpileOnly`. ([8fb14c7](https://github.com/darkobits/saffron/commit/8fb14c7fe431e3f0ba9a40b51d8c09d7bf58ca1b))
+
 ## [0.30.0-beta.1](https://github.com/darkobits/saffron/compare/v0.4.30-beta.1...v0.30.0-beta.1) (2023-01-20)
 
 
