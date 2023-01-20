@@ -51,9 +51,11 @@ async function withTsNode(cwd: string, contents: string) {
 async function configurationLoader(filePath: string) {
   try {
     const config = await withTsNode(filePath, `
-      module.exports = import("${filePath}?nonce=1").then(result => {
-        return result?.default ? result.default : result;
-      });
+      // module.exports = import("${filePath}?nonce=1").then(result => {
+      //   return result?.default ? result.default : result;
+      // });
+      const config = require("${filePath}");
+      module.exports = config.default ?? config;
     `);
     log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using ts-node + import().'));
     return config?.default ?? config;
