@@ -20,8 +20,6 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/core": "^7.19.0",
-    "@babel/register": "^7.18.9",
     "@darkobits/eslint-plugin": "^0.2.9",
     "@darkobits/fd-name": "^0.1.4",
     "@darkobits/log": "^2.0.0-beta.15",
@@ -35,6 +33,8 @@
     "pkg-dir": "^7.0.0",
     "read-pkg-up": "^9.1.0",
     "resolve-pkg": "^2.0.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

@@ -16,18 +16,20 @@ import log from 'lib/log';
  * @private
  *
  * Creates a temporary module in the nearest node_modules folder that loads
- * @babel/register, executes the provided contents, and returns the result. The
- * node_modules folder is used to ensure Babel loads the nearest configuration
- * file.
+ * tsconfig-paths and ts-node, executes the provided contents, and returns the
+ * result. The node_modules folder is used to ensure the nearest configuration
+ * file is loaded.
  */
-async function withBabelRegister(cwd: string, contents: string) {
+async function withTsNode(cwd: string, contents: string) {
   const pkgDir = await packageDirectory({ cwd: path.dirname(cwd) });
-  if (!pkgDir) throw new Error('[withBabelRegister] Unable to compute package directory.');
+  if (!pkgDir) throw new Error('[withTsNode] Unable to compute package directory.');
 
-  const babelRegisterPath = resolvePkg('@babel/register');
+  const tsConfigPathsPath = resolvePkg('tsconfig-paths');
+  const tsNodePath = resolvePkg('ts-node');
+
   const wrapper = `
-    const babelRegister = require('${babelRegisterPath}');
-    babelRegister({ extensions: ['.ts', '.js', '.mjs', '.cjs', '.json'] });
+    require('${tsConfigPathsPath}/register');
+    require('${tsNodePath}').register({ esm: true });
     ${contents}
   `;
 
@@ -42,25 +44,23 @@ async function withBabelRegister(cwd: string, contents: string) {
 
 
 /**
- * Cosmiconfig custom loader that supports ESM syntax and any Babel plugins that
- * may be installed in the local project. It allows host applications to be
- * written in ESM or CJS, and for the consumers of those applications to write
- * configuration files as ESM or CJS. It will also automatically use Babel with
- * the consumer's Babel configuration file, if present.
+ * Cosmiconfig custom loader that supports ESM syntax. It allows host
+ * applications to be written in ESM or CJS, and for the consumers of those
+ * applications to write configuration files as ESM or CJS.
  */
 async function configurationLoader(filePath: string) {
   try {
-    const config = await withBabelRegister(filePath, `
+    const config = await withTsNode(filePath, `
       module.exports = import("${filePath}?nonce=1").then(result => {
         return result?.default ? result.default : result;
       });
     `);
-    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register + import().'));
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using ts-node + import().'));
     return config?.default ?? config;
   } catch (err: any) {
     log.error(
       log.prefix('parseConfiguration'),
-      'Failed to load configuration file with @babel/register + import():',
+      'Failed to load configuration file with ts-node + import():',
       err.message
     );
   }
