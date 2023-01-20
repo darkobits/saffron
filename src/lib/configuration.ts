@@ -30,7 +30,7 @@ async function withTsNode(cwd: string, contents: string) {
   const wrapper = `
     require('${tsConfigPathsPath}/register');
     require('${tsNodePath}').register({
-      esm: true
+      esm: true,
       transpileOnly: true
     });
     ${contents}
