@@ -1,3 +1,17 @@
+## [0.4.30-beta.1](https://github.com/darkobits/saffron/compare/v0.4.29...v0.4.30-beta.1) (2023-01-20)
+
+
+### 🛠 Refactoring
+
+* Use `ts-node` and `tsconfig-paths` to load configuration files. ([5891784](https://github.com/darkobits/saffron/commit/5891784cb733399d5f4e029a61c573e18cded7f5))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([79c0bf7](https://github.com/darkobits/saffron/commit/79c0bf709c877ce58dc97d033859a481aca14784))
+* **release:** 0.4.30-beta.0 ([ce5510b](https://github.com/darkobits/saffron/commit/ce5510b4328e9c29964fd210f7c0f3a5e6f5ef35))
+* Update `.ci.yml`. ([45da942](https://github.com/darkobits/saffron/commit/45da94228fc0791decc65fb28c561e5b4f0df97b))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
