@@ -1,3 +1,10 @@
+## [0.30.0-beta.3](https://github.com/darkobits/saffron/compare/v0.30.0-beta.2...v0.30.0-beta.3) (2023-01-20)
+
+
+### 🐞 Bug Fixes
+
+* Add comma. ([1bb0184](https://github.com/darkobits/saffron/commit/1bb018492f8138520d3c7d720b005a8b29c699b9))
+
 ## [0.30.0-beta.2](https://github.com/darkobits/saffron/compare/v0.30.0-beta.1...v0.30.0-beta.2) (2023-01-20)
 
 
