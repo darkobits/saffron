@@ -1,3 +1,10 @@
+## [0.30.0-beta.1](https://github.com/darkobits/saffron/compare/v0.4.30-beta.1...v0.30.0-beta.1) (2023-01-20)
+
+
+### 🐞 Bug Fixes
+
+* Fix config loading logic. ([9b71b15](https://github.com/darkobits/saffron/commit/9b71b157a5c01fa7f383a3c271ab08292ebc5f7d))
+
 ## [0.4.30-beta.1](https://github.com/darkobits/saffron/compare/v0.4.29...v0.4.30-beta.1) (2023-01-20)
 
 
