@@ -21,24 +21,24 @@
   },
   "dependencies": {
     "@darkobits/eslint-plugin": "^0.2.9",
-    "@darkobits/fd-name": "^0.1.4",
+    "@darkobits/fd-name": "^0.1.7",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@endemolshinegroup/cosmiconfig-typescript-loader": "^3.0.2",
-    "@types/yargs": "^17.0.12",
+    "@types/yargs": "^17.0.20",
     "camelcase-keys": "^8.0.2",
-    "cosmiconfig": "^7.0.1",
+    "cosmiconfig": "^8.0.0",
     "deepmerge": "^4.2.2",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.1.0",
     "pkg-dir": "^7.0.0",
     "read-pkg-up": "^9.1.0",
     "resolve-pkg": "^2.0.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.2",
-    "yargs": "^17.5.1"
+    "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "^0.12.4",
-    "@types/fs-extra": "^9.0.13"
+    "@darkobits/ts": "^0.13.0",
+    "@types/fs-extra": "^11.0.1"
   }
 }

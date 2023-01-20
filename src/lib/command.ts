@@ -164,6 +164,7 @@ export default function buildCommand<
 
   // ----- Register Command ----------------------------------------------------
 
+  // @ts-expect-error - Suspected error in yargs typings.
   yargs.command<A>({
     command: saffronCommand.command ?? '*',
     describe: saffronCommand.description ?? hostPkg.json?.description,
