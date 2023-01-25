@@ -1,3 +1,10 @@
+## [0.30.0-beta.6](https://github.com/darkobits/saffron/compare/v0.30.0-beta.5...v0.30.0-beta.6) (2023-01-25)
+
+
+### 🛠 Refactoring
+
+* Publish as CommonJS. ([7a9cab0](https://github.com/darkobits/saffron/commit/7a9cab08a5d104c2c93974b641ac5aa2b7b8bc13))
+
 ## [0.30.0-beta.5](https://github.com/darkobits/saffron/compare/v0.30.0-beta.4...v0.30.0-beta.5) (2023-01-25)
 
 
