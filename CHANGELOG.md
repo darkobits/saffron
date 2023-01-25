@@ -1,3 +1,10 @@
+## [0.30.0-beta.4](https://github.com/darkobits/saffron/compare/v0.30.0-beta.3...v0.30.0-beta.4) (2023-01-25)
+
+
+### 🛠 Refactoring
+
+* Refactor TypeScript loader. ([4170c9d](https://github.com/darkobits/saffron/commit/4170c9dde857ec83785f0e2b2424d72a051e810d))
+
 ## [0.30.0-beta.3](https://github.com/darkobits/saffron/compare/v0.30.0-beta.2...v0.30.0-beta.3) (2023-01-20)
 
 
