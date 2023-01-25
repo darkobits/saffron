@@ -1,7 +1,7 @@
 import path from 'path';
 
 import fs from 'fs-extra';
-import { packageDirectory } from 'pkg-dir';
+import packageDirectory from 'pkg-dir';
 import resolvePkg from 'resolve-pkg';
 
 import log from 'lib/log';
@@ -15,9 +15,7 @@ import log from 'lib/log';
  * returns the results.
  */
 async function withTsNode(filePath: string) {
-  const pkgDir = await packageDirectory({
-    cwd: path.dirname(filePath)
-  });
+  const pkgDir = await packageDirectory(path.dirname(filePath));
 
   if (!pkgDir) throw new Error('[withTsNode] Unable to compute package directory.');
 

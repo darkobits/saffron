@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { dirname } from '@darkobits/fd-name';
-import { readPackageUpSync, NormalizedPackageJson } from 'read-pkg-up';
+import readPkgUp, { NormalizedPackageJson } from 'read-pkg-up';
 
 
 /**
@@ -34,7 +34,7 @@ export function getPackageInfo(type: 'host' | 'local'): PackageInfo {
       :  dirname();
     if (!cwd) throw new Error(`[getOurPackageInfo] Unable to compute cwd for the ${type} package.`);
 
-    const packageResult = readPackageUpSync({ cwd });
+    const packageResult = readPkgUp.sync({ cwd });
     if (!packageResult) throw new Error(`[getPackageInfo] Unable to get metadata for the ${type} package.`);
 
     packageCache.set(type, {
