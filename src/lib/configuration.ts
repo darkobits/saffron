@@ -19,8 +19,6 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
 
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
-      // [Aug 2022] This loader is not working at the moment.
-      // '.ts': TypeScriptLoader,
       '.ts': typescriptLoader,
       '.js': typescriptLoader,
       '.mjs': typescriptLoader,

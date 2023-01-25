@@ -26,6 +26,7 @@ async function withTsNode(filePath: string) {
 
   const wrapper = `
     require('${tsNodePath}').register({
+      transpileOnly: true,
       compilerOptions: {
         module: 'commonjs'
       }
