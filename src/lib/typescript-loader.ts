@@ -1,31 +1,68 @@
-import _TypeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
+import path from 'path';
+
+import fs from 'fs-extra';
+import { packageDirectory } from 'pkg-dir';
+import resolvePkg from 'resolve-pkg';
+
+import log from 'lib/log';
 
 
 /**
- * This is needed because while we transpile to ESM, we still transpile to CJS
- * for testing in Jest, and certain modules will import different values based
- * on these strategies, so we have to "find" the package's true default export
- * at runtime in a way that works in both ESM and CJS.
+ * @private
  *
- * This is essentially a replacement for Babel's _interopRequireDefault helper
- * which is not used / added to transpiled code when transpiling to ESM.
- *
- * TODO: Move to separate package.
+ * Creates a temporary module in the nearest node_modules folder that loads
+ * ts-node and tsconfig-paths, then loads the provided configuration file, and
+ * returns the results.
  */
-export function getDefaultExport<T extends object>(value: T): T {
-  try {
-    let result = value;
+async function withTsNode(filePath: string) {
+  const pkgDir = await packageDirectory({
+    cwd: path.dirname(filePath)
+  });
 
-    while (Reflect.has(result, 'default')) {
-      // @ts-expect-error - TODO: This file may likely be removed in the future.
-      result = Reflect.get(result, 'default');
-    }
+  if (!pkgDir) throw new Error('[withTsNode] Unable to compute package directory.');
 
-    return result;
-  } catch {
-    return value;
-  }
+  const tsNodePath = resolvePkg('ts-node');
+  const tsConfigPathsPath = resolvePkg('tsconfig-paths');
+
+  const wrapper = `
+    require('${tsNodePath}').register({
+      compilerOptions: {
+        module: 'commonjs'
+      }
+    });
+
+    require('${tsConfigPathsPath}/register');
+
+    const config = require("${filePath}");
+    module.exports = config.default ?? config;
+  `;
+
+  const tempDir = path.resolve(pkgDir, 'node_modules', '.saffron-config');
+  await fs.ensureDir(tempDir);
+  const loaderPath = path.resolve(tempDir, 'loader.js');
+  await fs.writeFile(loaderPath, wrapper);
+  const result = await import(loaderPath);
+  void fs.remove(loaderPath);
+
+  return result;
 }
 
 
-export default getDefaultExport(_TypeScriptLoader);
+/**
+ * Cosmiconfig custom loader that supports ESM syntax. It allows host
+ * applications to be written in ESM or CJS, and for the consumers of those
+ * applications to write configuration files as ESM or CJS.
+ */
+export default async function configurationLoader(filePath: string) {
+  try {
+    const config = await withTsNode(filePath);
+    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using ts-node + import().'));
+    return config?.default ?? config;
+  } catch (err: any) {
+    log.error(
+      log.prefix('parseConfiguration'),
+      'Failed to load configuration file with ts-node + import():',
+      err.message
+    );
+  }
+}

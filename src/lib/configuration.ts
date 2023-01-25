@@ -1,75 +1,9 @@
-import path from 'path';
-
 import { cosmiconfig } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
-import fs from 'fs-extra';
-import { packageDirectory } from 'pkg-dir';
-import resolvePkg from 'resolve-pkg';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import validators from 'etc/validators';
-import log from 'lib/log';
-// import TypeScriptLoader from 'lib/typescript-loader';
-
-
-/**
- * @private
- *
- * Creates a temporary module in the nearest node_modules folder that loads
- * tsconfig-paths and ts-node, executes the provided contents, and returns the
- * result. The node_modules folder is used to ensure the nearest configuration
- * file is loaded.
- */
-async function withTsNode(cwd: string, contents: string) {
-  const pkgDir = await packageDirectory({ cwd: path.dirname(cwd) });
-  if (!pkgDir) throw new Error('[withTsNode] Unable to compute package directory.');
-
-  const tsConfigPathsPath = resolvePkg('tsconfig-paths');
-  const tsNodePath = resolvePkg('ts-node');
-
-  const wrapper = `
-    require('${tsConfigPathsPath}/register');
-    require('${tsNodePath}').register({
-      esm: true,
-      transpileOnly: true
-    });
-    ${contents}
-  `;
-
-  const tempDir = path.resolve(pkgDir, 'node_modules');
-  const loaderPath = path.resolve(tempDir, '.saffron-loader.js');
-  await fs.ensureDir(tempDir);
-  await fs.writeFile(loaderPath, wrapper);
-  const result = await import(loaderPath);
-  void fs.remove(loaderPath);
-  return result;
-}
-
-
-/**
- * Cosmiconfig custom loader that supports ESM syntax. It allows host
- * applications to be written in ESM or CJS, and for the consumers of those
- * applications to write configuration files as ESM or CJS.
- */
-async function configurationLoader(filePath: string) {
-  try {
-    const config = await withTsNode(filePath, `
-      // module.exports = import("${filePath}?nonce=1").then(result => {
-      //   return result?.default ? result.default : result;
-      // });
-      const config = require("${filePath}");
-      module.exports = config.default ?? config;
-    `);
-    log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using ts-node + import().'));
-    return config?.default ?? config;
-  } catch (err: any) {
-    log.error(
-      log.prefix('parseConfiguration'),
-      'Failed to load configuration file with ts-node + import():',
-      err.message
-    );
-  }
-}
+import typescriptLoader from 'lib/typescript-loader';
 
 
 /**
@@ -87,10 +21,10 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
     loaders: {
       // [Aug 2022] This loader is not working at the moment.
       // '.ts': TypeScriptLoader,
-      '.ts': configurationLoader,
-      '.js': configurationLoader,
-      '.mjs': configurationLoader,
-      '.cjs': configurationLoader
+      '.ts': typescriptLoader,
+      '.js': typescriptLoader,
+      '.mjs': typescriptLoader,
+      '.cjs': typescriptLoader
     },
     searchPlaces: [
       'package.json',
