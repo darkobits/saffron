@@ -1,3 +1,10 @@
+## [0.30.0-beta.5](https://github.com/darkobits/saffron/compare/v0.30.0-beta.4...v0.30.0-beta.5) (2023-01-25)
+
+
+### 🐞 Bug Fixes
+
+* Add `transpileOnly` to `ts-node` options. ([7232b7e](https://github.com/darkobits/saffron/commit/7232b7ef583ca16e9648ee6db823a92de34486c3))
+
 ## [0.30.0-beta.4](https://github.com/darkobits/saffron/compare/v0.30.0-beta.3...v0.30.0-beta.4) (2023-01-25)
 
 
