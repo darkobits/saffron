@@ -1,3 +1,42 @@
+## [0.4.30](https://github.com/darkobits/saffron/compare/v0.4.29...v0.4.30) (2023-01-25)
+
+
+### 📖 Documentation
+
+* Update README. ([33e60e6](https://github.com/darkobits/saffron/commit/33e60e645a187da8d1172c4fdb9a3d12ad486dd2))
+
+
+### 🐞 Bug Fixes
+
+* Add `transpileOnly` to `ts-node` options. ([7232b7e](https://github.com/darkobits/saffron/commit/7232b7ef583ca16e9648ee6db823a92de34486c3))
+* Add comma. ([1bb0184](https://github.com/darkobits/saffron/commit/1bb018492f8138520d3c7d720b005a8b29c699b9))
+* Fix config loading logic. ([9b71b15](https://github.com/darkobits/saffron/commit/9b71b157a5c01fa7f383a3c271ab08292ebc5f7d))
+* Use `ts-node` with `transpileOnly`. ([8fb14c7](https://github.com/darkobits/saffron/commit/8fb14c7fe431e3f0ba9a40b51d8c09d7bf58ca1b))
+
+
+### 🛠 Refactoring
+
+* Publish as CommonJS. ([7a9cab0](https://github.com/darkobits/saffron/commit/7a9cab08a5d104c2c93974b641ac5aa2b7b8bc13))
+* Refactor TypeScript loader. ([4170c9d](https://github.com/darkobits/saffron/commit/4170c9dde857ec83785f0e2b2424d72a051e810d))
+* Use `ts-node` and `tsconfig-paths` to load configuration files. ([5891784](https://github.com/darkobits/saffron/commit/5891784cb733399d5f4e029a61c573e18cded7f5))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([f8db9e9](https://github.com/darkobits/saffron/commit/f8db9e93e42b3a5d15f6102857280c53ace686b1))
+* **deps:** Update dependencies. ([9af4169](https://github.com/darkobits/saffron/commit/9af41696dd61de50911c5041140abbd24f5aa3f7))
+* **deps:** Update dependencies. ([79c0bf7](https://github.com/darkobits/saffron/commit/79c0bf709c877ce58dc97d033859a481aca14784))
+* **release:** 0.30.0-beta.1 ([31ad05c](https://github.com/darkobits/saffron/commit/31ad05c26a1083be1505d2409c1210fc226ddc22))
+* **release:** 0.30.0-beta.2 ([6ecb96b](https://github.com/darkobits/saffron/commit/6ecb96be985418c4e36b2d8f56a890b0be772161))
+* **release:** 0.30.0-beta.3 ([2b897c3](https://github.com/darkobits/saffron/commit/2b897c3ce133849feafe90e16737361225422c77))
+* **release:** 0.30.0-beta.4 ([2a863d3](https://github.com/darkobits/saffron/commit/2a863d332a7ee65f290a2bbe4bba809c18f25741))
+* **release:** 0.30.0-beta.5 ([9a97be6](https://github.com/darkobits/saffron/commit/9a97be6d10a60107aed975c8d38c499a028a42f5))
+* **release:** 0.30.0-beta.6 ([946cba8](https://github.com/darkobits/saffron/commit/946cba8ebb09324ec19479b373da6487bd4a3035))
+* **release:** 0.30.0-beta.7 ([3089f16](https://github.com/darkobits/saffron/commit/3089f1647acfe999889152a12493e472e8c9e048))
+* **release:** 0.4.30-beta.0 ([ce5510b](https://github.com/darkobits/saffron/commit/ce5510b4328e9c29964fd210f7c0f3a5e6f5ef35))
+* **release:** 0.4.30-beta.1 ([08a80a1](https://github.com/darkobits/saffron/commit/08a80a1a26598d7e447649c914491df2a44e8ee4))
+* Update `.ci.yml`. ([45da942](https://github.com/darkobits/saffron/commit/45da94228fc0791decc65fb28c561e5b4f0df97b))
+
 ## [0.30.0-beta.7](https://github.com/darkobits/saffron/compare/v0.30.0-beta.6...v0.30.0-beta.7) (2023-01-25)
 
 
