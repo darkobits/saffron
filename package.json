@@ -40,7 +40,7 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.13.9",
+    "@darkobits/ts": "~0.13.10",
     "@types/fs-extra": "^11.0.1"
   }
 }
