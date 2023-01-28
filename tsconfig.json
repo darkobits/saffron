@@ -1,5 +1,5 @@
 {
-  "extends": "@darkobits/ts/config/tsconfig.json",
+  "extends": "@darkobits/ts/tsconfig.json",
   "include": ["src"],
   "compilerOptions": {
     "baseUrl": "src",

@@ -1,9 +1,9 @@
-import { cosmiconfig } from 'cosmiconfig';
+import { cosmiconfig, defaultLoaders } from 'cosmiconfig';
 import merge, { } from 'deepmerge';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import validators from 'etc/validators';
-import typescriptLoader from 'lib/typescript-loader';
+import ConfigurationLoader from 'lib/configuration-loader';
 
 
 /**
@@ -19,10 +19,10 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
 
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
-      '.ts': typescriptLoader,
-      '.js': typescriptLoader,
-      '.mjs': typescriptLoader,
-      '.cjs': typescriptLoader
+      ...defaultLoaders,
+      '.ts': ConfigurationLoader,
+      '.js': ConfigurationLoader,
+      '.cjs': ConfigurationLoader
     },
     searchPlaces: [
       'package.json',
@@ -33,11 +33,9 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       `${fileName}.config.ts`,
       `${fileName}.config.js`,
       `${fileName}.config.cjs`,
-      `${fileName}.config.mjs`,
       `${fileName}rc.ts`,
       `${fileName}rc.js`,
-      `${fileName}rc.cjs`,
-      `${fileName}rc.mjs`
+      `${fileName}rc.cjs`
     ]
   }, cosmicOptions, {
     arrayMerge: (target, source) => {
