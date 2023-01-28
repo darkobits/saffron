@@ -57,7 +57,7 @@ async function withBabel(pkgDir: string, filePath: string) {
   const babelRegisterPath = resolvePkg('@babel/register');
 
   const wrapper = `
-    require('${babelRegisterPath}').register({
+    require('${babelRegisterPath}')({
       extensions: ['.ts', '.js', '.cjs']
     });
 
