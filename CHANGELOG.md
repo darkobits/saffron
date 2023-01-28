@@ -1,3 +1,10 @@
+## [0.30.0-beta.9](https://github.com/darkobits/saffron/compare/v0.30.0-beta.8...v0.30.0-beta.9) (2023-01-28)
+
+
+### 🐞 Bug Fixes
+
+* Invoke `@babel/register` correctly. ([e2d4207](https://github.com/darkobits/saffron/commit/e2d42077f7af20b73f7da1bb99159c576c178dbd))
+
 ## [0.30.0-beta.8](https://github.com/darkobits/saffron/compare/v0.30.0-beta.7...v0.30.0-beta.8) (2023-01-28)
 
 
