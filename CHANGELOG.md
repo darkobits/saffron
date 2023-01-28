@@ -1,3 +1,16 @@
+## [0.30.0-beta.8](https://github.com/darkobits/saffron/compare/v0.30.0-beta.7...v0.30.0-beta.8) (2023-01-28)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([f8db9e9](https://github.com/darkobits/saffron/commit/f8db9e93e42b3a5d15f6102857280c53ace686b1))
+* **release:** 0.4.30 ([82b5ddc](https://github.com/darkobits/saffron/commit/82b5ddcb6053b478859aa06b6a404b19a0e6218b))
+
+
+### 🛠 Refactoring
+
+* Support loading configuration files using @babel/register. ([1d4d2a7](https://github.com/darkobits/saffron/commit/1d4d2a7e34d3391d78cc590b9ba1001a79293e0f))
+
 ## [0.4.30](https://github.com/darkobits/saffron/compare/v0.4.29...v0.4.30) (2023-01-25)
 
 
