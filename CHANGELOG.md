@@ -1,3 +1,15 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.4.32](https://github.com/darkobits/saffron/compare/v0.4.31...v0.4.32) (2023-01-30)
+
+
+### 🏗 Chores
+
+* **deps:** Move `eslint-plugin` to `devDependencies`. ([af180c2](https://github.com/darkobits/saffron/commit/af180c231ade4a447cd5a75727d1e2c3d4ba91f2))
+* **deps:** Update dependencies. ([426b869](https://github.com/darkobits/saffron/commit/426b869122d193ff9931f495f0470c51d1192841))
+
 ## [0.4.31](https://github.com/darkobits/saffron/compare/v0.4.30...v0.4.31) (2023-01-28)
 
 
