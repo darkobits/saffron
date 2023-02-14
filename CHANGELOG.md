@@ -1,3 +1,15 @@
+## [0.30.3](https://github.com/darkobits/saffron/compare/v0.30.2...v0.30.3) (2023-02-14)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([38f02b6](https://github.com/darkobits/saffron/commit/38f02b6a60e171dc3d9622b6e227ff89862a7925))
+
+
+### 🐞 Bug Fixes
+
+* Add `sourceType: unambiguous` to Babel config. ([8296e3b](https://github.com/darkobits/saffron/commit/8296e3b2fb007db0579ebdf408c09fc1846b3f23))
+
 ## [0.30.2](https://github.com/darkobits/saffron/compare/v0.30.1...v0.30.2) (2023-02-14)
 
 
