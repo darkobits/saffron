@@ -1,6 +1,7 @@
 import path from 'path';
 
 import AggregateError from 'aggregate-error';
+import findUp from 'find-up';
 import fs from 'fs-extra';
 import packageDirectory from 'pkg-dir';
 import resolvePkg from 'resolve-pkg';
@@ -20,6 +21,9 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
   const babelPresetEnvPath = resolvePkg('@babel/preset-env');
   const babelPresetTypeScriptPath = resolvePkg('@babel/preset-typescript');
   const babelPluginModuleResolverTsConfigPath = resolvePkg('babel-plugin-module-resolver-tsconfig');
+  const tsConfigPath = await findUp('tsconfig.json', { cwd: pkgDir });
+
+  if (!tsConfigPath) throw new Error('[withBabelRegister] Could not find tsconfig.json.');
 
   const wrapper = `
     const { setModuleResolverPluginForTsConfig } = require('${babelPluginModuleResolverTsConfigPath}');
@@ -33,7 +37,9 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
         }]
       ],
       plugins: [
-        setModuleResolverPluginForTsConfig()
+        setModuleResolverPluginForTsConfig({
+          tsconfigPath: '${tsConfigPath}'
+        })
       ]
     });
 
