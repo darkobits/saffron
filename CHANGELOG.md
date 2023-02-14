@@ -1,3 +1,10 @@
+## [0.30.2](https://github.com/darkobits/saffron/compare/v0.30.1...v0.30.2) (2023-02-14)
+
+
+### 🐞 Bug Fixes
+
+* Configure `@babel/preset-env` to preserve dynamic imports. ([43af67b](https://github.com/darkobits/saffron/commit/43af67b8c59a195aac83022f75239715f009ba58))
+
 ## [0.30.1](https://github.com/darkobits/saffron/compare/v0.30.0...v0.30.1) (2023-02-14)
 
 
