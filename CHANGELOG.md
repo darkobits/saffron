@@ -1,3 +1,15 @@
+## [0.30.0-beta.13](https://github.com/darkobits/saffron/compare/v0.30.0-beta.12...v0.30.0-beta.13) (2023-02-14)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([8efb9c1](https://github.com/darkobits/saffron/commit/8efb9c117ac564d420656f838c564a04cc1ed23f))
+
+
+### 🐞 Bug Fixes
+
+* Update `searchPlaces` with new extensions. ([550188b](https://github.com/darkobits/saffron/commit/550188badc3328af3bc1daa2d277a66879dc7c41))
+
 ## [0.30.0-beta.12](https://github.com/darkobits/saffron/compare/v0.30.0-beta.11...v0.30.0-beta.12) (2023-02-14)
 
 
