@@ -31,10 +31,11 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
     require('${babelRegisterPath}')({
       extensions: ['.ts', '.js', '.cjs', '.mjs', '.cts', '.mts'],
       presets: [
-        '${babelPresetEnvPath}',
-        ['${babelPresetTypeScriptPath}', {
+        ['${babelPresetEnvPath}', {
+          // This ensures we preserve dynamic import calls (ie: used to load ESM).
           exclude: ['proposal-dynamic-import']
-        }]
+        }],
+        '${babelPresetTypeScriptPath}',
       ],
       plugins: [
         setModuleResolverPluginForTsConfig({
