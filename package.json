@@ -43,8 +43,8 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@darkobits/eslint-plugin": "^0.2.13",
-    "@darkobits/ts": "~0.14.0-beta.6",
+    "@darkobits/eslint-plugin": "^0.3.2",
+    "@darkobits/ts": "~0.14.0",
     "@types/fs-extra": "^11.0.1"
   }
 }
