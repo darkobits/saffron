@@ -1,3 +1,10 @@
+## [0.30.0-beta.11](https://github.com/darkobits/saffron/compare/v0.30.0-beta.10...v0.30.0-beta.11) (2023-02-14)
+
+
+### 🐞 Bug Fixes
+
+* Explicitly resolve tsconfig.json. ([8fa3715](https://github.com/darkobits/saffron/commit/8fa37159ade25599b3cd04d3e7bb84eb405e03c6))
+
 ## [0.30.0-beta.10](https://github.com/darkobits/saffron/compare/v0.30.0-beta.9...v0.30.0-beta.10) (2023-02-14)
 
 
