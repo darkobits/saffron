@@ -29,7 +29,7 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
     const { setModuleResolverPluginForTsConfig } = require('${babelPluginModuleResolverTsConfigPath}');
 
     require('${babelRegisterPath}').register({
-      extensions: ['.ts', '.js', '.cjs', '.mjs'],
+      extensions: ['.ts', '.js', '.cjs', '.mjs', '.cts', '.mts'],
       presets: [
         '${babelPresetEnvPath}',
         ['${babelPresetTypeScriptPath}', {
@@ -43,24 +43,20 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
       ]
     });
 
-    async function requireConfigFile() {
-      const configExport = await import('${filePath}');
-      return configExport.default || configExport;
-    }
-
-    module.exports = requireConfigFile();
+    const configExport = require('${filePath}');
+    module.exports = configExport.default ?? configExport;
   `;
 
   const tempDir = path.resolve(pkgDir, 'node_modules', '.saffron-config');
   await fs.ensureDir(tempDir);
-  const loaderPath = path.resolve(tempDir, 'loader.js');
+  const loaderPath = path.resolve(tempDir, 'loader.cjs');
   await fs.writeFile(loaderPath, wrapper);
   const result = await import(loaderPath);
   await fs.remove(tempDir);
 
-  log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using ts-node.'));
+  log.verbose(log.prefix('parseConfiguration'), log.chalk.green.bold('Loaded configuration using @babel/register.'));
 
-  return result;
+  return result.default ?? result;
 }
 
 

@@ -23,7 +23,9 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       '.ts': ConfigurationLoader,
       '.js': ConfigurationLoader,
       '.cjs': ConfigurationLoader,
-      '.mjs': ConfigurationLoader
+      '.mjs': ConfigurationLoader,
+      '.cts': ConfigurationLoader,
+      '.mts': ConfigurationLoader
     },
     searchPlaces: [
       'package.json',
