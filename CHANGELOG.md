@@ -1,3 +1,18 @@
+## [0.30.0-beta.10](https://github.com/darkobits/saffron/compare/v0.30.0-beta.9...v0.30.0-beta.10) (2023-02-14)
+
+
+### 🏗 Chores
+
+* **deps:** Move `eslint-plugin` to `devDependencies`. ([af180c2](https://github.com/darkobits/saffron/commit/af180c231ade4a447cd5a75727d1e2c3d4ba91f2))
+* **deps:** Update dependencies. ([426b869](https://github.com/darkobits/saffron/commit/426b869122d193ff9931f495f0470c51d1192841))
+* **release:** 0.4.31 ([d62c1e7](https://github.com/darkobits/saffron/commit/d62c1e79bbd74444d602f9bd2d2374340881923f))
+* **release:** 0.4.32 ([5ad74f1](https://github.com/darkobits/saffron/commit/5ad74f100924e5f5297ffa1d02853e815419d60c))
+
+
+### 🛠 Refactoring
+
+* Improve configuration loader. ([31a7094](https://github.com/darkobits/saffron/commit/31a7094149b1f271fdb99d0af7008a6149d4abc6))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
