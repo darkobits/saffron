@@ -36,6 +36,8 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       `${fileName}.config.ts`,
       `${fileName}.config.js`,
       `${fileName}.config.cjs`,
+      `${fileName}.config.cts`,
+      `${fileName}.config.mts`,
       `${fileName}rc.ts`,
       `${fileName}rc.js`,
       `${fileName}rc.cjs`
