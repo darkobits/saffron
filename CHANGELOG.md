@@ -1,3 +1,10 @@
+## [0.30.0-beta.12](https://github.com/darkobits/saffron/compare/v0.30.0-beta.11...v0.30.0-beta.12) (2023-02-14)
+
+
+### 🐞 Bug Fixes
+
+* Fix Babel loader, supprt `.cts` and `.mts` extensions. ([999181c](https://github.com/darkobits/saffron/commit/999181ccedc7be5510494bcd2fd590fe2a0837e5))
+
 ## [0.30.0-beta.11](https://github.com/darkobits/saffron/compare/v0.30.0-beta.10...v0.30.0-beta.11) (2023-02-14)
 
 
