@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@darkobits/eslint-plugin": "^0.2.13",
-    "@darkobits/ts": "~0.13.15",
+    "@darkobits/ts": "~0.14.0-beta.6",
     "@types/fs-extra": "^11.0.1"
   }
 }
