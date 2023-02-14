@@ -28,7 +28,7 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
   const wrapper = `
     const { setModuleResolverPluginForTsConfig } = require('${babelPluginModuleResolverTsConfigPath}');
 
-    require('${babelRegisterPath}').register({
+    require('${babelRegisterPath}')({
       extensions: ['.ts', '.js', '.cjs', '.mjs', '.cts', '.mts'],
       presets: [
         '${babelPresetEnvPath}',
