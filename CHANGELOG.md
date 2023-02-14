@@ -1,3 +1,10 @@
+## [0.30.1](https://github.com/darkobits/saffron/compare/v0.30.0...v0.30.1) (2023-02-14)
+
+
+### 🐞 Bug Fixes
+
+* Fix call to `@babel/register`. ([a30bd6a](https://github.com/darkobits/saffron/commit/a30bd6a9e049de6c68eea0d7ab7eaa97a7d3595e))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
