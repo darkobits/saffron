@@ -1,7 +1,3 @@
-import command from 'lib/command';
-import init from 'lib/init';
-
-
 /**
  * [Types]
  *
@@ -28,19 +24,10 @@ export * from 'etc/types';
  *
  * command(...);
  * init(...);
+ *
+ * For a default-like import, use:
+ *
+ * import * as cli from '@darkobits/saffron';
  */
 export { default as init } from 'lib/init';
 export { default as command } from 'lib/command';
-
-
-/**
- * Allow a default import with named properties.
- *
- * @example
- *
- * import cli from '@darkobits/saffron';
- *
- * cli.command(...);
- * cli.init(...);
- */
-export default { init, command };
