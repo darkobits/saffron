@@ -1,3 +1,10 @@
+## [0.31.0](https://github.com/darkobits/saffron/compare/v0.30.3...v0.31.0) (2023-02-15)
+
+
+### ✨ Features
+
+* **config:** Improve configuration loader. ([39e1b60](https://github.com/darkobits/saffron/commit/39e1b60f6c89ba09a6c960f7a57b1d1c2fedf846))
+
 ## [0.30.3](https://github.com/darkobits/saffron/compare/v0.30.2...v0.30.3) (2023-02-14)
 
 
