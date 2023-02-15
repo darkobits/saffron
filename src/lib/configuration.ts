@@ -23,9 +23,7 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       '.ts': ConfigurationLoader,
       '.js': ConfigurationLoader,
       '.cjs': ConfigurationLoader,
-      '.mjs': ConfigurationLoader,
-      '.cts': ConfigurationLoader,
-      '.mts': ConfigurationLoader
+      '.cts': ConfigurationLoader
     },
     searchPlaces: [
       'package.json',
@@ -37,10 +35,10 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       `${fileName}.config.js`,
       `${fileName}.config.cjs`,
       `${fileName}.config.cts`,
-      `${fileName}.config.mts`,
       `${fileName}rc.ts`,
       `${fileName}rc.js`,
-      `${fileName}rc.cjs`
+      `${fileName}rc.cjs`,
+      `${fileName}rc.cts`
     ]
   }, cosmicOptions, {
     arrayMerge: (target, source) => {
