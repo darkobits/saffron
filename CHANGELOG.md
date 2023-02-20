@@ -1,3 +1,15 @@
+## [0.31.1](https://github.com/darkobits/saffron/compare/v0.31.0...v0.31.1) (2023-02-20)
+
+
+### 🏗 Chores
+
+* **deps:** bump http-cache-semantics from 4.1.0 to 4.1.1 ([#17](https://github.com/darkobits/saffron/issues/17)) ([b4d41d0](https://github.com/darkobits/saffron/commit/b4d41d0e5e9af9b5c080529167d3a99b3430fdcb))
+
+
+### 🐞 Bug Fixes
+
+* Add `extensions` to module resolver plugin. ([342daf1](https://github.com/darkobits/saffron/commit/342daf1bae9840d4ee47097679cce5e0713f8554))
+
 ## [0.31.0](https://github.com/darkobits/saffron/compare/v0.30.3...v0.31.0) (2023-02-15)
 
 
