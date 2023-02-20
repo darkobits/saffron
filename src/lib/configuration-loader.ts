@@ -29,8 +29,10 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
     const wrapper = `
       const { setModuleResolverPluginForTsConfig } = require('${babelPluginModuleResolverTsConfigPath}');
 
+      const extensions =  ['.ts', '.tsx', '.js', '.jsx', '.cts', '.cjs'];
+
       require('${babelRegisterPath}')({
-        extensions: ['.ts', '.js', '.cjs', '.cts'],
+        extensions,
         // Treat files that contain import statements as modules and require statements as CommonJS.
         sourceType: 'unambiguous',
         // Let's Babel transpile files that may be above process.cwd(), which are ignored when using the
@@ -52,7 +54,8 @@ async function withBabelRegister(pkgDir: string, filePath: string) {
           // If the project has set up path mappings using tsconfig.json, this plugin will allow those
           // path specifiers to work as expected.
           setModuleResolverPluginForTsConfig({
-            tsconfigPath: '${tsConfigPath}'
+            tsconfigPath: '${tsConfigPath}',
+            extensions
           })
         ]
       });
