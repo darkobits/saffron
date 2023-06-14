@@ -3,7 +3,7 @@
   "version": "0.31.1",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
   "author": "darkobits",
-  "license": "WTFPL",
+  "license": "Hippocratic",
   "engines": {
     "node": ">=16"
   },
