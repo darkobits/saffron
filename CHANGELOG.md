@@ -1,3 +1,41 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.32.0](https://github.com/darkobits/saffron/compare/v0.31.1...v0.32.0) (2023-06-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* This package no longer has a single default export, but a collection of named exports. To import all named exports as a single onbject, see below.
+
+Before:
+
+```js
+import cli from '@darkobits/saffron'
+```
+
+After:
+
+```js
+import * as cli from '@darkobits/saffron'
+```
+
+### 🛠 Refactoring
+
+* Refactor package exports. ([65b8802](https://github.com/darkobits/saffron/commit/65b8802991a941e0f09557262c2b1849bf993d3d))
+
+
+### 📖 Documentation
+
+* Update README. ([7e73483](https://github.com/darkobits/saffron/commit/7e734832b24086f0e17d931c38b45dce17bd5a14))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([c46fb03](https://github.com/darkobits/saffron/commit/c46fb03e759deb5ab5329500ce7dde3f02a34225))
+* Update LICENSE. ([5ccb650](https://github.com/darkobits/saffron/commit/5ccb650c35e684a70ce3b2f21b170895468b18e8))
+
 ## [0.31.1](https://github.com/darkobits/saffron/compare/v0.31.0...v0.31.1) (2023-02-20)
 
 
