@@ -37,6 +37,8 @@
   ></a>
 </p>
 
+<br />
+
 <p align="center">
   To get started with Saffron, check out the documentation at <a href="https://darkobits.gitbook.io/saffron">darkobits.gitbook.io/saffron</a>.
 </p>
