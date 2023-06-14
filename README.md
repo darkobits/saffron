@@ -1,11 +1,11 @@
 <picture>
 	<source
     media="(prefers-color-scheme: dark)"
-    srcset="https://github.com/darkobits/saffron/assets/441546/d7bd8058-b5ba-4ea2-97c2-fa2a20c7b5ba"
+    srcset="https://github.com/darkobits/saffron/assets/441546/8c52160d-a210-4290-a0a1-1e3830b1b74e"
     width="100%"
   >
 	<img
-    src="https://github.com/darkobits/saffron/assets/441546/d9f8cc16-ed87-4a8f-a7c8-0c0b1b0a0948"
+    src="https://github.com/darkobits/saffron/assets/441546/7897faf2-9dd8-4125-b0b3-dbd7a8eac097"
     width="100%"
   >
 </picture>
