@@ -1,3 +1,15 @@
+## [0.32.1](https://github.com/darkobits/saffron/compare/v0.32.0...v0.32.1) (2023-06-14)
+
+
+### 📖 Documentation
+
+* Update README. ([f4bb9e9](https://github.com/darkobits/saffron/commit/f4bb9e93261aafa355b64926966163ddab2536ab))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([d258cf1](https://github.com/darkobits/saffron/commit/d258cf106ec74a8301239af9c4e2c8554d2a6aa9))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
