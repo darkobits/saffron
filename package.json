@@ -19,32 +19,31 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-typescript": "^7.18.6",
-    "@babel/register": "^7.18.9",
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "@babel/register": "^7.22.5",
     "@darkobits/fd-name": "^0.1.7",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@endemolshinegroup/cosmiconfig-typescript-loader": "^3.0.2",
-    "@types/yargs": "^17.0.22",
+    "@types/yargs": "^17.0.24",
     "aggregate-error": "~3.1.0",
     "babel-plugin-module-resolver-tsconfig": "^1.0.25",
     "camelcase-keys": "~7.0.2",
-    "cosmiconfig": "^8.0.0",
-    "deepmerge": "^4.3.0",
+    "cosmiconfig": "^8.2.0",
+    "deepmerge": "^4.3.1",
     "find-up": "^5.0.0",
-    "fs-extra": "^11.1.0",
+    "fs-extra": "^11.1.1",
     "pkg-dir": "~5.0.0",
     "read-pkg-up": "~7.0.1",
     "resolve-pkg": "^2.0.0",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.2",
-    "yargs": "^17.6.2"
+    "tsconfig-paths": "^4.2.0",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/eslint-plugin": "^0.3.2",
-    "@darkobits/ts": "~0.14.0",
+    "@darkobits/ts": "~0.16.2",
     "@types/fs-extra": "^11.0.1"
   }
 }

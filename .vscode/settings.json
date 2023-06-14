@@ -1,0 +1,8 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "endemolshinegroup"
+  ],
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.options.overrideConfigFile": "eslint.config.js"
+}

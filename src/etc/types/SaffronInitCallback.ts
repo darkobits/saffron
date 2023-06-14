@@ -1,4 +1,4 @@
-import type yargs from 'yargs';
+import type { Argv, ParseCallback } from 'yargs';
 
 
 /**
@@ -7,4 +7,4 @@ import type yargs from 'yargs';
  * to arguments being parsed. It may be synchronous or asynchronous, and it may
  * optionally return a Yargs `ParseCallback` function.
  */
-export type SaffronInitCallback = (y: typeof yargs) => void | yargs.ParseCallback | Promise<void | yargs.ParseCallback>;
+export type SaffronInitCallback = (y: Argv) => void | ParseCallback | Promise<void | ParseCallback>;

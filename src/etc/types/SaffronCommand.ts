@@ -1,7 +1,7 @@
 import type { SaffronBuilder } from './SaffronBuilder';
 import type { SaffronCosmiconfigOptions } from './SaffronCosmiconfigOptions';
 import type { SaffronHandler } from './SaffronHandler';
-import type yargs from 'yargs';
+import type { CommandModule } from 'yargs';
 
 
 /**
@@ -22,7 +22,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * @default '*'
    */
-  command?: yargs.CommandModule['command'];
+  command?: CommandModule['command'];
 
   /**
    * List of aliases for the command being defined. This should only be used
@@ -30,7 +30,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#aliaskey-alias
    */
-  aliases?: yargs.CommandModule['aliases'];
+  aliases?: CommandModule['aliases'];
 
   /**
    * Description that will appear at the top of help content.
@@ -40,7 +40,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * @default "description" field from package.json.
    */
-  description?: yargs.CommandModule['describe'];
+  description?: CommandModule['describe'];
 
   /**
    * Configuration for Cosmiconfig. Will be merged with Saffron's defaults. This

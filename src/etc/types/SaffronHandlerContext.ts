@@ -1,5 +1,5 @@
 import type { SaffronCommonContext } from './SaffronCommonContext';
-import type yargs from 'yargs';
+import type { Arguments } from 'yargs';
 
 
 /**
@@ -10,7 +10,7 @@ export interface SaffronHandlerContext<A, C> extends SaffronCommonContext {
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
    */
-  argv: yargs.Arguments<A>;
+  argv: Arguments<A>;
 
   /**
    * Parsed configuration file, if found.
