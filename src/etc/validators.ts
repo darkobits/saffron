@@ -11,7 +11,7 @@ export default {
     })
   })),
   saffronCommand: createValidator(({ ow }) => ({
-    spec: {
+    spec: ow.object.exactShape({
       command: ow.optional.string.nonEmpty,
       description: ow.optional.string.nonEmpty,
       aliases: ow.any(ow.string, ow.array.ofType(ow.string), ow.undefined),
@@ -19,6 +19,6 @@ export default {
       config: ow.optional.any(ow.boolean.false, ow.object),
       builder: ow.optional.function,
       handler: ow.function
-    }
+    })
   }))
 };

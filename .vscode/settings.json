@@ -4,5 +4,5 @@
     "endemolshinegroup"
   ],
   "eslint.experimental.useFlatConfig": true,
-  "eslint.options.overrideConfigFile": "eslint.config.js"
+  "eslint.options.overrideConfigFile": "eslint.config.mjs"
 }
