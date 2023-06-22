@@ -12,10 +12,27 @@ import {
   register,
   type RegisterOptions
 } from 'ts-node';
+import { loadConfigFromFile } from 'vite';
 
 import log from 'lib/log';
 
 import type { Loader } from 'cosmiconfig';
+
+
+async function withViteLoader(configRoot: string, configFile: string) {
+  const result = await loadConfigFromFile(
+    {
+      command: 'build',
+      mode: 'development'
+    },
+    configFile, // configFile?: string,
+    configRoot // configRoot: string = process.cwd(),
+    // logLevel?: LogLevel
+  );
+
+  // @ts-expect-error
+  return result?.config?.default ?? result?.config;
+}
 
 
 /**
@@ -42,6 +59,7 @@ function computeFileExtension(fileName: string) {
 
   return path.format(parsedFileName);
 }
+
 
 /**
  * @private
@@ -255,6 +273,17 @@ export default async function configurationLoader(filePath: string, contents: st
   const pkgDir = await packageDirectory(path.dirname(filePath));
   if (!pkgDir) throw new Error(`${log.prefix('configurationLoader')} Unable to compute package directory.`);
 
+
+  /**
+   * Strategy 0: Use Vite's configuration loader.
+   */
+  try {
+    const config = await withViteLoader(pkgDir, filePath);
+    log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('vite'));
+    return config.default ?? config;
+  } catch (err: any) {
+    errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('Vite')}: ${err}`));
+  }
 
   /**
    * Strategy 1: Vanilla Dynamic Import

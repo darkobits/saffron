@@ -41,6 +41,7 @@
     "ts-import": "^5.0.0-beta.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "vite": "^4.3.9",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
