@@ -1,3 +1,10 @@
+## [0.32.2-beta.3](https://github.com/darkobits/saffron/compare/v0.32.2-beta.2...v0.32.2-beta.3) (2023-06-22)
+
+
+### 🏗 Chores
+
+* Remove cache directory created by `ts-import`. ([ce0db75](https://github.com/darkobits/saffron/commit/ce0db75c2963fbe221ef94cd62914557b41b3d61))
+
 ## [0.32.2-beta.2](https://github.com/darkobits/saffron/compare/v0.32.2-beta.1...v0.32.2-beta.2) (2023-06-22)
 
 
