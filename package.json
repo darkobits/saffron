@@ -4,6 +4,7 @@
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
   "author": "darkobits",
   "license": "Hippocratic",
+  "type": "module",
   "engines": {
     "node": ">=16"
   },
