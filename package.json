@@ -26,7 +26,6 @@
     "@darkobits/fd-name": "^0.1.7",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
-    "@endemolshinegroup/cosmiconfig-typescript-loader": "^3.0.2",
     "@types/yargs": "^17.0.24",
     "aggregate-error": "~3.1.0",
     "babel-plugin-module-resolver-tsconfig": "^1.0.25",
@@ -38,12 +37,13 @@
     "pkg-dir": "~5.0.0",
     "read-pkg-up": "~7.0.1",
     "resolve-pkg": "^2.0.0",
+    "ts-import": "^5.0.0-beta.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.16.3",
+    "@darkobits/ts": "~0.16.4",
     "@types/fs-extra": "^11.0.1"
   }
 }

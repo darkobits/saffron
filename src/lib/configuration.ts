@@ -1,5 +1,5 @@
 import { cosmiconfig, defaultLoaders } from 'cosmiconfig';
-import merge, { } from 'deepmerge';
+import merge from 'deepmerge';
 
 import { SaffronCosmiconfigOptions, SaffronCosmiconfigResult } from 'etc/types';
 import validators from 'etc/validators';
@@ -20,25 +20,31 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
   const configResult = await cosmiconfig(fileName, merge({
     loaders: {
       ...defaultLoaders,
+      // This works, but does not support path mappings in the end user's
+      // tsconfig.json. This is being worked on here:
+      // https://github.com/Codex-/cosmiconfig-typescript-loader/pull/96/commits
       '.ts': ConfigurationLoader,
-      '.js': ConfigurationLoader,
       '.cts': ConfigurationLoader,
-      '.cjs': ConfigurationLoader
+      '.js': ConfigurationLoader,
+      '.cjs': ConfigurationLoader,
+      '.mjs': ConfigurationLoader
     },
     searchPlaces: [
-      'package.json',
+      `${fileName}.config.ts`,
+      `${fileName}.config.cts`,
+      `${fileName}.config.js`,
+      `${fileName}.config.mjs`,
+      `${fileName}.config.cjs`,
       `.${fileName}.json`,
       `.${fileName}.yaml`,
       `.${fileName}.yml`,
       `.${fileName}rc`,
-      `${fileName}.config.ts`,
-      `${fileName}.config.js`,
-      `${fileName}.config.cts`,
-      `${fileName}.config.cjs`,
       `${fileName}rc.ts`,
-      `${fileName}rc.js`,
       `${fileName}rc.cts`,
-      `${fileName}rc.cjs`
+      `${fileName}rc.js`,
+      `${fileName}rc.mjs`,
+      `${fileName}rc.cjs`,
+      'package.json'
     ]
   }, cosmicOptions, {
     arrayMerge: (target, source) => {
@@ -63,6 +69,7 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
   }
 
   if (configResult) {
+
     return configResult as SaffronCosmiconfigResult<C>;
   }
 }

@@ -122,6 +122,8 @@ export default function buildCommand<
       });
 
       if (configResult) {
+        log.verbose(`Loaded configuration file from ${log.chalk.green(configResult.filepath)}.`);
+
         if (configResult.config) {
           context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
         }
