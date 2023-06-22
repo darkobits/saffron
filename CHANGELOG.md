@@ -1,3 +1,11 @@
+## [0.32.2-beta.1](https://github.com/darkobits/saffron/compare/v0.32.1...v0.32.2-beta.1) (2023-06-22)
+
+
+### 🛠 Refactoring
+
+* Add `ts-import` strategy, update `ts-node` strategy. ([19d8b4e](https://github.com/darkobits/saffron/commit/19d8b4e790249a659595f98b35ccb604ed1b964c))
+* Publish as ESM. ([655dc03](https://github.com/darkobits/saffron/commit/655dc03aff943ebc861ef483025212485f682c08))
+
 ## [0.32.1](https://github.com/darkobits/saffron/compare/v0.32.0...v0.32.1) (2023-06-14)
 
 
