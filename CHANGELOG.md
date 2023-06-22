@@ -1,3 +1,10 @@
+## [0.32.2-beta.2](https://github.com/darkobits/saffron/compare/v0.32.2-beta.1...v0.32.2-beta.2) (2023-06-22)
+
+
+### 🛠 Refactoring
+
+* Use compile mode of `ts-import`, don't use cache. ([23f8321](https://github.com/darkobits/saffron/commit/23f8321601ab8a716f3bfc6897261b3d57b08a0c))
+
 ## [0.32.2-beta.1](https://github.com/darkobits/saffron/compare/v0.32.1...v0.32.2-beta.1) (2023-06-22)
 
 
