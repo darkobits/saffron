@@ -127,9 +127,6 @@ function TypeScriptLoader(options: RegisterOptions = {}) {
       // `default` is used when exporting using export default, some modules
       // may still use `module.exports` or if in TS `export = `
       return (result.default || result) as Loader;
-    } catch (err: any) {
-      log.error(log.prefix('TypeScriptLoader'), err?.message);
-      throw err;
     } finally {
       if (tempConfigFilePath.length > 0) {
         await fs.remove(tempConfigFilePath);
@@ -146,7 +143,20 @@ function TypeScriptLoader(options: RegisterOptions = {}) {
  * Uses ts-import to dynamically import TypeScript configuration files.
  */
 async function withTsImport(filePath: string) {
-  const result = await tsImport.load(filePath);
+  const result = await tsImport.load(filePath, {
+    // Slower, but allows files to be considered as part of larger TypeScript
+    // programs, which should allow path mappings to work.
+    mode: tsImport.LoadMode.Compile,
+    useCache: false
+  });
+
+  // Clean-up the cache directory left behind by ts-import.
+  // try {
+  //   await fs.remove(path.join(path.dirname(filePath), '.cache'));
+  // } catch (err: any) {
+  //   log.error(log.prefix('ts-import'), 'Error removing cache directory:', err);
+  // }
+
   return result?.default || result;
 }
 
