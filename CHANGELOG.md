@@ -1,3 +1,10 @@
+## [0.32.2-beta.4](https://github.com/darkobits/saffron/compare/v0.32.2-beta.3...v0.32.2-beta.4) (2023-06-22)
+
+
+### 🛠 Refactoring
+
+* Add Vite strategy. ([f8b6f3e](https://github.com/darkobits/saffron/commit/f8b6f3e128cad884196c7b6aee49d119fa5da6ec))
+
 ## [0.32.2-beta.3](https://github.com/darkobits/saffron/compare/v0.32.2-beta.2...v0.32.2-beta.3) (2023-06-22)
 
 
