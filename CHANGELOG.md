@@ -1,3 +1,10 @@
+## [0.32.2-beta.9](https://github.com/darkobits/saffron/compare/v0.32.2-beta.8...v0.32.2-beta.9) (2023-06-25)
+
+
+### 🐞 Bug Fixes
+
+* Remove debug logging. ([9fb6ec6](https://github.com/darkobits/saffron/commit/9fb6ec62f9b2de3c64dd4dfeb70b1f8410d0e65c))
+
 ## [0.32.2-beta.8](https://github.com/darkobits/saffron/compare/v0.32.2-beta.7...v0.32.2-beta.8) (2023-06-25)
 
 
