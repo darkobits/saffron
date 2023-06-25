@@ -1,3 +1,10 @@
+## [0.32.2-beta.10](https://github.com/darkobits/saffron/compare/v0.32.2-beta.9...v0.32.2-beta.10) (2023-06-25)
+
+
+### 🐞 Bug Fixes
+
+* `ts-import` strategy removes cache directory. ([13c9c3f](https://github.com/darkobits/saffron/commit/13c9c3fb67450b2996ad68d864fefd701ecffab2))
+
 ## [0.32.2-beta.9](https://github.com/darkobits/saffron/compare/v0.32.2-beta.8...v0.32.2-beta.9) (2023-06-25)
 
 
