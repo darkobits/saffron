@@ -1,3 +1,10 @@
+## [0.32.2-beta.5](https://github.com/darkobits/saffron/compare/v0.32.2-beta.4...v0.32.2-beta.5) (2023-06-25)
+
+
+### 🛠 Refactoring
+
+* Add `esbuild` strategy. ([ebfa728](https://github.com/darkobits/saffron/commit/ebfa728c2bb8d853ffcdfdf2528f554a5bab788c))
+
 ## [0.32.2-beta.4](https://github.com/darkobits/saffron/compare/v0.32.2-beta.3...v0.32.2-beta.4) (2023-06-22)
 
 
