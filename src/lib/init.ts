@@ -8,7 +8,7 @@ import type { SaffronInitCallback } from 'etc/types';
  * Yargs parser.
  */
 export default function init(cb?: SaffronInitCallback) {
-  const hostPkg = getPackageInfo('host');
+  const hostPkg = getPackageInfo('process');
 
   // For applications with no sub-commands, this ensures we show help properly
   // when the user calls --help from the root command. This is necessary even

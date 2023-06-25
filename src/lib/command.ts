@@ -45,7 +45,7 @@ export default function buildCommand<
   validators.saffronCommand(saffronCommand);
 
   // Get the host application's package manifest.
-  const hostPkg = getPackageInfo('host');
+  const hostPkg = getPackageInfo('process');
 
 
   // ----- Builder Proxy -------------------------------------------------------

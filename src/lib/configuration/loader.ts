@@ -1,9 +1,14 @@
+import path from 'path';
+
+import { readPackageUp } from 'read-pkg-up';
+
 import { babelRegisterStrategy } from 'lib/configuration/strategies/babel-register';
 import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
 import { tsImportStrategy } from 'lib/configuration/strategies/ts-import';
 import { TypeScriptLoader } from 'lib/configuration/strategies/ts-node';
 import log from 'lib/log';
-import { getPackageInfo } from 'lib/package';
+
+import type { PackageInfo } from 'lib/package';
 
 
 /**
@@ -14,8 +19,13 @@ import { getPackageInfo } from 'lib/package';
 export default async function configurationLoader(filePath: string, content: string) {
   const errors: Array<Error> = [];
 
-  const pkgInfo = getPackageInfo('host');
-  if (!pkgInfo.root) throw new Error(`${log.prefix('configurationLoader')} Unable to compute host package root directory.`);
+  const pkgResult = await readPackageUp({ cwd: path.dirname(filePath) });
+  if (!pkgResult?.path) throw new Error(`${log.prefix('configurationLoader')} Unable to compute host package root directory.`);
+
+  const pkgInfo: PackageInfo = {
+    json: pkgResult.packageJson,
+    root: path.dirname(pkgResult.path)
+  };
 
 
   /**
