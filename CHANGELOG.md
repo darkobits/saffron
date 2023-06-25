@@ -1,3 +1,15 @@
+## [0.32.2-beta.11](https://github.com/darkobits/saffron/compare/v0.32.2-beta.10...v0.32.2-beta.11) (2023-06-25)
+
+
+### 🐞 Bug Fixes
+
+* Fix `ts-import` strategy. ([435d525](https://github.com/darkobits/saffron/commit/435d5256789f1bf02b6d69ad4290c7e206cb0c42))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([2916ee2](https://github.com/darkobits/saffron/commit/2916ee22fa517e2789aecfd5b70d7391fb4ab235))
+
 ## [0.32.2-beta.10](https://github.com/darkobits/saffron/compare/v0.32.2-beta.9...v0.32.2-beta.10) (2023-06-25)
 
 
