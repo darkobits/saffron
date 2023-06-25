@@ -1,3 +1,10 @@
+## [0.32.2-beta.7](https://github.com/darkobits/saffron/compare/v0.32.2-beta.6...v0.32.2-beta.7) (2023-06-25)
+
+
+### 🛠 Refactoring
+
+* Re-organize loader strategies. ([8eef2e7](https://github.com/darkobits/saffron/commit/8eef2e707b6473568164b45ff4eafa960d4387a1))
+
 ## [0.32.2-beta.6](https://github.com/darkobits/saffron/compare/v0.32.2-beta.5...v0.32.2-beta.6) (2023-06-25)
 
 
