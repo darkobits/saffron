@@ -1,3 +1,10 @@
+## [0.32.2-beta.8](https://github.com/darkobits/saffron/compare/v0.32.2-beta.7...v0.32.2-beta.8) (2023-06-25)
+
+
+### 🐞 Bug Fixes
+
+* Refactor `getPackageInfo`. ([f4c75d7](https://github.com/darkobits/saffron/commit/f4c75d7de99d545bc39f97af96fcf3d5e523213b))
+
 ## [0.32.2-beta.7](https://github.com/darkobits/saffron/compare/v0.32.2-beta.6...v0.32.2-beta.7) (2023-06-25)
 
 
