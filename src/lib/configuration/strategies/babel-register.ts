@@ -78,10 +78,11 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
     const result = await import(loaderPath);
     await fs.remove(tempDir);
 
-    log.verbose(log.prefix('parseConfiguration'), `Loaded configuration with ${log.chalk.bold('@babel/register')}.`, result);
-
     return result.default ?? result;
-  } catch (err) {
-    throw new Error(`${log.prefix('parseConfiguration')} Failed to load configuration with ${log.chalk.bold('@babel/register')}: ${err}`);
+  } catch (cause: any) {
+    throw new Error(
+      `${log.prefix('babelRegisterStrategy')} Failed to load configuration file: ${cause}`,
+      { cause }
+    );
   }
 }
