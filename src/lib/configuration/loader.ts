@@ -52,7 +52,6 @@ export default async function configurationLoader(filePath: string, content: str
     log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('esbuild'));
     return config.default ?? config;
   } catch (err: any) {
-    log.error(log.prefix('esbuild'), err);
     errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('esbuild')}: ${err}`));
   }
 
