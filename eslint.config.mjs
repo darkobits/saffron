@@ -1,6 +1,11 @@
 import { ts } from '@darkobits/eslint-plugin';
 
 export default [
+  {
+    files: [
+      'eslint.config.mjs'
+    ]
+  },
   ...ts,
   {
     rules: {

@@ -1,37 +1,88 @@
 import path from 'path';
 
 import { dirname } from '@darkobits/fd-name';
+import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
 import AggregateError from 'aggregate-error';
 import merge from 'deepmerge';
+import * as esbuild from 'esbuild';
 import findUp from 'find-up';
 import fs from 'fs-extra';
+import currentNodeVersion from 'node-version';
 import packageDirectory from 'pkg-dir';
+import readPkgUp from 'read-pkg-up';
 import resolvePkg from 'resolve-pkg';
 import * as tsImport from 'ts-import';
 import {
   register,
   type RegisterOptions
 } from 'ts-node';
-import { loadConfigFromFile } from 'vite';
+import { find } from 'tsconfck';
 
 import log from 'lib/log';
 
 import type { Loader } from 'cosmiconfig';
 
 
-async function withViteLoader(configRoot: string, configFile: string) {
-  const result = await loadConfigFromFile(
-    {
-      command: 'build',
-      mode: 'development'
-    },
-    configFile, // configFile?: string,
-    configRoot // configRoot: string = process.cwd(),
-    // logLevel?: LogLevel
-  );
+/**
+ * @private
+ *
+ * Uses esbuild to transpile the user's configuration file.
+ */
+async function withEsbuild(filePath: string) {
+  const pkg = await readPkgUp({ cwd: path.dirname(filePath) });
 
-  // @ts-expect-error
-  return result?.config?.default ?? result?.config;
+  const fileName = path.basename(filePath);
+
+  const outFileBasename = fileName
+    .replace(/\.(ts|tsx)$/, '.js')
+    .replace(/\.cts$/, '.cjs')
+    .replace(/\.mts$/, '.mjs')
+    .replace(/\.jsx$/, '.js');
+
+  const isExplicitCommonJs = fileName.endsWith('.cjs') || fileName.endsWith('.cts');
+
+  const format = isExplicitCommonJs
+  ? 'cjs'
+  : pkg?.packageJson.type === 'module'
+    ? 'esm'
+    : 'cjs';
+
+  log.verbose(log.prefix('esbuild'), `Using format: ${log.chalk.bold(format)}`);
+
+  const tempFileName = `.temp-saffron.${outFileBasename}`;
+  const tempFilePath = path.join(path.dirname(filePath), tempFileName);
+
+  try {
+    const buildOptions: esbuild.BuildOptions = {
+      entryPoints: [filePath],
+      target: `node${currentNodeVersion.major}`,
+      outfile: tempFileName,
+      format,
+      plugins: []
+    };
+
+    const tsConfigFilePath = await find(filePath);
+
+    if (tsConfigFilePath) {
+      log.verbose(log.prefix('esbuild'), `Using TypeScript configuration: ${log.chalk.green(tsConfigFilePath)}`);
+
+      buildOptions.tsconfig = tsConfigFilePath;
+
+      buildOptions.plugins?.push(TsconfigPathsPlugin({
+        tsconfig: tsConfigFilePath
+      }));
+    }
+
+    await esbuild.build(buildOptions);
+    const result = await import(tempFilePath);
+    // await fs.remove(tempFilePath);
+
+    return result?.default ?? result;
+  } finally {
+    if (await fs.exists(tempFilePath)) {
+      await fs.remove(tempFilePath);
+    }
+  }
 }
 
 
@@ -275,22 +326,11 @@ export default async function configurationLoader(filePath: string, contents: st
 
 
   /**
-   * Strategy 0: Use Vite's configuration loader.
-   */
-  try {
-    const config = await withViteLoader(pkgDir, filePath);
-    log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('vite'));
-    return config.default ?? config;
-  } catch (err: any) {
-    errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('Vite')}: ${err}`));
-  }
-
-  /**
    * Strategy 1: Vanilla Dynamic Import
    *
    * This will not perform any transpilation on code, and if the host project
    * uses any custom path mappings, they will not work here. This strategy is
-   * the simplest, however, so we try it first.
+   * the simplest and fastest, however, so we try it first.
    */
   try {
     const config = await import(filePath);
@@ -302,7 +342,20 @@ export default async function configurationLoader(filePath: string, contents: st
 
 
   /**
-   * Strategy 2: ts-import
+   * Strategy 2: esbuild
+   */
+  try {
+    const config = await withEsbuild(filePath);
+    log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('esbuild'));
+    return config.default ?? config;
+  } catch (err: any) {
+    log.error(log.prefix('esbuild'), err);
+    errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('esbuild')}: ${err}`));
+  }
+
+
+  /**
+   * Strategy 3: ts-import
    */
   try {
     const config = await withTsImport(filePath);
@@ -314,7 +367,7 @@ export default async function configurationLoader(filePath: string, contents: st
 
 
   /**
-   * Strategy 3: ts-node
+   * Strategy 4: ts-node
    *
    * This strategy is in place in the event that @babel/register did not work
    * for some reason, but it is not ideal for reasons explained above.
@@ -330,7 +383,7 @@ export default async function configurationLoader(filePath: string, contents: st
 
 
   /**
-   * Strategy 4: @babel/register
+   * Strategy 5: @babel/register
    *
    * This strategy uses a custom loader that uses @babel/register to transpile
    * code. The loader will work with TypeScript configuration files, and it will

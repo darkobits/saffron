@@ -69,7 +69,6 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
   }
 
   if (configResult) {
-
     return configResult as SaffronCosmiconfigResult<C>;
   }
 }
