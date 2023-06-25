@@ -104,8 +104,8 @@ export default async function configurationLoader(filePath: string, content: str
     errors.push(err);
   }
 
-
-  if (errors.length > 0) {
-    throw new AggregateError(errors, 'All parsing strategies failed.');
-  }
+  if (errors.length > 0) throw new AggregateError(
+    errors,
+    'All parsing strategies failed.'
+  );
 }

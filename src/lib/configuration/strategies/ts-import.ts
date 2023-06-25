@@ -24,8 +24,11 @@ export async function tsImportStrategy(filePath: string) {
     });
 
     return result?.default || result;
-  } catch (err: any) {
-    log.error(log.prefix('ts-import'), 'Error removing cache directory:', err);
+  } catch (cause: any) {
+    throw new Error(
+      `${log.prefix('tsImportStrategy')} Failed to load configuration file: ${cause}`,
+      { cause }
+    );
   } finally {
     if (await fs.exists(cacheDir)) await fs.remove(cacheDir);
   }

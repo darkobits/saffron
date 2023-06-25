@@ -64,6 +64,11 @@ export async function esbuildStrategy(filePath: string, pkgInfo: PackageInfo) {
     const result = await import(tempFilePath);
 
     return result?.default ?? result;
+  } catch (cause: any) {
+    throw new Error(
+      `${log.prefix('esbuildStrategy')} Failed to load configuration file: ${cause}`,
+      { cause }
+    );
   } finally {
     if (await fs.exists(tempFilePath)) {
       await fs.remove(tempFilePath);
