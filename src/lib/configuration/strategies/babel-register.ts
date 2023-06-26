@@ -98,7 +98,7 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
     `;
 
     if (tsConfigFilePath) {
-      log.info(log.prefix('babelRegisterStrategy'), `Loaded tsconfig.json from: ${log.chalk.green(tsConfigFilePath)}`);
+      log.silly(log.prefix('babelRegisterStrategy'), `Loaded tsconfig.json from: ${log.chalk.green(tsConfigFilePath)}`);
     }
 
     const tempDir = path.resolve(pkgInfo.root, 'node_modules', '.saffron-config');
@@ -111,7 +111,7 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
         : wrapperWithoutTsConfig
     );
     const result = await import(loaderPath);
-    // await fs.remove(tempDir);
+    await fs.remove(tempDir);
 
     return result.default ?? result;
   } catch (cause: any) {
