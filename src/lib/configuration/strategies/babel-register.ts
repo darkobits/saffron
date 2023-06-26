@@ -1,8 +1,8 @@
 import path from 'path';
 
-import { findUp } from 'find-up';
 import fs from 'fs-extra';
 import resolvePkg from 'resolve-pkg';
+import * as tsConfck from 'tsconfck';
 
 import log from 'lib/log';
 
@@ -30,13 +30,12 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
     const babelPluginModuleResolverTsConfigPath = resolvePkg('babel-plugin-module-resolver-tsconfig', { cwd: pkgInfo.root });
     if (!babelPluginModuleResolverTsConfigPath) throw new Error('Unable to resolve path to babel-plugin-module-resolver-tsconfig.');
 
-    const tsConfigPath = await findUp('tsconfig.json', { cwd: pkgInfo.root });
-    if (!tsConfigPath) throw new Error('[withBabelRegister] Could not find tsconfig.json.');
+    const tsConfigFilePath = await tsConfck.find(filePath);
 
-    const wrapper = `
+    const wrapperWithTsConfig = `
       const { setModuleResolverPluginForTsConfig } = require('${babelPluginModuleResolverTsConfigPath}');
 
-      const extensions =  ['.ts', '.tsx', '.js', '.jsx', '.cts', '.cjs', '.mjs'];
+      const extensions =  ['.ts', '.tsx', '.js', '.jsx', '.cts', '.cjs', '.mjs', '.mts'];
 
       require('${babelRegisterPath}')({
         extensions,
@@ -61,7 +60,7 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
           // If the project has set up path mappings using tsconfig.json, this plugin will allow those
           // path specifiers to work as expected.
           setModuleResolverPluginForTsConfig({
-            tsconfigPath: '${tsConfigPath}',
+            tsconfigPath: '${tsConfigFilePath}',
             extensions
           })
         ]
@@ -71,12 +70,48 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
       module.exports = configExport.default ?? configExport;
     `;
 
+    const wrapperWithoutTsConfig = `
+      const extensions =  ['.ts', '.tsx', '.js', '.jsx', '.cts', '.cjs', '.mjs', '.mts'];
+
+      require('${babelRegisterPath}')({
+        extensions,
+        // Treat files that contain import statements as modules and require statements as CommonJS.
+        sourceType: 'unambiguous',
+        // Let's Babel transpile files that may be above process.cwd(), which are ignored when using the
+        // default settings.
+        // See: https://github.com/babel/babel/issues/8321
+        ignore: [/node_modules/],
+        // Apply the minimum amount of transforms required to make code compatible with the local Node
+        // installation.
+        targets: { node: 'current' },
+        presets: [
+          ['${babelPresetEnvPath}', {
+            // Tell Babel to not transpile dynamic import statements into require() calls as this is the
+            // mechanism by which CommonJS can import ESM.
+            exclude: ['proposal-dynamic-import']
+          }]
+        ]
+      });
+
+      const configExport = require('${filePath}');
+      module.exports = configExport.default ?? configExport;
+    `;
+
+    if (tsConfigFilePath) {
+      log.info(log.prefix('babelRegisterStrategy'), `Loaded tsconfig.json from: ${log.chalk.green(tsConfigFilePath)}`);
+    }
+
     const tempDir = path.resolve(pkgInfo.root, 'node_modules', '.saffron-config');
     await fs.ensureDir(tempDir);
     const loaderPath = path.resolve(tempDir, 'loader.cjs');
-    await fs.writeFile(loaderPath, wrapper);
+    await fs.writeFile(
+      loaderPath,
+      tsConfigFilePath
+        ? wrapperWithTsConfig
+        : wrapperWithoutTsConfig
+    );
     const result = await import(loaderPath);
-    await fs.remove(tempDir);
+    // await fs.remove(tempDir);
 
     return result.default ?? result;
   } catch (cause: any) {

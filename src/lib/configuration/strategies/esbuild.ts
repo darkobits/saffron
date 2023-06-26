@@ -4,7 +4,7 @@ import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
 import * as esbuild from 'esbuild';
 import fs from 'fs-extra';
 import currentNodeVersion from 'node-version';
-import { find } from 'tsconfck';
+import * as tsConfck from 'tsconfck';
 
 import log from 'lib/log';
 
@@ -54,7 +54,7 @@ export async function esbuildStrategy(filePath: string, pkgInfo: PackageInfo) {
       }
     };
 
-    const tsConfigFilePath = await find(filePath);
+    const tsConfigFilePath = await tsConfck.find(filePath);
 
     if (tsConfigFilePath) {
       log.verbose(log.prefix('esbuild'), `Using TypeScript configuration: ${log.chalk.green(tsConfigFilePath)}`);
