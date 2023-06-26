@@ -2,8 +2,8 @@ import path from 'path';
 
 import { babelRegisterStrategy } from 'lib/configuration/strategies/babel-register';
 import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
-import { tsImportStrategy } from 'lib/configuration/strategies/ts-import';
-import { TypeScriptLoader } from 'lib/configuration/strategies/ts-node';
+// import { tsImportStrategy } from 'lib/configuration/strategies/ts-import';
+// import { TypeScriptLoader } from 'lib/configuration/strategies/ts-node';
 import log from 'lib/log';
 import { getPackageInfo } from 'lib/package';
 
@@ -13,7 +13,7 @@ import { getPackageInfo } from 'lib/package';
  * applications to be written in ESM or CJS, and for the consumers of those
  * applications to write configuration files as ESM or CJS.
  */
-export default async function configurationLoader(filePath: string, content: string) {
+export default async function configurationLoader(filePath: string /* , content: string */) {
   const errors: Array<Error> = [];
 
   const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
@@ -51,13 +51,13 @@ export default async function configurationLoader(filePath: string, content: str
   /**
    * Strategy 3: ts-import
    */
-  try {
-    const config = await tsImportStrategy(filePath);
-    log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('ts-import'));
-    return config?.default ?? config;
-  } catch (err: any) {
-    errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('ts-import')}: ${err}`));
-  }
+  // try {
+  //   const config = await tsImportStrategy(filePath);
+  //   log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('ts-import'));
+  //   return config?.default ?? config;
+  // } catch (err: any) {
+  //   errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('ts-import')}: ${err}`));
+  // }
 
 
   /**
@@ -66,14 +66,14 @@ export default async function configurationLoader(filePath: string, content: str
    * This strategy is in place in the event that @babel/register did not work
    * for some reason, but it is not ideal for reasons explained above.
    */
-  try {
-    const tsLoader = TypeScriptLoader();
-    const config = await tsLoader(filePath, content, pkgInfo);
-    log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('ts-node'));
-    return config;
-  } catch (err: any) {
-    errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('TypeScriptLoader')}: ${err}`));
-  }
+  // try {
+  //   const tsLoader = TypeScriptLoader();
+  //   const config = await tsLoader(filePath, content, pkgInfo);
+  //   log.verbose(log.prefix('configurationLoader'), 'Used strategy:', log.chalk.bold('ts-node'));
+  //   return config;
+  // } catch (err: any) {
+  //   errors.push(new Error(`${log.prefix('configurationLoader')} Failed to load configuration with ${log.chalk.bold('TypeScriptLoader')}: ${err}`));
+  // }
 
 
   /**
