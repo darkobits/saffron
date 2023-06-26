@@ -1,3 +1,22 @@
+## [0.32.4](https://github.com/darkobits/saffron/compare/v0.32.3...v0.32.4) (2023-06-26)
+
+
+### 🐞 Bug Fixes
+
+* `esbuild` strategy infers correct output. ([21903d8](https://github.com/darkobits/saffron/commit/21903d80013210f5f967a5cb9fbf6d6ed3128dc0))
+* Fix bug in `parsePackageName`. ([407bb87](https://github.com/darkobits/saffron/commit/407bb877fb9c23c0653994b61c69a0c6deba9656))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([c7e4304](https://github.com/darkobits/saffron/commit/c7e4304682f8718c8e78e335e4e4abb40ff4ca3a))
+* Disable `ts-import` and `ts-node` strategies. ([9156631](https://github.com/darkobits/saffron/commit/9156631687f86fe731f22ff9dada7ef2b3e9ca7e))
+
+
+### 🚦 Tests
+
+* Add smoke tests. ([0bd7596](https://github.com/darkobits/saffron/commit/0bd7596968f1e23b6f7671b7c411e3dcd226a741))
+
 ## [0.32.3](https://github.com/darkobits/saffron/compare/v0.32.2...v0.32.3) (2023-06-26)
 
 
