@@ -1,7 +1,7 @@
 import { nr } from '@darkobits/ts';
 
 
-export default nr(({ script, command }) => {
+export default nr(({ script, command, isCI }) => {
   script('test.smoke', {
     group: 'Testing',
     run: [
@@ -55,8 +55,9 @@ export default nr(({ script, command }) => {
     timing: true
   });
 
-  script('postPrepare', {
-    run: ['script:test.smoke']
-  });
-
+  if (!isCI) {
+    script('postPrepare', {
+      run: ['script:test.smoke']
+    });
+  }
 });
