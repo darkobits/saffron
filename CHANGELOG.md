@@ -1,3 +1,10 @@
+## [0.32.5](https://github.com/darkobits/saffron/compare/v0.32.4...v0.32.5) (2023-06-26)
+
+
+### 🐞 Bug Fixes
+
+* Suppress logging, restore temp file removal. ([0f56108](https://github.com/darkobits/saffron/commit/0f56108d589e1c33b91872bea7ba813d1fc61667))
+
 ## [0.32.4](https://github.com/darkobits/saffron/compare/v0.32.3...v0.32.4) (2023-06-26)
 
 
