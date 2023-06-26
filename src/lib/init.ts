@@ -1,14 +1,18 @@
+import fs from 'fs';
+import path from 'path';
+
 import { getPackageInfo  } from 'lib/package';
 import yargs from 'lib/yargs';
 
 import type { SaffronInitCallback } from 'etc/types';
+
 
 /**
  * Sets global defaults for Yargs, then calls `yargs.argv`, which initiates the
  * Yargs parser.
  */
 export default function init(cb?: SaffronInitCallback) {
-  const hostPkg = getPackageInfo('process');
+  const hostPkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) });
 
   // For applications with no sub-commands, this ensures we show help properly
   // when the user calls --help from the root command. This is necessary even

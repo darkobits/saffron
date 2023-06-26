@@ -1,11 +1,11 @@
-import fs from 'fs';
 import path from 'path';
 
-import { dirname } from '@darkobits/fd-name';
 import {
   readPackageUpSync,
   type NormalizedPackageJson
 } from 'read-pkg-up';
+
+import log from 'lib/log';
 
 
 /**
@@ -17,48 +17,39 @@ export interface PackageInfo {
 }
 
 
-type PackageType = 'host' | 'local' | 'process';
-
-
 /**
  * @private
  *
  * Module-local cache of package info lookups.
  */
-const packageCache = new Map<PackageType, PackageInfo>();
+const packageCache = new Map<string | symbol, PackageInfo>();
+
+
+interface GetPackageInfoOptions {
+  cwd: string;
+}
 
 
 /**
  * Loads the package.json of the host or local package and returns the
  * normalized result and the package's root directory. Results are cached.
+ *
+ * - For the manifest of the project running the CLI use `process.cwd()`.
+ * - For the manifest of the project implementing the CLI, use
+ *   `path.dirname(fs.realpathSync(process.argv[1]))`.
  */
-export function getPackageInfo(type: PackageType): PackageInfo {
-  const cwdMap: Record<PackageType, string | undefined> = {
-    // This will resolve the real path of the directory containing the script
-    // that is the process entrypoint (CLI).
-    process: path.dirname(fs.realpathSync(process.argv[1])),
-    // This will resolve to the package.json nearest to the current directory,
-    // which should be that of the project that is using the CLI.
-    host: process.cwd(),
-    // This will resolve the directory name of this file; crawling up from it
-    // will resolve our package.json.
-    local: dirname()
-  };
-
+export function getPackageInfo({ cwd }: GetPackageInfoOptions): PackageInfo {
   // Cache miss; populate cache.
-  if (!packageCache.has(type)) {
-    const cwd = cwdMap[type];
-    if (!cwd) throw new Error(`[getPackageInfo] Unable to compute cwd for the ${type} package.`);
-
+  if (!packageCache.has(cwd)) {
     const packageResult = readPackageUpSync({ cwd });
-    if (!packageResult) throw new Error(`[getPackageInfo] Unable to get metadata for the ${type} package.`);
+    if (!packageResult) throw new Error(`${log.prefix('getPackageInfo')} Unable to get package metadata from: ${log.chalk.green(cwd)}`);
 
-    packageCache.set(type, {
+    packageCache.set(cwd, {
       json: packageResult.packageJson,
       root: path.dirname(packageResult.path)
     });
   }
 
   // Return from cache.
-  return packageCache.get(type) as PackageInfo;
+  return packageCache.get(cwd) as PackageInfo;
 }

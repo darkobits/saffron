@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 import camelcaseKeys from 'camelcase-keys';
 
 import {
@@ -17,11 +20,7 @@ type ParsedPackageName<T> = T extends string
   ? { scope?: string; name: string }
   : { scope: never; name: never };
 
-/**
- * @private
- *
- * TODO: Move to own package.
- */
+
 function parsePackageName<T = any>(packageName: T) {
   if (typeof packageName !== 'string') {
     return { scope: undefined, name: undefined } as ParsedPackageName<T>;
@@ -45,7 +44,7 @@ export default function buildCommand<
   validators.saffronCommand(saffronCommand);
 
   // Get the host application's package manifest.
-  const hostPkg = getPackageInfo('process');
+  const hostPkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) });
 
 
   // ----- Builder Proxy -------------------------------------------------------

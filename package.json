@@ -24,7 +24,6 @@
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
     "@babel/register": "^7.22.5",
-    "@darkobits/fd-name": "^0.1.7",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
