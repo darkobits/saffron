@@ -1,3 +1,9 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.32.2](https://github.com/darkobits/saffron/compare/v0.32.2-beta.11...v0.32.2) (2023-06-26)
+
 ## [0.32.2-beta.11](https://github.com/darkobits/saffron/compare/v0.32.2-beta.10...v0.32.2-beta.11) (2023-06-25)
 
 
