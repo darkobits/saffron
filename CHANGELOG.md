@@ -1,3 +1,10 @@
+## [0.32.3](https://github.com/darkobits/saffron/compare/v0.32.2...v0.32.3) (2023-06-26)
+
+
+### 🛠 Refactoring
+
+* Refactor `getPackageInfo`. ([6c66be1](https://github.com/darkobits/saffron/commit/6c66be18bccf0eef524253f8e04336a351e74ea9))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
