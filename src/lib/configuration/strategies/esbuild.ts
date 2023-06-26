@@ -24,12 +24,18 @@ export async function esbuildStrategy(filePath: string, pkgInfo: PackageInfo) {
     .replace(/\.jsx$/, '.js');
 
   const isExplicitCommonJs = fileName.endsWith('.cjs') || fileName.endsWith('.cts');
+  const isExplicitESM = fileName.endsWith('.mjs') || fileName.endsWith('.mts');
 
-  const format = isExplicitCommonJs
-  ? 'cjs'
-  : pkgInfo.json?.type === 'module'
+  // Determine the output format to use by first honoring any explicit
+  // transpilation hints based on file extension, then fall back to relying on
+  // the "type" field in package.json.
+  const format = isExplicitESM
     ? 'esm'
-    : 'cjs';
+    : isExplicitCommonJs
+      ? 'cjs'
+      : pkgInfo.json?.type === 'module'
+        ? 'esm'
+        : 'cjs';
 
   log.verbose(log.prefix('esbuild'), `Using format: ${log.chalk.bold(format)}`);
 
