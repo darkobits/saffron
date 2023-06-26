@@ -17,17 +17,23 @@ import type { Argv, ArgumentsCamelCase } from 'yargs';
 
 
 type ParsedPackageName<T> = T extends string
-  ? { scope?: string; name: string }
-  : { scope: never; name: never };
+  ? { scope: string | undefined; name: string }
+  : { scope: undefined; name: undefined };
 
 
 function parsePackageName<T = any>(packageName: T) {
   if (typeof packageName !== 'string') {
+    console.log('PACKAGE NAME IS NOT A STRING');
     return { scope: undefined, name: undefined } as ParsedPackageName<T>;
   }
 
-  const [scope, name] = packageName.replace('@', '').split('/');
-  return { scope, name } as ParsedPackageName<T>;
+  if (packageName.includes('/')) {
+    const [scope, name] = packageName.replace('@', '').split('/');
+    return { scope, name } as ParsedPackageName<T>;
+  }
+
+  return { scope: undefined, name: packageName };
+
 }
 
 
@@ -112,6 +118,7 @@ export default function buildCommand<
       // If the user provided an explicit file name, use it. Otherwise, use the
       // non-scope portion of the name from the host application's package.json.
       const fileName = saffronCommand.config?.fileName ?? parsePackageName(hostPkg.json?.name).name;
+      if (!fileName) throw new Error('Unable to infer configuration file name. Either set a "name" property in package.json or set "config.fileName" in a command builder.');
 
       const configResult = await loadConfiguration<C>({
         fileName,
