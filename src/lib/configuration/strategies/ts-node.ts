@@ -85,7 +85,7 @@ export function TypeScriptLoader(options: RegisterOptions = {}) {
 
       // ----- [2] Compute Path for Temporary Configuration File ---------------
 
-      const tempConfigFileName = computeFileExtension(`.saffron-temporary-${path.basename(filePath)}`);
+      const tempConfigFileName = computeFileExtension(`.${path.basename(filePath)}.${Date.now()}`);
       const tempConfigFileDirectory = path.dirname(filePath);
       tempConfigFilePath = path.join(tempConfigFileDirectory, tempConfigFileName);
 
