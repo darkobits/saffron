@@ -128,8 +128,6 @@ export default function buildCommand<
       });
 
       if (configResult) {
-        log.verbose(`Loaded configuration file from ${log.chalk.green(configResult.filepath)}.`);
-
         if (configResult.config) {
           context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
         }
@@ -147,7 +145,7 @@ export default function buildCommand<
               }
             });
           } else {
-            log.warn(log.prefix('loadConfiguration'), `Cannot merge configuration of type "${typeof configResult.config}" with arguments.`);
+            log.warn(log.prefix('handler'), `Auto-configuration is enabled, but the command's arguments (type "object") cannot merged with configuration of type "${typeof configResult.config}".`);
           }
         }
       }

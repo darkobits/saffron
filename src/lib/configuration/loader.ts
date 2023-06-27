@@ -16,6 +16,8 @@ import { getPackageInfo } from 'lib/package';
 export default async function configurationLoader(filePath: string /* , content: string */) {
   const errors: Array<Error> = [];
 
+  log.verbose(log.prefix('configurationLoader'), `Using configuration file: ${log.chalk.green(filePath)}`);
+
   const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
   if (!pkgInfo?.root) throw new Error(`${log.prefix('configurationLoader')} Unable to compute host package root directory.`);
 
