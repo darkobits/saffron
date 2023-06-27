@@ -1,3 +1,10 @@
+## [0.32.7](https://github.com/darkobits/saffron/compare/v0.32.6...v0.32.7) (2023-06-27)
+
+
+### 🛠 Refactoring
+
+* Update logging. ([7555e2d](https://github.com/darkobits/saffron/commit/7555e2dfd82f1139e5e078e95b4c616f88e0ed2f))
+
 ## [0.32.6](https://github.com/darkobits/saffron/compare/v0.32.5...v0.32.6) (2023-06-27)
 
 
