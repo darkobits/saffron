@@ -1,3 +1,15 @@
+## [0.32.6](https://github.com/darkobits/saffron/compare/v0.32.5...v0.32.6) (2023-06-27)
+
+
+### 🏗 Chores
+
+* Update package scripts. ([6d5554d](https://github.com/darkobits/saffron/commit/6d5554db74f840d7d10b27b937d62ef4ba90ac74))
+
+
+### 🛠 Refactoring
+
+* `esbuild` strategy. ([856d786](https://github.com/darkobits/saffron/commit/856d7860e6038567b984fe7f919cac7fed66d456))
+
 ## [0.32.5](https://github.com/darkobits/saffron/compare/v0.32.4...v0.32.5) (2023-06-26)
 
 
