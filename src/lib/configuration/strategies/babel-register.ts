@@ -15,6 +15,8 @@ import type { PackageInfo } from 'lib/package';
  * results.
  */
 export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageInfo) {
+  const prefix = log.prefix('strategy:babel');
+
   try {
     if (!pkgInfo.root) throw new Error('Unable to determine host package root directory.');
 
@@ -98,7 +100,7 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
     `;
 
     if (tsConfigFilePath) {
-      log.silly(log.prefix('babelRegisterStrategy'), `Loaded tsconfig.json from: ${log.chalk.green(tsConfigFilePath)}`);
+      log.silly(prefix, `Loaded tsconfig.json from: ${log.chalk.green(tsConfigFilePath)}`);
     }
 
     const tempDir = path.resolve(pkgInfo.root, 'node_modules', '.saffron-config');
@@ -114,10 +116,10 @@ export async function babelRegisterStrategy(filePath: string, pkgInfo: PackageIn
     await fs.remove(tempDir);
 
     return result.default ?? result;
-  } catch (cause: any) {
+  } catch (err: any) {
     throw new Error(
-      `${log.prefix('babelRegisterStrategy')} Failed to load configuration file: ${cause}`,
-      { cause }
+      `${log.chalk.red(`[${prefix}] Failed to import() configuration file ${filePath}:`)} ${err.message}`,
+      { cause: err }
     );
   }
 }

@@ -17,29 +17,41 @@ import ConfigurationLoader from 'lib/configuration/loader';
 export default async function loadConfiguration<C>(options: SaffronCosmiconfigOptions) {
   const { fileName, key, searchFrom, ...cosmicOptions } = validators.cosmiconfigOptions(options);
 
-  const configResult = await cosmiconfig(fileName, merge({
+  const mergedOptions = merge({
     loaders: {
       ...defaultLoaders,
+
       '.ts': ConfigurationLoader,
-      '.cts': ConfigurationLoader,
+      '.tsx': ConfigurationLoader,
       '.mts': ConfigurationLoader,
+      '.cts': ConfigurationLoader,
+
       '.js': ConfigurationLoader,
-      '.cjs': ConfigurationLoader,
-      '.mjs': ConfigurationLoader
+      '.jsx': ConfigurationLoader,
+      '.mjs': ConfigurationLoader,
+      '.cjs': ConfigurationLoader
     },
     searchPlaces: [
       `${fileName}.config.ts`,
+      `${fileName}.config.tsx`,
       `${fileName}.config.mts`,
       `${fileName}.config.cts`,
+
       `${fileName}.config.js`,
+      `${fileName}.config.jsx`,
       `${fileName}.config.mjs`,
       `${fileName}.config.cjs`,
+
       `${fileName}rc.ts`,
+      `${fileName}rc.tsx`,
       `${fileName}rc.mts`,
       `${fileName}rc.cts`,
+
       `${fileName}rc.js`,
+      `${fileName}rc.jsx`,
       `${fileName}rc.mjs`,
       `${fileName}rc.cjs`,
+
       `.${fileName}.json`,
       `.${fileName}.yaml`,
       `.${fileName}.yml`,
@@ -52,7 +64,9 @@ export default async function loadConfiguration<C>(options: SaffronCosmiconfigOp
       // our value.
       return [...source, ...target];
     }
-  })).search(searchFrom);
+  });
+
+  const configResult = await cosmiconfig(fileName, mergedOptions).search(searchFrom);
 
   // If we loaded a non-empty file and the user specified a sub-key that they
   // want to drill-down into, ensure that the root configuration object has that

@@ -37,10 +37,7 @@
     "node-version": "^3.0.0",
     "read-pkg-up": "^9.1.0",
     "resolve-pkg": "^2.0.0",
-    "ts-import": "^5.0.0-beta.0",
-    "ts-node": "^10.9.1",
     "tsconfck": "^2.1.1",
-    "tsconfig-paths": "^4.2.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
