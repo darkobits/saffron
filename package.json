@@ -16,6 +16,10 @@
     "dist"
   ],
   "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
+  },
   "scripts": {
     "prepare": "nr prepare"
   },
