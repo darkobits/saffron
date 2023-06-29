@@ -1,3 +1,10 @@
+## [0.32.9](https://github.com/darkobits/saffron/compare/v0.32.8...v0.32.9) (2023-06-29)
+
+
+### 🏗 Chores
+
+* Add export maps in `package.json`. ([1422a85](https://github.com/darkobits/saffron/commit/1422a85ad686989f38fe95c39f04929859436259))
+
 ## [0.32.8](https://github.com/darkobits/saffron/compare/v0.32.7...v0.32.8) (2023-06-28)
 
 
