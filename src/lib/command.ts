@@ -23,7 +23,6 @@ type ParsedPackageName<T> = T extends string
 
 function parsePackageName<T = any>(packageName: T) {
   if (typeof packageName !== 'string') {
-    console.log('PACKAGE NAME IS NOT A STRING');
     return { scope: undefined, name: undefined } as ParsedPackageName<T>;
   }
 
@@ -117,6 +116,8 @@ export default function buildCommand<
 
       // If the user provided an explicit file name, use it. Otherwise, use the
       // non-scope portion of the name from the host application's package.json.
+      // TODO: This approach does not allow the dependent CLI to take a --config
+      // flag to specify a custom configuration file to use.
       const fileName = saffronCommand.config?.fileName ?? parsePackageName(hostPkg.json?.name).name;
       if (!fileName) throw new Error('Unable to infer configuration file name. Either set a "name" property in package.json or set "config.fileName" in a command builder.');
 

@@ -43,15 +43,3 @@ export default function init(cb?: SaffronInitCallback) {
     process.exit(1);
   });
 }
-
-// cli.init(() => (err, argv, output) => {
-//   if (err) {
-//     console.error(MakinUrText.fromString(err.message ?? err));
-//     return;
-//   }
-
-//   if (output) {
-//     console.error(MakinUrText.fromString(output));
-//     return;
-//   }
-// });

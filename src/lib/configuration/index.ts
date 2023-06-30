@@ -15,7 +15,12 @@ import ConfigurationLoader from 'lib/configuration/loader';
  * filesystem calls here.
  */
 export default async function loadConfiguration<C>(options: SaffronCosmiconfigOptions) {
-  const { fileName, key, searchFrom, ...cosmicOptions } = validators.cosmiconfigOptions(options);
+  const {
+    fileName,
+    key,
+    searchFrom,
+    ...cosmicOptions
+  } = validators.cosmiconfigOptions(options);
 
   const mergedOptions = merge({
     loaders: {
