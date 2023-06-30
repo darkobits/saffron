@@ -1,3 +1,10 @@
+## [0.32.10](https://github.com/darkobits/saffron/compare/v0.32.9...v0.32.10) (2023-06-30)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([e990db7](https://github.com/darkobits/saffron/commit/e990db76b4cd52692c5f55d196c2c4458b0fed7a))
+
 ## [0.32.9](https://github.com/darkobits/saffron/compare/v0.32.8...v0.32.9) (2023-06-29)
 
 
