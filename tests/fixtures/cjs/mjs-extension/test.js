@@ -17,7 +17,7 @@ const log = LogFactory({ heading: 'smokeTest' });
  */
 async function explicitEsm() {
   try {
-    const cli = await import('../../../dist/index.js');
+    const cli = await import('../../../../dist/index.js');
 
     cli.command({
       handler: ({ config }) => {

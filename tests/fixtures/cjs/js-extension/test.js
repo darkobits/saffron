@@ -16,7 +16,7 @@ const log = LogFactory({ heading: 'smokeTest' });
  */
 async function implicitCjs() {
   try {
-    const cli = await import('../../../dist/index.js');
+    const cli = await import('../../../../dist/index.js');
 
     cli.command({
       handler: ({ config }) => {

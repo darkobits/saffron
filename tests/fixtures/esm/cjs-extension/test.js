@@ -2,7 +2,7 @@ import os from 'os';
 
 import LogFactory from '@darkobits/log';
 
-import * as cli from '../../../dist/index.js';
+import * as cli from '../../../../dist/index.js';
 
 const log = LogFactory({ heading: 'smokeTest' });
 
