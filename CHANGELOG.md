@@ -1,3 +1,12 @@
+## [0.32.11](https://github.com/darkobits/saffron/compare/v0.32.10...v0.32.11) (2023-07-03)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([5ed502d](https://github.com/darkobits/saffron/commit/5ed502d38f6f1a0955b836494795aaaa52a86dd1))
+* Misc. cleanup. ([c4787c0](https://github.com/darkobits/saffron/commit/c4787c07c0b13ca04b63aa545beb9e0b934c25e3))
+* Reorganize tests. ([ac38314](https://github.com/darkobits/saffron/commit/ac38314639bc82f5dcde159e601eca6482fa4272))
+
 ## [0.32.10](https://github.com/darkobits/saffron/compare/v0.32.9...v0.32.10) (2023-06-30)
 
 
