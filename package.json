@@ -36,7 +36,7 @@
     "camelcase-keys": "^8.0.2",
     "cosmiconfig": "^8.2.0",
     "deepmerge": "^4.3.1",
-    "esbuild": "^0.18.10",
+    "esbuild": "^0.18.11",
     "fs-extra": "^11.1.1",
     "node-version": "^3.0.0",
     "read-pkg-up": "^9.1.0",
@@ -45,7 +45,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.17.4",
+    "@darkobits/ts": "~0.17.5",
     "@types/fs-extra": "^11.0.1"
   }
 }
