@@ -12,36 +12,39 @@ import type { PackageInfo } from 'lib/package';
 
 
 /**
- * Uses esbuild to transpile the user's configuration file. This strategy
- * creates a temporary transpiled configuration file in the same directory as
- * the source file, then attempts to dynamically import it. An output format
- * and extension are chosen based on the project's configuration that are the
- * least likely to produce errors. Finally, the temporary file is removed.
+ * Map of possible config file extensions to the most sensible output format
+ * that we can dynamically import without producing an
+ * ERR_UNKNOWN_FILE_EXTENSION error from Node.
+ */
+const EXT_MAP: Record<string, string | undefined> = {
+  '.js': '.js',
+  '.ts': '.js',
+  '.tsx': '.js',
+  '.jsx':' .js',
+  // User explicitly wants CommonJS.
+  '.cts': '.cjs',
+  '.cjs': '.cjs',
+  // User explicitly wants ESM.
+  '.mts': '.mjs',
+  '.mjs': '.mjs'
+};
+
+
+/**
+ * This strategy uses esbuild to transpile the host package's configuration
+ * file. It creates a temporary transpiled configuration file in the same
+ * directory as the source file, then attempts to dynamically import it. An
+ * output format and extension are chosen based on the host project's
+ * configuration that are the least likely to produce errors. Finally, the
+ * temporary file is removed.
  */
 export async function esbuildStrategy(filePath: string, pkgInfo: PackageInfo) {
   const prefix = log.prefix('strategy:esbuild');
   const parsedFilePath = path.parse(filePath);
-
-  // Map of possible config file extensions to the most sensible output format
-  // that we can dynamically import without producing an
-  // ERR_UNKNOWN_FILE_EXTENSION error from Node.
-  const extMap: Record<string, string | undefined> = {
-    '.js': '.js',
-    '.ts': '.js',
-    '.tsx': '.js',
-    '.jsx':' .js',
-    // User explicitly wants CommonJS.
-    '.cts': '.cjs',
-    '.cjs': '.cjs',
-    // User explicitly wants ESM.
-    '.mts': '.mjs',
-    '.mjs': '.mjs'
-  };
-
   const isExplicitCommonJs = ['.cjs', '.cts'].includes(parsedFilePath.ext);
   const isExplicitESM = ['.mjs', '.mts'].includes(parsedFilePath.ext);
 
-  const outExt = extMap[parsedFilePath.ext];
+  const outExt = EXT_MAP[parsedFilePath.ext];
 
   if (!outExt) throw new Error(
     `${prefix} Unable to determine output file extension from input extension: ${parsedFilePath.ext}`
@@ -63,7 +66,7 @@ export async function esbuildStrategy(filePath: string, pkgInfo: PackageInfo) {
 
   const tempFileName = `.${parsedFilePath.name}.${Date.now()}${outExt}`;
   const tempFilePath = path.join(path.dirname(filePath), tempFileName);
-  log.silly(prefix, `Temporary file will be written to: ${log.chalk.green(tempFilePath)}`);
+  log.verbose(prefix, `Temporary configuration file: ${log.chalk.green(tempFilePath)}`);
 
   try {
     const buildOptions: esbuild.BuildOptions = {
