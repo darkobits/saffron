@@ -24,8 +24,8 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/core": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
+    "@babel/core": "^7.22.8",
+    "@babel/preset-env": "^7.22.7",
     "@babel/preset-typescript": "^7.22.5",
     "@babel/register": "^7.22.5",
     "@darkobits/log": "^2.0.0-beta.15",
@@ -39,13 +39,13 @@
     "esbuild": "^0.18.11",
     "fs-extra": "^11.1.1",
     "node-version": "^3.0.0",
-    "read-pkg-up": "^9.1.0",
+    "read-pkg-up": "^10.0.0",
     "resolve-pkg": "^2.0.0",
     "tsconfck": "^2.1.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.17.5",
+    "@darkobits/ts": "~0.18.4",
     "@types/fs-extra": "^11.0.1"
   }
 }
