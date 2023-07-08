@@ -20,5 +20,5 @@ export interface SaffronCommonContext {
      * Path to the package root.
      */
     root: string | undefined;
-  };
+  } | undefined;
 }

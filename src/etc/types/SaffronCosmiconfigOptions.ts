@@ -32,4 +32,12 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
    * @default process.cwd()
    */
   searchFrom?: string;
+
+  /**
+   * (Optional) If provided, Saffron will skip searching for a configuration
+   * file and instead use the file at the path specified at this key. This
+   * option may be used to implement a `--config` parameter in a CLI that allows
+   * the user to provide an explicit file path.
+   */
+  explicitConfigFileParam?: string;
 }

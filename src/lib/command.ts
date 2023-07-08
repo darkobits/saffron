@@ -4,36 +4,21 @@ import path from 'path';
 import camelcaseKeys from 'camelcase-keys';
 
 import {
-  SaffronHandlerContext,
-  SaffronCommand
+  SaffronCommand,
+  SaffronCosmiconfigResult,
+  SaffronHandlerContext
 } from 'etc/types';
 import validators from 'etc/validators';
-import loadConfiguration from 'lib/configuration';
+import createLoader from 'lib/configuration/loader';
 import log from 'lib/log';
-import { getPackageInfo } from 'lib/package';
+import { getPackageInfo, parsePackageName } from 'lib/package';
 import yargs from 'lib/yargs';
 
-import type { Argv, ArgumentsCamelCase } from 'yargs';
-
-
-type ParsedPackageName<T> = T extends string
-  ? { scope: string | undefined; name: string }
-  : { scope: undefined; name: undefined };
-
-
-function parsePackageName<T = any>(packageName: T) {
-  if (typeof packageName !== 'string') {
-    return { scope: undefined, name: undefined } as ParsedPackageName<T>;
-  }
-
-  if (packageName.includes('/')) {
-    const [scope, name] = packageName.replace('@', '').split('/');
-    return { scope, name } as ParsedPackageName<T>;
-  }
-
-  return { scope: undefined, name: packageName };
-
-}
+import type {
+  Argv,
+  ArgumentsCamelCase,
+  CommandModule
+} from 'yargs';
 
 
 /**
@@ -48,30 +33,115 @@ export default function buildCommand<
   // Validate options.
   validators.saffronCommand(saffronCommand);
 
-  // Get the host application's package manifest.
-  const hostPkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) });
+  /**
+   * Context object that will ultimately be passed to the command's handler. We
+   * define this early because we need to modify it from middleware that will
+   * run before the handler is called.
+   */
+  const context: Partial<SaffronHandlerContext<A, C>> = {};
+
+  // Get the application's manifest.
+  context.pkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) });
+
+
+  // ----- Prepare Configuration Loader ----------------------------------------
+
+  const configOptions = saffronCommand.config || {};
+
+  const loader = createLoader<C>({
+    fileName: context.pkg?.json?.name
+      ? parsePackageName(context.pkg.json.name).name
+      : undefined,
+    ...configOptions
+  });
+
+
+  // ----- Configuration-Loader Middleware -------------------------------------
+
+  const middleware = async (argv: ArgumentsCamelCase<A>) => {
+    // If set to `false`, the application wants to disable all configuration
+    // related features.
+    if (saffronCommand.config === false) return;
+
+    const configOptions = saffronCommand.config ?? {};
+
+    // Enable auto-configuration unless the user explicitly set the `auto`
+    // option to `false`.
+    const autoConfig = configOptions.auto !== false;
+
+    let configResult: SaffronCosmiconfigResult<C> | undefined;
+
+    // If the application defined a parameter to use for loading an explicit
+    // configuration file, and the user invoked the CLI with that option,
+    // then attempt to load a configuration file from that location.
+    if (configOptions.explicitConfigFileParam) {
+      const explicitConfigFilePath = argv[configOptions.explicitConfigFileParam];
+      if (typeof explicitConfigFilePath === 'string') configResult = await loader.load(explicitConfigFilePath);
+    }
+
+    // If any of the above conditions were not satisfied and we still don't
+    // have a truthy value, attempt to load a configuration file by searching.
+    if (!configResult) configResult = await loader.search(configOptions.searchFrom);
+
+    // If we loaded a non-empty file and the user specified a sub-key that
+    // they want to drill-down into, ensure that the root configuration object
+    // has that key. If it doesn't, delete the 'config' property on our result
+    // and set 'isEmpty' to true. Otherwise, hoist the desired sub-key up to
+    // the root of the result.
+    if (configResult?.config && configOptions.key) {
+      if (!Reflect.has(configResult.config, configOptions.key)) {
+        Reflect.deleteProperty(configResult, 'config');
+        configResult.isEmpty = true;
+      } else {
+        configResult.config = Reflect.get(configResult.config, configOptions.key) as C;
+      }
+    }
+
+    if (configResult) {
+      if (configResult.config) context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
+      context.configPath = configResult.filepath;
+      context.configIsEmpty = Boolean(configResult.isEmpty);
+
+      // If auto-config is enabled, then for each key/value pair in the config
+      // object, set the same key/value pair on `argv` if and only if the key
+      // does not already exist on `argv`. This ensures that command-line
+      // arguments will always supersede configuration options.
+      if (autoConfig && !configResult.isEmpty) {
+        if (typeof configResult.config === 'object') {
+          Object.entries(configResult.config).forEach(([key, value]) => {
+            if (!Reflect.has(argv, key)) Reflect.set(argv, key, value);
+          });
+        } else {
+          log.warn(
+            log.prefix('handler'),
+            `Auto-configuration enabled; expected configuration to be of type "object", got "${typeof configResult.config}".`
+          );
+        }
+      }
+    }
+  };
 
 
   // ----- Builder Proxy -------------------------------------------------------
 
   /**
    * This function wraps the "builder" function provided to Yargs, setting
-   * default behaviors.
+   * default behaviors and registering middleware.
    */
-  const builder = (yargsCommand: Argv<any>): Argv<A> => {
+  const builder = (yargsCommand: Argv<A>): Argv<A> => {
     // Set strict mode unless explicitly disabled.
     if (saffronCommand.strict !== false) yargsCommand.strict();
 
     // Apply defaults for the command.
     yargsCommand.showHelpOnFail(true, 'See --help for usage instructions.');
-    yargsCommand.wrap(yargs.terminalWidth());
+    yargsCommand.wrap(yargsCommand.terminalWidth());
     yargsCommand.alias('v', 'version');
     yargsCommand.alias('h', 'help');
 
     // Set name and version based on the host application's metadata.
     // N.B. Description is set below.
-    if (hostPkg.json?.name) yargsCommand.scriptName(parsePackageName(hostPkg.json?.name).name);
-    if (hostPkg.json?.version) yargsCommand.version(hostPkg.json.version);
+    if (context.pkg?.json?.name) yargsCommand.scriptName(parsePackageName(context.pkg.json.name).name);
+    if (context.pkg?.json?.version) yargsCommand.version(context.pkg.json.version);
 
     // Enable --help for this command.
     yargsCommand.help();
@@ -81,9 +151,12 @@ export default function buildCommand<
     if (typeof saffronCommand.builder === 'function') {
       saffronCommand.builder({
         command: yargsCommand,
-        pkg: hostPkg
+        pkg: context.pkg
       });
     }
+
+    // Register middleware, run before validation occurs.
+    yargsCommand.middleware(middleware, true);
 
     return yargsCommand;
   };
@@ -99,61 +172,11 @@ export default function buildCommand<
    * errors.
    */
   const handler = async (argv: ArgumentsCamelCase<A>) => {
-    const context: Partial<SaffronHandlerContext<A, C>> = {};
-
     // Convert raw `argv` to camelCase.
     context.argv = camelcaseKeys<any, any>(argv, { deep: true });
 
-    context.pkg = hostPkg;
-
-    // Whether we should automatically call command.config() with the data
-    // from the configuration file.
-
-    if (saffronCommand.config !== false) {
-      // Enable auto-configuration unless the user explicitly set the `auto`
-      // option to `false`.
-      const autoConfig = saffronCommand.config?.auto !== false;
-
-      // If the user provided an explicit file name, use it. Otherwise, use the
-      // non-scope portion of the name from the host application's package.json.
-      // TODO: This approach does not allow the dependent CLI to take a --config
-      // flag to specify a custom configuration file to use.
-      const fileName = saffronCommand.config?.fileName ?? parsePackageName(hostPkg.json?.name).name;
-      if (!fileName) throw new Error('Unable to infer configuration file name. Either set a "name" property in package.json or set "config.fileName" in a command builder.');
-
-      const configResult = await loadConfiguration<C>({
-        fileName,
-        // N.B. If the user provided a custom fileName, it will overwrite the
-        // one from package.json above.
-        ...saffronCommand.config
-      });
-
-      if (configResult) {
-        if (configResult.config) {
-          context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
-        }
-
-        context.configPath = configResult.filepath;
-        context.configIsEmpty = Boolean(configResult.isEmpty);
-
-        // If `autoConfig` is enabled, for each key in `argv`, set its value to
-        // the corresponding value from `config`, if it exists.
-        if (autoConfig && !context.configIsEmpty) {
-          if (typeof configResult.config === 'object') {
-            Object.entries(configResult.config).forEach(([key, value]) => {
-              if (context.argv && context.config && Reflect.has(context.argv, key)) {
-                Reflect.set(context.argv, key, value);
-              }
-            });
-          } else {
-            log.warn(log.prefix('handler'), `Auto-configuration is enabled, but the command's arguments (type "object") cannot merged with configuration of type "${typeof configResult.config}".`);
-          }
-        }
-      }
-    }
-
     try {
-      // Finally, invoke the user's handler.
+      // Invoke the application's handler.
       await saffronCommand.handler(context as Required<SaffronHandlerContext<A, C>>);
     } catch (err: any) {
       console.error(err);
@@ -171,12 +194,11 @@ export default function buildCommand<
 
   // ----- Register Command ----------------------------------------------------
 
-  // @ts-expect-error - Suspected error in yargs typings.
-  yargs.command<A>({
+  yargs.command({
     command: saffronCommand.command ?? '*',
-    describe: saffronCommand.description ?? hostPkg.json?.description,
+    describe: saffronCommand.description ?? context.pkg?.json?.description,
     aliases: saffronCommand.aliases,
     builder,
     handler
-  });
+  } as CommandModule<any, A>);
 }

@@ -53,3 +53,22 @@ export function getPackageInfo({ cwd }: GetPackageInfoOptions): PackageInfo {
   // Return from cache.
   return packageCache.get(cwd) as PackageInfo;
 }
+
+
+type ParsedPackageName<T> = T extends string
+  ? { scope: string | undefined; name: string }
+  : { scope: undefined; name: undefined };
+
+
+export function parsePackageName<T = any>(packageName: T) {
+  if (typeof packageName !== 'string') {
+    return { scope: undefined, name: undefined } as ParsedPackageName<T>;
+  }
+
+  if (packageName.includes('/')) {
+    const [scope, name] = packageName.replace('@', '').split('/');
+    return { scope, name } as ParsedPackageName<T>;
+  }
+
+  return { scope: undefined, name: packageName };
+}
