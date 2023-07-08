@@ -20,6 +20,12 @@ async function explicitEsm() {
     const cli = await import('../../../../dist/index.js');
 
     cli.command({
+      builder: ({ command }) => {
+        command.option('foo', {
+          type: 'string',
+          required: false
+        });
+      },
       handler: ({ config }) => {
         if (config && Object.keys(config).length > 0) {
           log.verbose(log.prefix('cjs:mjs-extension'), log.chalk.green('success'));

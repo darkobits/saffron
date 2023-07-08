@@ -19,6 +19,12 @@ const log = LogFactory({ heading: 'smokeTest' });
 function typeScriptToImplicitEsm() {
   try {
     cli.command({
+      builder: ({ command }) => {
+        command.option('foo', {
+          type: 'string',
+          required: false
+        });
+      },
       handler: ({ config }) => {
         if (config && Object.keys(config).length > 0) {
           log.verbose(log.prefix('esm:ts-extension'), log.chalk.green('success'));
