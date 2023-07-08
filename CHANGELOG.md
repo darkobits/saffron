@@ -1,3 +1,21 @@
+## [0.32.12-beta.1](https://github.com/darkobits/saffron/compare/v0.32.11...v0.32.12-beta.1) (2023-07-08)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([27c793f](https://github.com/darkobits/saffron/commit/27c793f4c68e1062b9fb6820e7cef4df3937f249))
+* Update linting rules. ([0ddfef8](https://github.com/darkobits/saffron/commit/0ddfef8850b4b4c9a1c8cfa43a63f521bd9dc642))
+
+
+### 🛠 Refactoring
+
+* Fix auto-configuration, add `explicitConfigFileParam` option. ([c87cb71](https://github.com/darkobits/saffron/commit/c87cb71ddbfe1b0dbc3d02c70071d1fc28ed2bd8))
+
+
+### 🚦 Tests
+
+* Fix smoke tests. ([ee4623f](https://github.com/darkobits/saffron/commit/ee4623f31ab4d54e80c2c6a5f95d05520d6b7649))
+
 ## [0.32.11](https://github.com/darkobits/saffron/compare/v0.32.10...v0.32.11) (2023-07-03)
 
 
