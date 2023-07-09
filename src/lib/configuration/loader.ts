@@ -5,6 +5,7 @@ import merge from 'deepmerge';
 
 import validators from 'etc/validators';
 import { babelStrategy } from 'lib/configuration/strategies/babel';
+import { babelRegisterStrategy } from 'lib/configuration/strategies/babel-register';
 import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
 import log from 'lib/log';
 import { getPackageInfo } from 'lib/package';
@@ -76,7 +77,7 @@ async function ecmaScriptLoader(filePath: string /* , content: string */) {
 
 
   /**
-   * Strategy 3: Babel
+   * Strategy 3: babel
    */
   try {
     const result = await babelStrategy(filePath, pkgInfo);
@@ -84,6 +85,21 @@ async function ecmaScriptLoader(filePath: string /* , content: string */) {
     return getDefaultExport(result);
   } catch (err: any) {
     errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('babel')}: ${err}`));
+  }
+
+
+  /**
+   * Strategy 3: babel/register
+   *
+   * This strategy will (likely) only need to be used when a configuration file
+   * relies on other files that also need to be transpiled.
+   */
+  try {
+    const result = await babelRegisterStrategy(filePath, pkgInfo);
+    log.verbose(prefix, 'Used strategy:', log.chalk.bold('babel/register'));
+    return getDefaultExport(result);
+  } catch (err: any) {
+    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('babel/register')}: ${err}`));
   }
 
 

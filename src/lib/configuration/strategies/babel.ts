@@ -27,20 +27,12 @@ const EXT_MAP: Record<string, string> = {
 };
 
 
-const extensions =  [
-  '.ts',
-  '.tsx',
-  '.js',
-  '.jsx',
-  '.cts',
-  '.cjs',
-  '.mjs',
-  '.mts'
-];
-
-
 /**
- * WIP
+ * Uses Babel to transpile the file at `filePath` by creating a temporary
+ * file in the same directory, then attempts to dynamically import it. An
+ * output format and extension are chosen based on the host project's
+ * "type" setting that are the least likely to produce errors. Once imported,
+ * the temporary file is removed.
  */
 export async function babelStrategy(filePath: string, pkgInfo: PackageInfo) {
   const prefix = log.prefix('strategy:babel');
@@ -100,7 +92,16 @@ export async function babelStrategy(filePath: string, pkgInfo: PackageInfo) {
       log.verbose(prefix, `Using TypeScript configuration: ${log.chalk.green(tsConfigFilePath)}`);
       transformOptions.plugins?.push(setModuleResolverPluginForTsConfig({
         tsconfigPath: tsConfigFilePath,
-        extensions
+        extensions: [
+          '.ts',
+          '.tsx',
+          '.js',
+          '.jsx',
+          '.cts',
+          '.cjs',
+          '.mjs',
+          '.mts'
+        ]
       }));
     }
 
