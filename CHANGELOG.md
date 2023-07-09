@@ -1,3 +1,10 @@
+## [0.32.12-beta.3](https://github.com/darkobits/saffron/compare/v0.32.12-beta.2...v0.32.12-beta.3) (2023-07-09)
+
+
+### 🐞 Bug Fixes
+
+* Restore `@babel/register` strategy. ([858a8a6](https://github.com/darkobits/saffron/commit/858a8a6b066414b8a7a667aa5088de83f04ecbd7))
+
 ## [0.32.12-beta.2](https://github.com/darkobits/saffron/compare/v0.32.12-beta.1...v0.32.12-beta.2) (2023-07-09)
 
 
