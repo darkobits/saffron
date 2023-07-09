@@ -25,9 +25,9 @@ import type {
  * Saffron command builder.
  */
 export default function buildCommand<
-  // Shape of the application's parsed command-line arguments.
+  // Type of the application's parsed command-line arguments.
   A extends Record<string, any> = Record<string, any>,
-  // Shape of the application's parsed configuration file.
+  // Type of the application's parsed configuration file.
   C extends Record<string, any> = A
 >(saffronCommand: SaffronCommand<A, C>) {
   // Validate options.
@@ -58,6 +58,12 @@ export default function buildCommand<
 
   // ----- Configuration-Loader Middleware -------------------------------------
 
+  /**
+   * This middleware will be installed in the builder proxy (see below) to run
+   * after command-line arguments have been parsed but _before_ they have been
+   * validated. This allows us to asynchronously load the application's
+   * configuration file and update `argv` (if configured to do so).
+   */
   const middleware = async (argv: ArgumentsCamelCase<A>) => {
     // If set to `false`, the application wants to disable all configuration
     // related features.

@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@darkobits/ts": "~0.18.4",
+    "@types/babel__core": "^7.20.1",
     "@types/fs-extra": "^11.0.1"
   }
 }

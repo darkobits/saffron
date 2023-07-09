@@ -1,9 +1,8 @@
 import path from 'path';
 
-import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
-import * as esbuild from 'esbuild';
+import babel from '@babel/core';
+import { setModuleResolverPluginForTsConfig } from 'babel-plugin-module-resolver-tsconfig';
 import fs from 'fs-extra';
-import currentNodeVersion from 'node-version';
 import * as tsConfck from 'tsconfck';
 
 import log from 'lib/log';
@@ -28,15 +27,23 @@ const EXT_MAP: Record<string, string> = {
 };
 
 
+const extensions =  [
+  '.ts',
+  '.tsx',
+  '.js',
+  '.jsx',
+  '.cts',
+  '.cjs',
+  '.mjs',
+  '.mts'
+];
+
+
 /**
- * Uses esbuild to transpile the file at `filePath` by creating a temporary
- * file in the same directory, then attempts to dynamically import it. An
- * output format and extension are chosen based on the host project's
- * "type" setting that are the least likely to produce errors. Once imported,
- * the temporary file is removed.
+ * WIP
  */
-export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: PackageInfo): Promise<M> {
-  const prefix = log.prefix('strategy:esbuild');
+export async function babelStrategy(filePath: string, pkgInfo: PackageInfo) {
+  const prefix = log.prefix('strategy:babel');
 
   const parsedFilePath = path.parse(filePath);
   const isExplicitCommonJs = ['.cjs', '.cts'].includes(parsedFilePath.ext);
@@ -67,28 +74,43 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
   log.verbose(prefix, `Temporary file path: ${log.chalk.green(tempFilePath)}`);
 
   try {
-    const buildOptions: esbuild.BuildOptions = {
-      entryPoints: [filePath],
-      target: `node${currentNodeVersion.major}`,
-      outfile: tempFileName,
-      format,
+    const transformOptions: babel.TransformOptions = {
+      // Treat files that contain import statements as modules and require
+      // statements as CommonJS.
+      sourceType: 'unambiguous',
+      // Apply the minimum amount of transforms required to make code compatible
+      // with the local Node installation.
+      targets: {
+        node: 'current',
+        esmodules: format === 'esm'
+      },
+      presets: [
+        ['@babel/preset-env', {
+          modules: format === 'esm' ? false : 'commonjs',
+          exclude: ['proposal-dynamic-import']
+        }],
+        '@babel/preset-typescript'
+      ],
       plugins: []
     };
 
-    // If the user has a TypeScript configuration file, enable TypeScript
-    // features.
     const tsConfigFilePath = await tsConfck.find(filePath);
 
     if (tsConfigFilePath) {
-      log.verbose(prefix, 'Using TypeScript configuration:', log.chalk.green(tsConfigFilePath));
-      buildOptions.tsconfig = tsConfigFilePath;
-      buildOptions.plugins?.push(TsconfigPathsPlugin({
-        tsconfig: tsConfigFilePath
+      log.verbose(prefix, `Using TypeScript configuration: ${log.chalk.green(tsConfigFilePath)}`);
+      transformOptions.plugins?.push(setModuleResolverPluginForTsConfig({
+        tsconfigPath: tsConfigFilePath,
+        extensions
       }));
     }
 
-    // Transpile the input file.
-    await esbuild.build(buildOptions);
+    const result = await babel.transformFileAsync(filePath, transformOptions);
+
+    if (typeof result?.code !== 'string') throw new TypeError(
+      `Expected "code" to be of type "string", got "${typeof result?.code}".`
+    );
+
+    await fs.writeFile(tempFilePath, result.code);
   } catch (err: any) {
     // Handle any transpilation-related errors.
     throw new Error(
@@ -98,7 +120,6 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
   }
 
   try {
-    // Import the temporary file and return the result.
     return await import(tempFilePath);
   } catch (err: any) {
     // Handle any import-related errors.
