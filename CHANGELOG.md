@@ -1,3 +1,10 @@
+## [0.32.12-beta.2](https://github.com/darkobits/saffron/compare/v0.32.12-beta.1...v0.32.12-beta.2) (2023-07-09)
+
+
+### 🛠 Refactoring
+
+* Babel strategy uses Node API. ([799b8ae](https://github.com/darkobits/saffron/commit/799b8ae25518d1ca3b83298f775d0bc75fe5f84a))
+
 ## [0.32.12-beta.1](https://github.com/darkobits/saffron/compare/v0.32.11...v0.32.12-beta.1) (2023-07-08)
 
 
