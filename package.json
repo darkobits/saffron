@@ -37,6 +37,7 @@
     "node-version": "^3.0.0",
     "read-pkg-up": "^10.0.0",
     "rollup": "^3.26.2",
+    "rollup-plugin-node-externals": "^6.1.1",
     "tsconfck": "^2.1.1",
     "yargs": "^17.7.2"
   },

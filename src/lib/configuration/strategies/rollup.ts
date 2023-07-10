@@ -7,6 +7,7 @@ import {
   type InputOptions,
   type OutputOptions
 } from 'rollup';
+import { nodeExternals } from 'rollup-plugin-node-externals';
 import * as tsConfck from 'tsconfck';
 
 import log from 'lib/log';
@@ -78,8 +79,7 @@ export async function rollupStrategy<M = any>(filePath: string, pkgInfo: Package
 
   log.verbose(prefix, `Using format: ${log.chalk.bold(format)}`);
 
-  // const tempFileName = `.${parsedFilePath.name}.${Date.now()}${outExt}`;
-  const tempFileName = `.${parsedFilePath.name}.temp${outExt}`;
+  const tempFileName = `.${parsedFilePath.name}.${Date.now()}${outExt}`;
   const tempFilePath = path.join(path.dirname(filePath), tempFileName);
 
   log.verbose(prefix, `Temporary file path: ${log.chalk.green(tempFilePath)}`);
@@ -89,7 +89,16 @@ export async function rollupStrategy<M = any>(filePath: string, pkgInfo: Package
 
     const inputOptions: InputOptions = {
       input: filePath,
-      plugins: []
+      plugins: [
+        nodeExternals({
+          builtinsPrefix: 'ignore',
+          packagePath: path.resolve(pkgInfo.root, 'package.json'),
+          deps: true,
+          devDeps: true,
+          peerDeps: true,
+          optDeps: true
+        })
+      ]
     };
 
     // If the user has a TypeScript configuration file, enable TypeScript
@@ -100,7 +109,8 @@ export async function rollupStrategy<M = any>(filePath: string, pkgInfo: Package
       log.verbose(prefix, 'Using TypeScript configuration:', log.chalk.green(tsConfigFilePath));
       // Add TypeScript config to inputOptions here.
       inputOptions.plugins?.push(typescriptPlugin({
-        sourceMap: false
+        sourceMap: false,
+        outputToFilesystem: false
       }));
     }
 
