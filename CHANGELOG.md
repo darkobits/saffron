@@ -1,3 +1,34 @@
+## [0.32.12](https://github.com/darkobits/saffron/compare/v0.32.11...v0.32.12) (2023-07-10)
+
+
+### 🐞 Bug Fixes
+
+* Externalize built-ins and dependencies. ([bd43a05](https://github.com/darkobits/saffron/commit/bd43a0512f0107d851bef3cb046769d6c1eaa6a6))
+* Restore `@babel/register` strategy. ([858a8a6](https://github.com/darkobits/saffron/commit/858a8a6b066414b8a7a667aa5088de83f04ecbd7))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([27c793f](https://github.com/darkobits/saffron/commit/27c793f4c68e1062b9fb6820e7cef4df3937f249))
+* **release:** 0.32.12-beta.1 ([ce12a12](https://github.com/darkobits/saffron/commit/ce12a12fc326edeb4e91d2d4a75eb2e2c8923b73))
+* **release:** 0.32.12-beta.2 ([a6e4a41](https://github.com/darkobits/saffron/commit/a6e4a417eb28ed828299db5446a992d5bdae8a71))
+* **release:** 0.32.12-beta.3 ([512e5fa](https://github.com/darkobits/saffron/commit/512e5fa05f5d07bb5cb36f660deea5a4f2687109))
+* **release:** 0.32.12-beta.4 ([d6741cc](https://github.com/darkobits/saffron/commit/d6741cc6ba1b29c415df06f38b69d1d32b4f9996))
+* **release:** 0.32.12-beta.5 ([b206e37](https://github.com/darkobits/saffron/commit/b206e3710800ba0159d139a0005270e11e940941))
+* Update linting rules. ([0ddfef8](https://github.com/darkobits/saffron/commit/0ddfef8850b4b4c9a1c8cfa43a63f521bd9dc642))
+
+
+### 🛠 Refactoring
+
+* Babel strategy uses Node API. ([799b8ae](https://github.com/darkobits/saffron/commit/799b8ae25518d1ca3b83298f775d0bc75fe5f84a))
+* Fix auto-configuration, add `explicitConfigFileParam` option. ([c87cb71](https://github.com/darkobits/saffron/commit/c87cb71ddbfe1b0dbc3d02c70071d1fc28ed2bd8))
+* Replace Babel strategy with Rollup strategy. ([f9ca579](https://github.com/darkobits/saffron/commit/f9ca57991da81dfdaa29b164f671a3d7cc3bd8af))
+
+
+### 🚦 Tests
+
+* Fix smoke tests. ([ee4623f](https://github.com/darkobits/saffron/commit/ee4623f31ab4d54e80c2c6a5f95d05520d6b7649))
+
 ## [0.32.12-beta.5](https://github.com/darkobits/saffron/compare/v0.32.12-beta.4...v0.32.12-beta.5) (2023-07-10)
 
 
