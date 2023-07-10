@@ -4,9 +4,8 @@ import { cosmiconfig, defaultLoaders } from 'cosmiconfig';
 import merge from 'deepmerge';
 
 import validators from 'etc/validators';
-import { babelStrategy } from 'lib/configuration/strategies/babel';
-import { babelRegisterStrategy } from 'lib/configuration/strategies/babel-register';
 import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
+import { rollupStrategy } from 'lib/configuration/strategies/rollup';
 import log from 'lib/log';
 import { getPackageInfo } from 'lib/package';
 
@@ -38,22 +37,25 @@ function getDefaultExport(module: any) {
  * ESM or CJS, for the consumers of those applications to be written in ESM or
  * CJS, and with configuration files written in ESM or CJS.
  */
-async function ecmaScriptLoader(filePath: string /* , content: string */) {
+async function ecmaScriptLoader(filePath: string /* , contents: string */) {
   const prefix = log.prefix('config');
-  const errors: Array<Error> = [];
-
   log.verbose(prefix, `Loading file: ${log.chalk.green(filePath)}`);
 
-  const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
-  if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`);
+
+  /**
+   * Tracks errors produced by various strategies. If all strategies fail, an
+   * AggregateError will be thrown with this value.
+   */
+  const errors: Array<Error> = [];
 
 
   /**
    * Strategy 1: Dynamic Import
    *
    * This will not perform any transpilation on code, and if the host project
-   * uses any custom path mappings, they will not work here. However, this
-   * strategy is the simplest and fastest, so we always try it first.
+   * uses any language features that require transpilation, this strategy will
+   * fail. However, this strategy is the simplest and fastest, so we always try
+   * it first.
    */
   try {
     const result = await import(filePath);
@@ -65,7 +67,23 @@ async function ecmaScriptLoader(filePath: string /* , content: string */) {
 
 
   /**
+   * Gather information about the package containing `filePath`, required for
+   * subsequent strategies.
+   */
+  const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
+  if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`);
+
+
+  /**
    * Strategy 2: esbuild
+   *
+   * This strategy will work for files that:
+   * - import nothing
+   * - only import other code that does not require a transpilation step
+   * - do not use any custom path mappings
+   *
+   * It is faster than Rollup and should cover the vast majority of cases where
+   * a simple dynamic import will not work.
    */
   try {
     const result = await esbuildStrategy(filePath, pkgInfo);
@@ -77,29 +95,18 @@ async function ecmaScriptLoader(filePath: string /* , content: string */) {
 
 
   /**
-   * Strategy 3: babel
-   */
-  try {
-    const result = await babelStrategy(filePath, pkgInfo);
-    log.verbose(prefix, 'Used strategy:', log.chalk.bold('babel'));
-    return getDefaultExport(result);
-  } catch (err: any) {
-    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('babel')}: ${err}`));
-  }
-
-
-  /**
-   * Strategy 3: babel/register
+   * Strategy 3: Rollup
    *
-   * This strategy will (likely) only need to be used when a configuration file
-   * relies on other files that also need to be transpiled.
+   * This is the slowest strategy, but the most robust. It will inline and
+   * transpile any code that the configuration file imports, allowing the
+   * output file to be imported as a standalone bundle.
    */
   try {
-    const result = await babelRegisterStrategy(filePath, pkgInfo);
-    log.verbose(prefix, 'Used strategy:', log.chalk.bold('babel/register'));
+    const result = await rollupStrategy(filePath, pkgInfo);
+    log.verbose(prefix, 'Used strategy:', log.chalk.bold('rollup'));
     return getDefaultExport(result);
   } catch (err: any) {
-    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('babel/register')}: ${err}`));
+    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('rollup')}: ${err}`));
   }
 
 

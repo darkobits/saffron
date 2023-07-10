@@ -24,15 +24,11 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@babel/core": "^7.22.8",
-    "@babel/preset-env": "^7.22.7",
-    "@babel/preset-typescript": "^7.22.5",
-    "@babel/register": "^7.22.5",
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
+    "@rollup/plugin-typescript": "^11.1.2",
     "@types/yargs": "^17.0.24",
-    "babel-plugin-module-resolver-tsconfig": "^1.0.25",
     "camelcase-keys": "^8.0.2",
     "cosmiconfig": "^8.2.0",
     "deepmerge": "^4.3.1",
@@ -40,13 +36,12 @@
     "fs-extra": "^11.1.1",
     "node-version": "^3.0.0",
     "read-pkg-up": "^10.0.0",
-    "resolve-pkg": "^2.0.0",
+    "rollup": "^3.26.2",
     "tsconfck": "^2.1.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@darkobits/ts": "~0.18.4",
-    "@types/babel__core": "^7.20.1",
     "@types/fs-extra": "^11.0.1"
   }
 }
