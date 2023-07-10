@@ -1,3 +1,10 @@
+## [0.32.12-beta.4](https://github.com/darkobits/saffron/compare/v0.32.12-beta.3...v0.32.12-beta.4) (2023-07-10)
+
+
+### 🛠 Refactoring
+
+* Replace Babel strategy with Rollup strategy. ([f9ca579](https://github.com/darkobits/saffron/commit/f9ca57991da81dfdaa29b164f671a3d7cc3bd8af))
+
 ## [0.32.12-beta.3](https://github.com/darkobits/saffron/compare/v0.32.12-beta.2...v0.32.12-beta.3) (2023-07-09)
 
 
