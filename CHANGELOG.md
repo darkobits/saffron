@@ -1,3 +1,10 @@
+## [0.32.12-beta.5](https://github.com/darkobits/saffron/compare/v0.32.12-beta.4...v0.32.12-beta.5) (2023-07-10)
+
+
+### 🐞 Bug Fixes
+
+* Externalize built-ins and dependencies. ([bd43a05](https://github.com/darkobits/saffron/commit/bd43a0512f0107d851bef3cb046769d6c1eaa6a6))
+
 ## [0.32.12-beta.4](https://github.com/darkobits/saffron/compare/v0.32.12-beta.3...v0.32.12-beta.4) (2023-07-10)
 
 
