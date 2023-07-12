@@ -2,6 +2,7 @@ import path from 'path';
 
 import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
 import * as esbuild from 'esbuild';
+import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import fs from 'fs-extra';
 import currentNodeVersion from 'node-version';
 import * as tsConfck from 'tsconfck';
@@ -72,7 +73,13 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
       target: `node${currentNodeVersion.major}`,
       outfile: tempFileName,
       format,
-      plugins: []
+      platform: 'node',
+      bundle: true,
+      plugins: [
+        nodeExternalsPlugin({
+          packagePath: path.resolve(pkgInfo.root ?? '', 'package.json')
+        })
+      ]
     };
 
     // If the user has a TypeScript configuration file, enable TypeScript
