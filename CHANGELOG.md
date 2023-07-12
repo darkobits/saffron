@@ -1,3 +1,10 @@
+## [0.32.16](https://github.com/darkobits/saffron/compare/v0.32.15...v0.32.16) (2023-07-12)
+
+
+### 🏗 Chores
+
+* **deps:** Replace / prune various dependencies. ([f8d8a65](https://github.com/darkobits/saffron/commit/f8d8a654b2610dd3be1f77cee9606110c6368c86))
+
 ## [0.32.15](https://github.com/darkobits/saffron/compare/v0.32.14...v0.32.15) (2023-07-12)
 
 
