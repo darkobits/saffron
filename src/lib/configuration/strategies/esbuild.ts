@@ -1,10 +1,11 @@
+import fs from 'fs/promises';
 import path from 'path';
 
 import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
 import * as esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
-import fs from 'fs-extra';
-import * as tsConfck from 'tsconfck';
+import { getTsconfig } from 'get-tsconfig';
+
 
 import log from 'lib/log';
 
@@ -83,14 +84,13 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
 
     // If the user has a TypeScript configuration file, enable TypeScript
     // features.
-    const tsConfigFilePath = await tsConfck.find(filePath);
+    const tsConfigResult = getTsconfig(filePath);
 
-    if (tsConfigFilePath) {
-      log.verbose(prefix, 'Using TypeScript configuration:', log.chalk.green(tsConfigFilePath));
-      buildOptions.tsconfig = tsConfigFilePath;
-      buildOptions.plugins?.push(TsconfigPathsPlugin({
-        tsconfig: tsConfigFilePath
-      }));
+    if (tsConfigResult) {
+      const tsconfig = tsConfigResult.path;
+      log.verbose(prefix, 'Using TypeScript configuration:', log.chalk.green(tsconfig));
+      buildOptions.tsconfig = tsconfig;
+      buildOptions.plugins?.push(TsconfigPathsPlugin({ tsconfig }));
     }
 
     // Transpile the input file.
@@ -114,6 +114,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
     );
   } finally {
     // Remove the temporary file.
-    if (await fs.exists(tempFilePath)) await fs.remove(tempFilePath);
+    await fs.access(tempFilePath, fs.constants.F_OK)
+      .then(() => fs.unlink(tempFilePath));
   }
 }

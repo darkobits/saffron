@@ -1,7 +1,7 @@
-import { nr } from '@darkobits/ts';
+import { withDefaultPackageScripts } from '@darkobits/ts';
 
 
-export default nr(({ script, command, isCI }) => {
+export default withDefaultPackageScripts(({ script, command, isCI }) => {
   script('test.smoke', [[
     // ----- [Smoke Tests] CJS Host Package --------------------------------
 

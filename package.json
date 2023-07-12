@@ -33,13 +33,11 @@
     "deepmerge": "^4.3.1",
     "esbuild": "^0.18.11",
     "esbuild-node-externals": "^1.8.0",
-    "fs-extra": "^11.1.1",
+    "get-tsconfig": "^4.6.2",
     "read-pkg-up": "^10.0.0",
-    "tsconfck": "^2.1.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.18.8",
-    "@types/fs-extra": "^11.0.1"
+    "@darkobits/ts": "~0.18.8"
   }
 }
