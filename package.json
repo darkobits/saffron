@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/saffron",
-  "version": "0.32.12",
+  "version": "0.32.13",
   "description": "Yargs + Cosmiconfig for robust, configurable CLIs.",
   "author": "darkobits",
   "license": "Hippocratic",

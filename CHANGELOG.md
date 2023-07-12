@@ -1,3 +1,15 @@
+## [0.32.13](https://github.com/darkobits/saffron/compare/v0.32.12...v0.32.13) (2023-07-12)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([3a71734](https://github.com/darkobits/saffron/commit/3a71734cfbc6657e63de2f7ce374af76a903e1bc))
+
+
+### 🛠 Refactoring
+
+* **esbuild:** Optimize for Node targets. ([152fd8e](https://github.com/darkobits/saffron/commit/152fd8e2f714c6c5190c501a5c7d0c7f539bbe4f))
+
 ## [0.32.12](https://github.com/darkobits/saffron/compare/v0.32.11...v0.32.12) (2023-07-10)
 
 
