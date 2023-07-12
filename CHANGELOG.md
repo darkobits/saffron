@@ -1,3 +1,10 @@
+## [0.32.14](https://github.com/darkobits/saffron/compare/v0.32.13...v0.32.14) (2023-07-12)
+
+
+### 🐞 Bug Fixes
+
+* **esbuild:** Write output file to correct location. ([08a7e45](https://github.com/darkobits/saffron/commit/08a7e45e062b2adb0c8ab2bb400ec2c4a3dc242f))
+
 ## [0.32.13](https://github.com/darkobits/saffron/compare/v0.32.12...v0.32.13) (2023-07-12)
 
 
