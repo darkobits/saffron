@@ -1,3 +1,10 @@
+## [0.32.15](https://github.com/darkobits/saffron/compare/v0.32.14...v0.32.15) (2023-07-12)
+
+
+### 🛠 Refactoring
+
+* Deprecate Rollup strategy. ([8cbf9b3](https://github.com/darkobits/saffron/commit/8cbf9b357edaff86be381e46619a7942b0082618))
+
 ## [0.32.14](https://github.com/darkobits/saffron/compare/v0.32.13...v0.32.14) (2023-07-12)
 
 
