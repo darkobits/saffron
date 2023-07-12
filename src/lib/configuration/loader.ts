@@ -5,7 +5,6 @@ import merge from 'deepmerge';
 
 import validators from 'etc/validators';
 import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
-import { rollupStrategy } from 'lib/configuration/strategies/rollup';
 import log from 'lib/log';
 import { getPackageInfo } from 'lib/package';
 
@@ -77,13 +76,7 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
   /**
    * Strategy 2: esbuild
    *
-   * This strategy will work for files that:
-   * - import nothing
-   * - only import other code that does not require a transpilation step
-   * - do not use any custom path mappings
-   *
-   * It is faster than Rollup and should cover the vast majority of cases where
-   * a simple dynamic import will not work.
+   * Uses esbuild to transpile the indicated file.
    */
   try {
     const result = await esbuildStrategy(filePath, pkgInfo);
@@ -91,22 +84,6 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
     return getDefaultExport(result);
   } catch (err: any) {
     errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('esbuild')}: ${err}`));
-  }
-
-
-  /**
-   * Strategy 3: Rollup
-   *
-   * This is the slowest strategy, but the most robust. It will inline and
-   * transpile any code that the configuration file imports, allowing the
-   * output file to be imported as a standalone bundle.
-   */
-  try {
-    const result = await rollupStrategy(filePath, pkgInfo);
-    log.verbose(prefix, 'Used strategy:', log.chalk.bold('rollup'));
-    return getDefaultExport(result);
-  } catch (err: any) {
-    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('rollup')}: ${err}`));
   }
 
 

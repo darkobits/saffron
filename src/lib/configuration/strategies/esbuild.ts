@@ -4,7 +4,6 @@ import { TsconfigPathsPlugin } from '@esbuild-plugins/tsconfig-paths';
 import * as esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import fs from 'fs-extra';
-import currentNodeVersion from 'node-version';
 import * as tsConfck from 'tsconfck';
 
 import log from 'lib/log';
@@ -70,7 +69,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
   try {
     const buildOptions: esbuild.BuildOptions = {
       entryPoints: [filePath],
-      target: `node${currentNodeVersion.major}`,
+      target: 'node16',
       outfile: tempFilePath,
       format,
       platform: 'node',
