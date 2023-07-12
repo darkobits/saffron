@@ -71,7 +71,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
     const buildOptions: esbuild.BuildOptions = {
       entryPoints: [filePath],
       target: `node${currentNodeVersion.major}`,
-      outfile: tempFileName,
+      outfile: tempFilePath,
       format,
       platform: 'node',
       bundle: true,
