@@ -31,7 +31,7 @@
     "camelcase-keys": "^8.0.2",
     "cosmiconfig": "^8.2.0",
     "deepmerge": "^4.3.1",
-    "esbuild": "^0.18.11",
+    "esbuild": "^0.18.13",
     "esbuild-node-externals": "^1.8.0",
     "get-tsconfig": "^4.6.2",
     "read-pkg-up": "^10.0.0",
