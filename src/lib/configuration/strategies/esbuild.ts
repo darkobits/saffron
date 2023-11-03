@@ -6,14 +6,16 @@ import * as esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import { getTsconfig } from 'get-tsconfig';
 
-
 import log from 'lib/log';
 
 import type { PackageInfo } from 'lib/package';
 
 
 /**
- * Map of input extensions to output extensions that Node can natively import.
+ * @private
+ *
+ * Map of supported input extensions to a corresponding output extension that
+ * Node can natively import.
  */
 const EXT_MAP: Record<string, string> = {
   '.js': '.js',
@@ -21,22 +23,35 @@ const EXT_MAP: Record<string, string> = {
   '.tsx': '.js',
   '.jsx':' .js',
   // User explicitly wants CommonJS.
-  '.cts': '.cjs',
   '.cjs': '.cjs',
+  '.cts': '.cjs',
   // User explicitly wants ESM.
-  '.mts': '.mjs',
-  '.mjs': '.mjs'
+  '.mjs': '.mjs',
+  '.mts': '.mjs'
 };
+
+
+export interface EsbuildStrategyOptions {
+  pkg: {
+    type: 'module' | 'commonjs' | undefined;
+    root: string;
+  };
+}
 
 
 /**
  * Uses esbuild to transpile the file at `filePath` by creating a temporary
  * file in the same directory, then attempts to dynamically import it. An
- * output format and extension are chosen based on the host project's
- * "type" setting that are the least likely to produce errors. Once imported,
- * the temporary file is removed.
+ * output format and extension are chosen based on the host project's "type"
+ * setting that are the least likely to produce errors. Once imported, the
+ * temporary file is removed.
+ *
+ * The `pkgInfo` parameter is needed to determine the "type"
+ *
+ * The optional type argument `M` may be used to specify the shape of the
+ * imported module.
  */
-export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: PackageInfo): Promise<M> {
+export async function esbuildStrategy<M = any>(filePath: string, opts: EsbuildStrategyOptions): Promise<M> {
   const prefix = log.prefix('strategy:esbuild');
 
   const parsedFilePath = path.parse(filePath);
@@ -56,7 +71,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
     ? 'esm'
     : isExplicitCommonJs
       ? 'cjs'
-      : pkgInfo.json?.type === 'module'
+      : opts.pkg.type === 'module'
         ? 'esm'
         : 'cjs';
 
@@ -77,7 +92,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
       bundle: true,
       plugins: [
         nodeExternalsPlugin({
-          packagePath: path.resolve(pkgInfo.root ?? '', 'package.json')
+          packagePath: path.resolve(opts.pkg.root ?? '', 'package.json')
         })
       ]
     };
@@ -113,7 +128,7 @@ export async function esbuildStrategy<M = any>(filePath: string, pkgInfo: Packag
       { cause: err }
     );
   } finally {
-    // Remove the temporary file.
+    // Remove the temporary file.f
     await fs.access(tempFilePath, fs.constants.F_OK)
       .then(() => fs.unlink(tempFilePath));
   }

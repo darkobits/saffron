@@ -66,21 +66,23 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
 
 
   /**
-   * Gather information about the package containing `filePath`, required for
-   * subsequent strategies.
-   */
-  const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
-  if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`);
-
-
-  /**
    * Strategy 2: esbuild
    *
    * Uses esbuild to transpile the indicated file.
    */
   try {
-    const result = await esbuildStrategy(filePath, pkgInfo);
+    const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
+    if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`);
+
+    const result = await esbuildStrategy(filePath, {
+      pkg: {
+        root: pkgInfo.root,
+        type: pkgInfo.json?.type
+      }
+    });
+
     log.verbose(prefix, 'Used strategy:', log.chalk.bold('esbuild'));
+
     return getDefaultExport(result);
   } catch (err: any) {
     errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('esbuild')}: ${err}`));
