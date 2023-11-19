@@ -152,6 +152,24 @@ export default function buildCommand<
     // Enable --help for this command.
     yargsCommand.help();
 
+    /**
+     * If the command has been configured to accept a parameter to indicate an
+     * explicit path to a configuration file (ie: --config) add it to the
+     * command definition. This ensures that Yargs knows about this flag so that
+     * invocations are still valid in strict mode and that it appears in --help
+     * output.
+     *
+     * The user can still re-define this option in their own builder to
+     * overwrite its description or other properties.
+     */
+    if (configOptions.explicitConfigFileParam) {
+      yargsCommand.option(configOptions.explicitConfigFileParam, {
+        type: 'string',
+        description: 'Use the configuration file at the specified path.',
+        required: false
+      });
+    }
+
     // Call user-provided builder, additionally passing the (possible)
     // configuration file data we loaded.
     if (typeof saffronCommand.builder === 'function') {
