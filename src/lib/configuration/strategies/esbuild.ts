@@ -8,8 +8,6 @@ import { getTsconfig } from 'get-tsconfig';
 
 import log from 'lib/log';
 
-import type { PackageInfo } from 'lib/package';
-
 
 /**
  * @private

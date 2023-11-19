@@ -27,17 +27,17 @@
     "@darkobits/log": "^2.0.0-beta.15",
     "@darkobits/valida": "^0.1.6",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
-    "@types/yargs": "^17.0.24",
-    "camelcase-keys": "^8.0.2",
-    "cosmiconfig": "^8.2.0",
+    "@types/yargs": "^17.0.31",
+    "camelcase-keys": "^9.1.2",
+    "cosmiconfig": "^8.3.6",
     "deepmerge": "^4.3.1",
-    "esbuild": "^0.18.12",
-    "esbuild-node-externals": "^1.8.0",
-    "get-tsconfig": "^4.6.2",
-    "read-pkg-up": "^10.0.0",
+    "esbuild": "^0.19.6",
+    "esbuild-node-externals": "^1.9.0",
+    "get-tsconfig": "^4.7.2",
+    "read-pkg-up": "^10.1.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@darkobits/ts": "~0.18.8"
+    "@darkobits/ts": "~0.19.2"
   }
 }
