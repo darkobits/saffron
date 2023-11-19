@@ -1,3 +1,21 @@
+## [0.32.17](https://github.com/darkobits/saffron/compare/v0.32.16...v0.32.17) (2023-11-19)
+
+
+### 🐞 Bug Fixes
+
+* Add `explicitConfigFileParam` in builder proxy. ([c13e218](https://github.com/darkobits/saffron/commit/c13e2186ed8143a77a838feab68424c5826907ac))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([709fae4](https://github.com/darkobits/saffron/commit/709fae4fd262ab6ea3e832441145fb6c4582d0c6))
+* **deps:** Update dependencies. ([728df49](https://github.com/darkobits/saffron/commit/728df497455bba4a5b0c42d9397215da5ed6c95a))
+
+
+### 🛠 Refactoring
+
+* Update loader. ([797c6e8](https://github.com/darkobits/saffron/commit/797c6e84b13f34c0cb12435ffdbba33fa4e7e8be))
+
 ## [0.32.16](https://github.com/darkobits/saffron/compare/v0.32.15...v0.32.16) (2023-07-12)
 
 
