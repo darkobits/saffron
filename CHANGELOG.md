@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.32.19](https://github.com/darkobits/saffron/compare/v0.32.18...v0.32.19) (2024-12-02)
+
+
+### Bug Fixes
+
+* Bump `package.json` version. ([88adf3b](https://github.com/darkobits/saffron/commit/88adf3bdddfb47a3509b118b0b6bdd794ec27ae1))
+
 ## [0.32.18](https://github.com/darkobits/saffron/compare/v0.32.17...v0.32.18) (2024-12-02)
 
 ### 🏗 Chores
