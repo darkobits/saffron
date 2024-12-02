@@ -1,3 +1,10 @@
+## [0.32.18](https://github.com/darkobits/saffron/compare/v0.32.17...v0.32.18) (2024-12-02)
+
+### 🏗 Chores
+
+* **ci:** Update CI workflow. ([1e852a2](https://github.com/darkobits/saffron/commit/1e852a2a09cb51f4b5e120cd32534863b5b45da1))
+* **deps:** Update dependencies. ([0322f32](https://github.com/darkobits/saffron/commit/0322f3295af5205c2cf36cd01a020c7718fe0a9c))
+
 ## [0.32.17](https://github.com/darkobits/saffron/compare/v0.32.16...v0.32.17) (2023-11-19)
 
 
