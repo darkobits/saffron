@@ -1,8 +1,7 @@
-import type { SaffronBuilder } from './SaffronBuilder';
-import type { SaffronCosmiconfigOptions } from './SaffronCosmiconfigOptions';
-import type { SaffronHandler } from './SaffronHandler';
-import type { CommandModule } from 'yargs';
-
+import type { SaffronBuilder } from './SaffronBuilder'
+import type { SaffronCosmiconfigOptions } from './SaffronCosmiconfigOptions'
+import type { SaffronHandler } from './SaffronHandler'
+import type { CommandModule } from 'yargs'
 
 /**
  * Options object accepted by Saffron's `command` function.
@@ -22,7 +21,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * @default '*'
    */
-  command?: CommandModule['command'];
+  command?: CommandModule['command']
 
   /**
    * List of aliases for the command being defined. This should only be used
@@ -30,7 +29,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#aliaskey-alias
    */
-  aliases?: CommandModule['aliases'];
+  aliases?: CommandModule['aliases']
 
   /**
    * Description that will appear at the top of help content.
@@ -40,7 +39,7 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * @default "description" field from package.json.
    */
-  description?: CommandModule['describe'];
+  description?: CommandModule['describe']
 
   /**
    * Configuration for Cosmiconfig. Will be merged with Saffron's defaults. This
@@ -48,14 +47,14 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * See: https://github.com/davidtheclark/cosmiconfig#cosmiconfigoptions
    */
-  config?: Partial<SaffronCosmiconfigOptions> | false;
+  config?: Partial<SaffronCosmiconfigOptions> | false
 
   /**
    * If `false`, Yargs strict mode will not be used. Disabling strict mode will
    * be necessary if auto-configuration is enabled _and_ an application's
    * configuration schema differs from its command-line argument schema.
    */
-  strict?: boolean;
+  strict?: boolean
 
   /**
    * (Optional) Command builder function, used to add and configure arguments
@@ -63,10 +62,10 @@ export interface SaffronCommand<A extends Record<string, any> = Record<string, a
    *
    * See: https://github.com/yargs/yargs/blob/master/docs/api.md#commandmodule
    */
-  builder?: SaffronBuilder<A>;
+  builder?: SaffronBuilder<A>
 
   /**
     * Handler for the command.
     */
-  handler: SaffronHandler<A, C>;
+  handler: SaffronHandler<A, C>
 }

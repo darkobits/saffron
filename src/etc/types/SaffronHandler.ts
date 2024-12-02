@@ -1,5 +1,4 @@
-import type { SaffronHandlerContext } from './SaffronHandlerContext';
-
+import type { SaffronHandlerContext } from './SaffronHandlerContext'
 
 /**
  * Signature of handlers.

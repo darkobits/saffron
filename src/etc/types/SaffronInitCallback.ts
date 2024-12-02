@@ -1,5 +1,4 @@
-import type { Argv, ParseCallback } from 'yargs';
-
+import type { Argv, ParseCallback } from 'yargs'
 
 /**
  * Optional function that may be passed to `init`. This function will be passed

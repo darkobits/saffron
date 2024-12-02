@@ -1,5 +1,4 @@
-import createValidator from '@darkobits/valida';
-
+import createValidator from '@darkobits/valida'
 
 export default {
   cosmiconfigOptions: createValidator(({ ow }) => ({
@@ -21,4 +20,4 @@ export default {
       handler: ow.function
     })
   }))
-};
+}

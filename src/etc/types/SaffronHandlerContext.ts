@@ -1,6 +1,5 @@
-import type { SaffronCommonContext } from './SaffronCommonContext';
-import type { Arguments } from 'yargs';
-
+import type { SaffronCommonContext } from './SaffronCommonContext'
+import type { Arguments } from 'yargs'
 
 /**
  * Context passed to handlers.
@@ -10,20 +9,20 @@ export interface SaffronHandlerContext<A, C> extends SaffronCommonContext {
    * Parsed command line arguments merged with any file-based configuration and
    * validated by Yargs.
    */
-  argv: Arguments<A>;
+  argv: Arguments<A>
 
   /**
    * Parsed configuration file, if found.
    */
-  config?: C;
+  config?: C
 
   /**
     * Path where Cosmiconfig found a configuration file.
   */
-  configPath?: string;
+  configPath?: string
 
   /**
     * True if Cosmiconfig found a configuration file, but the file was empty.
     */
-  configIsEmpty?: boolean;
+  configIsEmpty?: boolean
 }

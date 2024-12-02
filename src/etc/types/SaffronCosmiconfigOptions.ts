@@ -1,5 +1,4 @@
-import type { Options as CosmiconfigOptions } from 'cosmiconfig';
-
+import type { Options as CosmiconfigOptions } from 'cosmiconfig'
 
 /**
  * Options for configuring Cosmiconfig.
@@ -11,27 +10,27 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
    *
    * @default true
    */
-  auto?: boolean;
+  auto?: boolean
 
   /**
    * (Optional) Name to use as a base when searching for configuration files. If
    * omitted, the un-scoped portion of the project's package name will be used.
    */
-  fileName?: string | undefined;
+  fileName?: string | undefined
 
   /**
    * (Optional) Specifies a key in loaded configuration files that should be
    * used as a scope for configuring this command. Useful when building
    * applications with several sub-commands.
    */
-  key?: string;
+  key?: string
 
   /**
    * (Optional) Path to begin searching for a configuration file.
    *
    * @default process.cwd()
    */
-  searchFrom?: string;
+  searchFrom?: string
 
   /**
    * (Optional) If provided, Saffron will skip searching for a configuration
@@ -39,5 +38,5 @@ export interface SaffronCosmiconfigOptions extends CosmiconfigOptions {
    * option may be used to implement a `--config` parameter in a CLI that allows
    * the user to provide an explicit file path.
    */
-  explicitConfigFileParam?: string;
+  explicitConfigFileParam?: string
 }

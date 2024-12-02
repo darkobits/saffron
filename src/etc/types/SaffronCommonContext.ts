@@ -1,5 +1,4 @@
-import type { NormalizedReadResult } from 'read-pkg-up';
-
+import type { NormalizedReadResult } from 'read-pkg-up'
 
 /**
  * Common properties for contexts provided to builders and handlers.
@@ -14,11 +13,11 @@ export interface SaffronCommonContext {
      *
      * See: https://github.com/npm/normalize-package-data
      */
-    json: NormalizedReadResult['packageJson'] | undefined;
+    json: NormalizedReadResult['packageJson'] | undefined
 
     /**
      * Path to the package root.
      */
-    root: string | undefined;
-  } | undefined;
+    root: string | undefined
+  } | undefined
 }

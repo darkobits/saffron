@@ -1,18 +1,17 @@
-import path from 'path';
+import path from 'path'
 
-import { cosmiconfig, defaultLoaders } from 'cosmiconfig';
-import merge from 'deepmerge';
+import { cosmiconfig, defaultLoaders } from 'cosmiconfig'
+import merge from 'deepmerge'
 
-import validators from 'etc/validators';
-import { esbuildStrategy } from 'lib/configuration/strategies/esbuild';
-import log from 'lib/log';
-import { getPackageInfo } from 'lib/package';
+import validators from 'etc/validators'
+import { esbuildStrategy } from 'lib/configuration/strategies/esbuild'
+import log from 'lib/log'
+import { getPackageInfo } from 'lib/package'
 
 import type {
   SaffronCosmiconfigOptions,
   SaffronCosmiconfigResult
-} from 'etc/types';
-
+} from 'etc/types'
 
 /**
  * @private
@@ -22,11 +21,10 @@ import type {
  * compilation target used (ie: based on the end-user's environment).
  */
 function getDefaultExport(module: any) {
-  let result = module;
-  while (Reflect.has(result, 'default')) result = Reflect.get(result, 'default');
-  return result;
+  let result = module
+  while (Reflect.has(result, 'default')) result = Reflect.get(result, 'default')
+  return result
 }
-
 
 /**
  * @private
@@ -37,16 +35,14 @@ function getDefaultExport(module: any) {
  * CJS, and with configuration files written in ESM or CJS.
  */
 async function ecmaScriptLoader(filePath: string /* , contents: string */) {
-  const prefix = log.prefix('config');
-  log.verbose(prefix, `Loading file: ${log.chalk.green(filePath)}`);
-
+  const prefix = log.chalk.green('config')
+  log.verbose(prefix, `Loading file: ${log.chalk.green(filePath)}`)
 
   /**
    * Tracks errors produced by various strategies. If all strategies fail, an
    * AggregateError will be thrown with this value.
    */
-  const errors: Array<Error> = [];
-
+  const errors: Array<Error> = []
 
   /**
    * Strategy 1: Dynamic Import
@@ -57,13 +53,12 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
    * it first.
    */
   try {
-    const result = await import(filePath);
-    log.verbose(prefix, 'Used strategy:', log.chalk.bold('import()'));
-    return getDefaultExport(result);
+    const result = await import(filePath)
+    log.verbose(prefix, 'Used strategy:', log.chalk.bold('import()'))
+    return getDefaultExport(result)
   } catch (err: any) {
-    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('import()')}: ${err}`));
+    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('import()')}: ${err}`))
   }
-
 
   /**
    * Strategy 2: esbuild
@@ -71,27 +66,25 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
    * Uses esbuild to transpile the indicated file.
    */
   try {
-    const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) });
-    if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`);
+    const pkgInfo = getPackageInfo({ cwd: path.dirname(filePath) })
+    if (!pkgInfo?.root) throw new Error(`${prefix} Unable to compute host package root directory.`)
 
     const result = await esbuildStrategy(filePath, {
       pkg: {
         root: pkgInfo.root,
         type: pkgInfo.json?.type
       }
-    });
+    })
 
-    log.verbose(prefix, 'Used strategy:', log.chalk.bold('esbuild'));
+    log.verbose(prefix, 'Used strategy:', log.chalk.bold('esbuild'))
 
-    return getDefaultExport(result);
+    return getDefaultExport(result)
   } catch (err: any) {
-    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('esbuild')}: ${err}`));
+    errors.push(new Error(`${prefix} Failed to load file with ${log.chalk.bold('esbuild')}: ${err}`))
   }
 
-
-  if (errors.length > 0) throw new AggregateError(errors, 'All parsing strategies failed.');
+  if (errors.length > 0) throw new AggregateError(errors, 'All parsing strategies failed.')
 }
-
 
 /**
  * Creates and returns an object similar Cosmiconfig's `PublicExplorer`, but
@@ -99,7 +92,7 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
  * extensions.
  */
 export default function createLoader<C>(options: SaffronCosmiconfigOptions) {
-  const { fileName, ...cosmicOptions } = validators.cosmiconfigOptions(options);
+  const { fileName, ...cosmicOptions } = validators.cosmiconfigOptions(options)
 
   const mergedOptions = merge({
     loaders: {
@@ -146,20 +139,20 @@ export default function createLoader<C>(options: SaffronCosmiconfigOptions) {
     arrayMerge: (target, source) => {
       // When merging arrays (like searchPlaces) prepend the user's value to
       // our value.
-      return [...source, ...target];
+      return [...source, ...target]
     }
-  });
+  })
 
-  const explorer = cosmiconfig(fileName, mergedOptions);
+  const explorer = cosmiconfig(fileName, mergedOptions)
 
   return {
     load: async (filePath: string) => {
-      const result = await explorer.load(filePath);
-      if (result) return result as SaffronCosmiconfigResult<C>;
+      const result = await explorer.load(filePath)
+      if (result) return result as SaffronCosmiconfigResult<C>
     },
     search: async (searchFrom?: string | undefined) => {
-      const result = await explorer.search(searchFrom);
-      if (result) return result as SaffronCosmiconfigResult<C>;
+      const result = await explorer.search(searchFrom)
+      if (result) return result as SaffronCosmiconfigResult<C>
     }
-  };
+  }
 }

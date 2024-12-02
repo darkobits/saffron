@@ -1,11 +1,10 @@
-import os from 'os';
+import os from 'os'
 
-import LogFactory from '@darkobits/log';
+import { createLogger } from '@darkobits/log'
 
-import * as cli from '../../../../dist/index.js';
+import * as cli from '../../../../dist/index.js'
 
-const log = LogFactory({ heading: 'smokeTest' });
-
+const log = createLogger({ heading: 'smokeTest' })
 
 /**
  * Loading an Explicitly ESM Configuration File in a CJS Project
@@ -22,24 +21,23 @@ function explicitCjs() {
         command.option('foo', {
           type: 'string',
           required: false
-        });
+        })
       },
       handler: ({ config }) => {
         if (config && Object.keys(config).length > 0) {
-          log.verbose(log.prefix('esm:cjs-extension'), log.chalk.green('success'));
+          log.verbose(log.chalk.green('esm:cjs-extension'), log.chalk.green('success'))
         } else {
-          throw new Error('No config found.');
+          throw new Error('No config found.')
         }
       }
-    });
+    })
 
-    cli.init();
+    cli.init()
   } catch (err) {
-    log.error(log.prefix('esm:cjs-extension'), log.chalk.gray(err.message.replaceAll(os.EOL, ' ')));
-    log.verbose(err.stack);
-    process.exit(1);
+    log.error(log.chalk.green('esm:cjs-extension'), log.chalk.gray(err.message.replaceAll(os.EOL, ' ')))
+    log.verbose(err.stack)
+    process.exit(1)
   }
 }
 
-
-void explicitCjs();
+void explicitCjs()

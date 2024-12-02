@@ -1,11 +1,6 @@
-import { ts } from '@darkobits/eslint-plugin';
+import { ts } from '@darkobits/eslint-plugin'
 
 export default [
-  {
-    files: [
-      'eslint.config.mjs'
-    ]
-  },
   ...ts,
   {
     rules: {
@@ -16,4 +11,4 @@ export default [
       '@typescript-eslint/prefer-nullish-coalescing': 'off'
     }
   }
-];
+]

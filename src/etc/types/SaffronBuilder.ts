@@ -1,5 +1,4 @@
-import type { SaffronBuilderContext } from './SaffronBuilderContext';
-
+import type { SaffronBuilderContext } from './SaffronBuilderContext'
 
 /**
  * Signature of a builder.

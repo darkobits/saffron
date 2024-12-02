@@ -4,16 +4,14 @@
  * Re-export selected types from 'yargs' in the event they are needed for
  * advanced use-cases.
  */
-export type { Arguments, Argv } from 'yargs';
-
+export type { Arguments, Argv } from 'yargs'
 
 /**
  * [Types]
  *
  * Export types.
  */
-export * from 'etc/types';
-
+export * from 'etc/types'
 
 /**
  * Allow named imports.
@@ -29,5 +27,5 @@ export * from 'etc/types';
  *
  * import * as cli from '@darkobits/saffron';
  */
-export { default as init } from 'lib/init';
-export { default as command } from 'lib/command';
+export { default as init } from 'lib/init'
+export { default as command } from 'lib/command'

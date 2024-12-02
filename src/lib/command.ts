@@ -1,25 +1,24 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'fs'
+import path from 'path'
 
-import camelcaseKeys from 'camelcase-keys';
+import camelcaseKeys from 'camelcase-keys'
 
 import {
   SaffronCommand,
   SaffronCosmiconfigResult,
   SaffronHandlerContext
-} from 'etc/types';
-import validators from 'etc/validators';
-import createLoader from 'lib/configuration/loader';
-import log from 'lib/log';
-import { getPackageInfo, parsePackageName } from 'lib/package';
-import yargs from 'lib/yargs';
+} from 'etc/types'
+import validators from 'etc/validators'
+import createLoader from 'lib/configuration/loader'
+import log from 'lib/log'
+import { getPackageInfo, parsePackageName } from 'lib/package'
+import yargs from 'lib/yargs'
 
 import type {
   Argv,
   ArgumentsCamelCase,
   CommandModule
-} from 'yargs';
-
+} from 'yargs'
 
 /**
  * Saffron command builder.
@@ -31,30 +30,28 @@ export default function buildCommand<
   C extends Record<string, any> = A
 >(saffronCommand: SaffronCommand<A, C>) {
   // Validate options.
-  validators.saffronCommand(saffronCommand);
+  validators.saffronCommand(saffronCommand)
 
   /**
    * Context object that will ultimately be passed to the command's handler. We
    * define this early because we need to modify it from middleware that will
    * run before the handler is called.
    */
-  const context: Partial<SaffronHandlerContext<A, C>> = {};
+  const context: Partial<SaffronHandlerContext<A, C>> = {}
 
   // Get the application's manifest.
-  context.pkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) });
-
+  context.pkg = getPackageInfo({ cwd: path.dirname(fs.realpathSync(process.argv[1])) })
 
   // ----- Prepare Configuration Loader ----------------------------------------
 
-  const configOptions = saffronCommand.config || {};
+  const configOptions = saffronCommand.config || {}
 
   const loader = createLoader<C>({
     fileName: context.pkg?.json?.name
       ? parsePackageName(context.pkg.json.name).name
       : undefined,
     ...configOptions
-  });
-
+  })
 
   // ----- Configuration-Loader Middleware -------------------------------------
 
@@ -67,27 +64,27 @@ export default function buildCommand<
   const middleware = async (argv: ArgumentsCamelCase<A>) => {
     // If set to `false`, the application wants to disable all configuration
     // related features.
-    if (saffronCommand.config === false) return;
+    if (saffronCommand.config === false) return
 
-    const configOptions = saffronCommand.config ?? {};
+    const configOptions = saffronCommand.config ?? {}
 
     // Enable auto-configuration unless the user explicitly set the `auto`
     // option to `false`.
-    const autoConfig = configOptions.auto !== false;
+    const autoConfig = configOptions.auto !== false
 
-    let configResult: SaffronCosmiconfigResult<C> | undefined;
+    let configResult: SaffronCosmiconfigResult<C> | undefined
 
     // If the application defined a parameter to use for loading an explicit
     // configuration file, and the user invoked the CLI with that option,
     // then attempt to load a configuration file from that location.
     if (configOptions.explicitConfigFileParam) {
-      const explicitConfigFilePath = argv[configOptions.explicitConfigFileParam];
-      if (typeof explicitConfigFilePath === 'string') configResult = await loader.load(explicitConfigFilePath);
+      const explicitConfigFilePath = argv[configOptions.explicitConfigFileParam]
+      if (typeof explicitConfigFilePath === 'string') configResult = await loader.load(explicitConfigFilePath)
     }
 
     // If any of the above conditions were not satisfied and we still don't
     // have a truthy value, attempt to load a configuration file by searching.
-    if (!configResult) configResult = await loader.search(configOptions.searchFrom);
+    if (!configResult) configResult = await loader.search(configOptions.searchFrom)
 
     // If we loaded a non-empty file and the user specified a sub-key that
     // they want to drill-down into, ensure that the root configuration object
@@ -96,17 +93,17 @@ export default function buildCommand<
     // the root of the result.
     if (configResult?.config && configOptions.key) {
       if (!Reflect.has(configResult.config, configOptions.key)) {
-        Reflect.deleteProperty(configResult, 'config');
-        configResult.isEmpty = true;
+        Reflect.deleteProperty(configResult, 'config')
+        configResult.isEmpty = true
       } else {
-        configResult.config = Reflect.get(configResult.config, configOptions.key) as C;
+        configResult.config = Reflect.get(configResult.config, configOptions.key) as C
       }
     }
 
     if (configResult) {
-      if (configResult.config) context.config = camelcaseKeys<any, any>(configResult.config, { deep: true });
-      context.configPath = configResult.filepath;
-      context.configIsEmpty = Boolean(configResult.isEmpty);
+      if (configResult.config) context.config = camelcaseKeys<any, any>(configResult.config, { deep: true })
+      context.configPath = configResult.filepath
+      context.configIsEmpty = Boolean(configResult.isEmpty)
 
       // If auto-config is enabled, then for each key/value pair in the config
       // object, set the same key/value pair on `argv` if and only if the key
@@ -115,18 +112,17 @@ export default function buildCommand<
       if (autoConfig && !configResult.isEmpty) {
         if (typeof configResult.config === 'object') {
           Object.entries(configResult.config).forEach(([key, value]) => {
-            if (!Reflect.has(argv, key)) Reflect.set(argv, key, value);
-          });
+            if (!Reflect.has(argv, key)) Reflect.set(argv, key, value)
+          })
         } else {
           log.warn(
-            log.prefix('handler'),
+            log.chalk.green('handler'),
             `Auto-configuration enabled; expected configuration to be of type "object", got "${typeof configResult.config}".`
-          );
+          )
         }
       }
     }
-  };
-
+  }
 
   // ----- Builder Proxy -------------------------------------------------------
 
@@ -136,21 +132,21 @@ export default function buildCommand<
    */
   const builder = (yargsCommand: Argv<A>): Argv<A> => {
     // Set strict mode unless explicitly disabled.
-    if (saffronCommand.strict !== false) yargsCommand.strict();
+    if (saffronCommand.strict !== false) yargsCommand.strict()
 
     // Apply defaults for the command.
-    yargsCommand.showHelpOnFail(true, 'See --help for usage instructions.');
-    yargsCommand.wrap(yargsCommand.terminalWidth());
-    yargsCommand.alias('v', 'version');
-    yargsCommand.alias('h', 'help');
+    yargsCommand.showHelpOnFail(true, 'See --help for usage instructions.')
+    yargsCommand.wrap(yargsCommand.terminalWidth())
+    yargsCommand.alias('v', 'version')
+    yargsCommand.alias('h', 'help')
 
     // Set name and version based on the host application's metadata.
     // N.B. Description is set below.
-    if (context.pkg?.json?.name) yargsCommand.scriptName(parsePackageName(context.pkg.json.name).name);
-    if (context.pkg?.json?.version) yargsCommand.version(context.pkg.json.version);
+    if (context.pkg?.json?.name) yargsCommand.scriptName(parsePackageName(context.pkg.json.name).name)
+    if (context.pkg?.json?.version) yargsCommand.version(context.pkg.json.version)
 
     // Enable --help for this command.
-    yargsCommand.help();
+    yargsCommand.help()
 
     /**
      * If the command has been configured to accept a parameter to indicate an
@@ -167,7 +163,7 @@ export default function buildCommand<
         type: 'string',
         description: 'Use the configuration file at the specified path.',
         required: false
-      });
+      })
     }
 
     // Call user-provided builder, additionally passing the (possible)
@@ -176,15 +172,14 @@ export default function buildCommand<
       saffronCommand.builder({
         command: yargsCommand,
         pkg: context.pkg
-      });
+      })
     }
 
     // Register middleware, run before validation occurs.
-    yargsCommand.middleware(middleware, true);
+    yargsCommand.middleware(middleware, true)
 
-    return yargsCommand;
-  };
-
+    return yargsCommand
+  }
 
   // ----- Handler Proxy -------------------------------------------------------
 
@@ -197,24 +192,23 @@ export default function buildCommand<
    */
   const handler = async (argv: ArgumentsCamelCase<A>) => {
     // Convert raw `argv` to camelCase.
-    context.argv = camelcaseKeys<any, any>(argv, { deep: true });
+    context.argv = camelcaseKeys<any, any>(argv, { deep: true })
 
     try {
       // Invoke the application's handler.
-      await saffronCommand.handler(context as Required<SaffronHandlerContext<A, C>>);
+      await saffronCommand.handler(context as Required<SaffronHandlerContext<A, C>>)
     } catch (err: any) {
-      console.error(err);
+      console.error(err)
 
       if (typeof err?.exitCode === 'number') {
-        process.exit(err.exitCode);
+        process.exit(err.exitCode)
       } else if (typeof err?.code === 'number') {
-        process.exit(err.code);
+        process.exit(err.code)
       } else {
-        process.exit(1);
+        process.exit(1)
       }
     }
-  };
-
+  }
 
   // ----- Register Command ----------------------------------------------------
 
@@ -224,5 +218,5 @@ export default function buildCommand<
     aliases: saffronCommand.aliases,
     builder,
     handler
-  } as CommandModule<any, A>);
+  } as CommandModule<any, A>)
 }
