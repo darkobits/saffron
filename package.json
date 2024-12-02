@@ -24,7 +24,7 @@
     "prepare": "nr prepare"
   },
   "dependencies": {
-    "@darkobits/log": "^2.0.0-beta.15",
+    "@darkobits/log": "^2.0.0-beta.18",
     "@darkobits/valida": "^0.1.6",
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
     "@types/yargs": "^17.0.33",
