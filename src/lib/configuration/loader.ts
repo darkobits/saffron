@@ -91,7 +91,7 @@ async function ecmaScriptLoader(filePath: string /* , contents: string */) {
  * with typed configuration results. Uses our custom loader for ECMAScript
  * extensions.
  */
-export default function createLoader<C>(options: SaffronCosmiconfigOptions) {
+export default function createLoader<C>(options: Partial<SaffronCosmiconfigOptions>) {
   const { fileName, ...cosmicOptions } = validators.cosmiconfigOptions(options)
 
   const mergedOptions = merge({
