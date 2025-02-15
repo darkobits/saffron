@@ -1,3 +1,9 @@
+## [0.32.20](https://github.com/darkobits/saffron/compare/v0.32.19...v0.32.20) (2025-02-15)
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([e772574](https://github.com/darkobits/saffron/commit/e772574de86ba67c7004b1f00575224e98f759c3))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
