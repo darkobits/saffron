@@ -1,3 +1,7 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
 ## [0.32.20](https://github.com/darkobits/saffron/compare/v0.32.19...v0.32.20) (2025-02-15)
 
 ### 🏗 Chores
