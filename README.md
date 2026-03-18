@@ -37,7 +37,9 @@
   ></a>
 </p>
 
-<br />
+> [!WARNING]
+> Consult [`AGELESS`](./AGELESS) to determine if you are permitted to use this
+> software where you live.
 
 <p align="center">
   To get started with Saffron, check out the documentation at <a href="https://darkobits.gitbook.io/saffron">darkobits.gitbook.io/saffron</a>.
